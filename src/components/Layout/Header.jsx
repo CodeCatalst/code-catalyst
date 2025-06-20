@@ -33,9 +33,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   }
 
   return (
-    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
-    }`}>
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-gray-900 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+      }`}>
       <nav className="container-max">
         <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
@@ -54,11 +53,10 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <Link
                 key={link.name}
                 to={link.href}
-                className={`font-medium transition-colors duration-200 hover:text-primary-600 ${
-                  location.pathname === link.href 
-                    ? 'text-primary-600' 
-                    : scrolled ? 'text-gray-900' : 'text-white'
-                }`}
+                className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
+                    ? 'text-primary-600'
+                    : scrolled ? 'text-white' : 'text-white'
+                  }`}
               >
                 {link.name}
               </Link>
@@ -78,7 +76,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       {user?.name?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className={`font-medium ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+                  <span className={`font-medium ${scrolled ? 'text-white' : 'text-white'}`}>
                     {user?.name}
                   </span>
                 </button>
@@ -107,9 +105,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className={`font-medium hover:text-primary-600 transition-colors ${
-                    scrolled ? 'text-gray-900' : 'text-white'
-                  }`}
+                  className={`font-medium hover:text-primary-600 transition-colors ${scrolled ? 'text-white' : 'text-white'
+                    }`}
                 >
                   Login
                 </Link>
@@ -126,30 +123,29 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {mobileMenuOpen ? (
-              <X size={24} className={scrolled ? 'text-gray-900' : 'text-white'} />
+              <X size={24} className={scrolled ? 'text-white' : 'text-white'} />
             ) : (
-              <Menu size={24} className={scrolled ? 'text-gray-900' : 'text-white'} />
+              <Menu size={24} className={scrolled ? 'text-white' : 'text-white'} />
             )}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white shadow-lg rounded-b-2xl mx-4 mb-4">
+          <div className="lg:hidden bg-gray-900 shadow-lg rounded-b-2xl mx-4 mb-4">
             <div className="px-4 py-6 space-y-4">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`block font-medium py-2 transition-colors hover:text-primary-600 ${
-                    location.pathname === link.href ? 'text-primary-600' : 'text-gray-900'
-                  }`}
+                  className={`block font-medium py-2 text-white hover:text-primary-600 ${location.pathname === link.href ? 'text-primary-600' : 'text-gray-900'
+                    }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
                 </Link>
               ))}
-              
+
               <div className="border-t pt-4 space-y-3">
                 {isAuthenticated ? (
                   <>

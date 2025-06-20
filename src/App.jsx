@@ -5,7 +5,7 @@ import ProtectedRoute from './components/Auth/ProtectedRoute'
 
 // Lazy load pages for better performance
 import { lazy, Suspense } from 'react'
-import LoadingSpinner from './components/Common/LoadingSpinner'
+import Loader from './components/Common/LoadingSpinner'
 
 const Home = lazy(() => import('./pages/Home/Home'))
 const About = lazy(() => import('./pages/About/About'))
@@ -23,7 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <Layout>
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

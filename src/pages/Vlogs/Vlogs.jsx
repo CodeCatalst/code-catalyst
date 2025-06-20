@@ -132,9 +132,9 @@ const Vlogs = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-gray-900">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Code Catalyst <span className="text-secondary-300">Vlogs</span>
@@ -146,20 +146,19 @@ const Vlogs = () => {
       </section>
 
       {/* Filter Bar */}
-      <section className="py-8 bg-gray-50 border-b">
+      <section className="py-8 border-b border-gray-700">
         <div className="container-max">
           <div className="flex items-center space-x-4 overflow-x-auto">
-            <Filter size={20} className="text-gray-600 flex-shrink-0" />
+            <Filter size={20} className="text-gray-400 flex-shrink-0" />
             <div className="flex space-x-2">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap ${
-                    selectedCategory === category
-                      ? 'bg-primary-600 text-white shadow-lg'
-                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap ${selectedCategory === category
+                    ? 'bg-primary-600 text-white shadow-lg'
+                    : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
+                    }`}
                 >
                   {category}
                 </button>
@@ -181,7 +180,7 @@ const Vlogs = () => {
                     alt={vlog.title}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  
+
                   {/* Play Button Overlay */}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
                     <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -212,14 +211,14 @@ const Vlogs = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-white group-hover:text-primary-600 transition-colors line-clamp-2">
                     {vlog.title}
                   </h3>
-                  
-                  <p className="text-gray-600 text-sm line-clamp-3">
+
+                  <p className="text-gray-400 text-sm line-clamp-3">
                     {vlog.description}
                   </p>
-                  
+
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-1">
@@ -246,13 +245,13 @@ const Vlogs = () => {
       </section>
 
       {/* Featured Playlist Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding">
         <div className="container-max">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Featured <span className="text-gradient">Playlists</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-400 max-w-2xl mx-auto">
               Curated collections of our best content organized by topic
             </p>
           </div>
@@ -262,27 +261,27 @@ const Vlogs = () => {
               <div className="w-full h-32 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg mb-4 flex items-center justify-center">
                 <Play className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Complete Web Development</h3>
-              <p className="text-gray-600 text-sm mb-3">12 videos • 4 hours</p>
-              <p className="text-gray-600">Learn web development from basics to advanced concepts</p>
+              <h3 className="text-xl font-bold text-white mb-2">Complete Web Development</h3>
+              <p className="text-gray-400 text-sm mb-3">12 videos • 4 hours</p>
+              <p className="text-gray-400">Learn web development from basics to advanced concepts</p>
             </div>
 
             <div className="card hover:scale-105 transition-transform">
               <div className="w-full h-32 bg-gradient-to-r from-accent-500 to-primary-500 rounded-lg mb-4 flex items-center justify-center">
                 <Play className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Event Highlights</h3>
-              <p className="text-gray-600 text-sm mb-3">8 videos • 2 hours</p>
-              <p className="text-gray-600">Best moments from our workshops and hackathons</p>
+              <h3 className="text-xl font-bold text-white mb-2">Event Highlights</h3>
+              <p className="text-gray-400 text-sm mb-3">8 videos • 2 hours</p>
+              <p className="text-gray-400">Best moments from our workshops and hackathons</p>
             </div>
 
             <div className="card hover:scale-105 transition-transform">
               <div className="w-full h-32 bg-gradient-to-r from-secondary-500 to-accent-500 rounded-lg mb-4 flex items-center justify-center">
                 <Play className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Career Success</h3>
-              <p className="text-gray-600 text-sm mb-3">6 videos • 3 hours</p>
-              <p className="text-gray-600">Tips and stories from successful alumni</p>
+              <h3 className="text-xl font-bold text-white mb-2">Career Success</h3>
+              <p className="text-gray-400 text-sm mb-3">6 videos • 3 hours</p>
+              <p className="text-gray-400">Tips and stories from successful alumni</p>
             </div>
           </div>
         </div>

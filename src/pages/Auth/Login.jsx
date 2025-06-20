@@ -39,7 +39,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -47,7 +47,7 @@ const Login = () => {
     setLoading(true)
     try {
       const result = await login(formData.email, formData.password)
-      
+
       if (result.success) {
         navigate(from, { replace: true })
       } else {
@@ -66,7 +66,7 @@ const Login = () => {
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -77,7 +77,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen py-20 flex items-center justify-center bg-gray-900">
       <div className="max-w-md w-full mx-4">
         <div className="card">
           {/* Header */}
@@ -85,8 +85,8 @@ const Login = () => {
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <LogIn className="text-white" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-            <p className="text-gray-600">Sign in to your Code Catalyst account</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p className="text-gray-400">Sign in to your Code Catalyst account</p>
           </div>
 
           {/* Error Message */}
@@ -100,7 +100,7 @@ const Login = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
               </label>
               <input
@@ -119,7 +119,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -154,7 +154,7 @@ const Login = () => {
                   type="checkbox"
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
                   Remember me
                 </label>
               </div>
@@ -188,7 +188,7 @@ const Login = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Don't have an account?{' '}
               <Link
                 to="/signup"

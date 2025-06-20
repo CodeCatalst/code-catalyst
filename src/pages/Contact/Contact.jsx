@@ -106,9 +106,9 @@ const Contact = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen bg-gray-900 pt-16">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding  text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Get in <span className="text-secondary-300">Touch</span>
@@ -125,8 +125,8 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
-                <p className="text-gray-600">
+                <h2 className="text-3xl font-bold text-gray-50 mb-4">Send us a Message</h2>
+                <p className="text-gray-400">
                   Fill out the form below and we'll get back to you as soon as possible.
                 </p>
               </div>
@@ -148,7 +148,7 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -166,7 +166,7 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -185,7 +185,7 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">
                     Subject *
                   </label>
                   <input
@@ -203,7 +203,7 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -243,8 +243,8 @@ const Contact = () => {
             {/* Contact Information */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact Information</h2>
-                <p className="text-gray-600">
+                <h2 className="text-3xl font-bold text-white mb-4">Contact Information</h2>
+                <p className="text-gray-400">
                   Reach out to us through any of these channels or visit us on campus.
                 </p>
               </div>
@@ -252,20 +252,20 @@ const Contact = () => {
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="text-primary-600" size={24} />
+                    <div className="w-12 h-12 bg-gray-900 border border-gray-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <info.icon className="text-gray-400" size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
+                      <h3 className="font-semibold text-primary-600 mb-1">{info.title}</h3>
                       {info.action !== '#' ? (
                         <a
                           href={info.action}
-                          className="text-gray-600 hover:text-primary-600 transition-colors"
+                          className="text-gray-400 hover:text-primary-600 transition-colors"
                         >
                           {info.details}
                         </a>
                       ) : (
-                        <p className="text-gray-600">{info.details}</p>
+                        <p className="text-gray-400">{info.details}</p>
                       )}
                     </div>
                   </div>
@@ -273,8 +273,8 @@ const Contact = () => {
               </div>
 
               {/* Social Links */}
-              <div className="pt-8 border-t border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">Follow Us</h3>
+              <div className="pt-8 border-t border-gray-700">
+                <h3 className="font-semibold text-white mb-4">Follow Us</h3>
                 <div className="flex space-x-4">
                   {socialLinks.map((social) => (
                     <a
@@ -282,12 +282,12 @@ const Contact = () => {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-12 h-12 bg-gray-100 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group"
+                      className="w-12 h-12 bg-gray-900 border border-gray-700/50 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group"
                       aria-label={social.label}
                     >
                       <social.icon 
                         size={20} 
-                        className="text-gray-600 group-hover:text-white transition-colors" 
+                        className="text-gray-400 group-hover:text-white transition-colors" 
                       />
                     </a>
                   ))}
@@ -295,9 +295,9 @@ const Contact = () => {
               </div>
 
               {/* Office Hours */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Office Hours</h3>
-                <div className="space-y-2 text-gray-600">
+              <div className="bg-gray-900 border border-gray-700/50 rounded-lg p-6">
+                <h3 className="font-semibold text-white mb-4">Office Hours</h3>
+                <div className="space-y-2 text-gray-400">
                   <p><span className="font-medium">Monday - Friday:</span> 9:00 AM - 6:00 PM</p>
                   <p><span className="font-medium">Saturday:</span> 10:00 AM - 4:00 PM</p>
                   <p><span className="font-medium">Sunday:</span> Closed</p>

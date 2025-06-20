@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
     setLoading(true)
     try {
       const result = await forgotPassword(email.trim())
-      
+
       if (result.success) {
         setSuccess(true)
       } else {
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
 
   const handleChange = (e) => {
     setEmail(e.target.value)
-    
+
     // Clear error when user starts typing
     if (errors.email) {
       setErrors(prev => ({
@@ -61,25 +61,25 @@ const ForgotPassword = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-900">
         <div className="max-w-md w-full mx-4">
           <div className="card text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="text-green-600" size={32} />
             </div>
-            
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Check Your Email</h1>
-            
+
+            <h1 className="text-2xl font-bold text-white mb-4">Check Your Email</h1>
+
             <p className="text-gray-600 mb-6 leading-relaxed">
-              We've sent a password reset link to <strong>{email}</strong>. 
+              We've sent a password reset link to <strong>{email}</strong>.
               Please check your email and follow the instructions to reset your password.
             </p>
-            
+
             <div className="space-y-4">
               <p className="text-sm text-gray-500">
                 Didn't receive the email? Check your spam folder or try again.
               </p>
-              
+
               <button
                 onClick={() => {
                   setSuccess(false)
@@ -89,7 +89,7 @@ const ForgotPassword = () => {
               >
                 Try Again
               </button>
-              
+
               <Link to="/login" className="btn-primary w-full block text-center">
                 Back to Login
               </Link>
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-900">
       <div className="max-w-md w-full mx-4">
         <div className="card">
           {/* Header */}
@@ -109,7 +109,7 @@ const ForgotPassword = () => {
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <Mail className="text-white" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">Forgot Password?</h1>
             <p className="text-gray-600">
               No worries! Enter your email address and we'll send you a link to reset your password.
             </p>

@@ -128,9 +128,9 @@ const Gallery = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-gray-900">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Event <span className="text-secondary-300">Gallery</span>
@@ -147,7 +147,7 @@ const Gallery = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
               <div key={event.id} className="card group cursor-pointer hover:scale-105 transition-all duration-300"
-                   onClick={() => openLightbox(event)}>
+                onClick={() => openLightbox(event)}>
                 <div className="relative overflow-hidden rounded-lg mb-4">
                   <img
                     src={event.thumbnail}
@@ -163,17 +163,17 @@ const Gallery = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                  <h3 className="text-xl font-bold text-white group-hover:text-primary-600 transition-colors">
                     {event.name}
                   </h3>
-                  
-                  <p className="text-gray-600 text-sm line-clamp-2">
+
+                  <p className="text-gray-400 text-sm line-clamp-2">
                     {event.description}
                   </p>
-                  
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+
+                  <div className="flex items-center justify-between text-sm text-gray-400">
                     <div className="flex items-center space-x-1">
                       <Calendar size={16} />
                       <span>{formatDate(event.date)}</span>
@@ -222,7 +222,7 @@ const Gallery = () => {
 
             {/* Modal Content */}
             <div className="p-6">
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="text-gray-400 mb-6 leading-relaxed">
                 {selectedEvent.description}
               </p>
 

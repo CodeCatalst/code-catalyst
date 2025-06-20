@@ -98,15 +98,15 @@ const About = () => {
   ]
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-gray-900">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             About <span className="text-secondary-300">Code Catalyst</span>
           </h1>
           <p className="text-xl max-w-3xl mx-auto leading-relaxed animate-slide-up">
-            We are more than just a tech society - we're a community of innovators, learners, 
+            We are more than just a tech society - we're a community of innovators, learners,
             and future leaders who believe in the power of technology to change the world.
           </p>
         </div>
@@ -121,8 +121,8 @@ const About = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-6">
                   <value.icon className="text-white" size={32} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                <h3 className="text-2xl font-bold text-white mb-4">{value.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{value.description}</p>
               </div>
             ))}
           </div>
@@ -130,13 +130,13 @@ const About = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding">
         <div className="container-max">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
               Our <span className="text-gradient">Journey</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               From humble beginnings to a thriving tech community
             </p>
           </div>
@@ -145,20 +145,19 @@ const About = () => {
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-primary"></div>
-              
+
               {timeline.map((item, index) => (
-                <div key={index} className={`relative flex items-center mb-12 ${
-                  index % 2 === 0 ? 'flex-row-reverse' : ''
-                }`}>
+                <div key={index} className={`relative flex items-center mb-12 ${index % 2 === 0 ? 'flex-row-reverse' : ''
+                  }`}>
                   {/* Timeline dot */}
                   <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-primary-600 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  
+
                   {/* Content */}
                   <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
                     <div className="card">
                       <div className="text-primary-600 font-bold text-lg mb-2">{item.year}</div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                      <p className="text-gray-600">{item.description}</p>
+                      <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                      <p className="text-gray-400">{item.description}</p>
                     </div>
                   </div>
                 </div>
@@ -172,10 +171,10 @@ const About = () => {
       <section className="section-padding">
         <div className="container-max">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
               Our <span className="text-gradient">Achievements</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Milestones that reflect our commitment to excellence
             </p>
           </div>
@@ -186,8 +185,8 @@ const About = () => {
                 <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <achievement.icon className="text-accent-600" size={32} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{achievement.title}</h3>
-                <p className="text-gray-600">{achievement.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{achievement.title}</h3>
+                <p className="text-gray-400">{achievement.description}</p>
               </div>
             ))}
           </div>
@@ -195,13 +194,13 @@ const About = () => {
       </section>
 
       {/* Team Summary Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-900">
         <div className="container-max">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
               Meet Our <span className="text-gradient">Leadership Team</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               The passionate individuals driving Code Catalyst forward
             </p>
           </div>
@@ -214,9 +213,9 @@ const About = () => {
                   alt={member.name}
                   className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
                 />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
                 <p className="text-primary-600 font-medium mb-3">{member.role}</p>
-                <p className="text-gray-600 text-sm">{member.bio}</p>
+                <p className="text-gray-400 text-sm">{member.bio}</p>
               </div>
             ))}
           </div>

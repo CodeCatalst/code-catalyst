@@ -1,14 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   html {
     scroll-behavior: smooth;
-  }
-  
-  body {
-    @apply font-sans text-gray-900 bg-white;
+    font-family: 'Inter', sans-serif;
   }
 }
 
@@ -22,11 +21,18 @@
   }
   
   .card {
-    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100;
+    @apply bg-gray-900 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6;
   }
   
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
+    @apply bg-gray-800 text-gray-100 border border-gray-700 placeholder-gray-400;
+    @apply focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-gray-900;
+    box-shadow: 0 2px 8px 0 rgba(16,30,54,0.04);
+  }
+  
+  .input-field::placeholder {
+    @apply text-gray-400 opacity-80;
   }
   
   .section-padding {

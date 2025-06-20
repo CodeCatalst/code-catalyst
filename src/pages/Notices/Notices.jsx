@@ -155,9 +155,9 @@ const Notices = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-gray-900">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Notice <span className="text-secondary-300">Board</span>
@@ -173,8 +173,8 @@ const Notices = () => {
         <div className="container-max max-w-4xl">
           <div className="space-y-6">
             {notices.map((notice) => (
-              <div 
-                key={notice.id} 
+              <div
+                key={notice.id}
                 className={`card border-l-4 ${getPriorityIndicator(notice.priority)} hover:shadow-xl transition-all duration-300`}
               >
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
@@ -184,16 +184,16 @@ const Notices = () => {
                         <Tag size={14} className="inline mr-1" />
                         {notice.type}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-400">
                         {formatRelativeDate(notice.date)}
                       </span>
                     </div>
-                    
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-primary-600 transition-colors">
+
+                    <h2 className="text-2xl font-bold text-white mb-3 hover:text-primary-600 transition-colors">
                       {notice.title}
                     </h2>
-                    
-                    <p className="text-gray-600 leading-relaxed mb-4">
+
+                    <p className="text-gray-400 leading-relaxed mb-4">
                       {notice.description}
                     </p>
 
@@ -204,7 +204,7 @@ const Notices = () => {
                           <ArrowRight size={16} className="ml-1 transform transition-transform duration-200" />
                         </summary>
                         <div className="mt-3 p-4 bg-gray-50 rounded-lg">
-                          <pre className="text-gray-600 whitespace-pre-wrap font-sans">
+                          <pre className="text-gray-400 whitespace-pre-wrap font-sans">
                             {notice.details}
                           </pre>
                         </div>
@@ -213,7 +213,7 @@ const Notices = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
+                <div className="flex items-center justify-between text-sm text-gray-400 border-t border-gray-700/50 pt-4">
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-1">
                       <User size={16} />
@@ -224,7 +224,7 @@ const Notices = () => {
                       <span>{formatDate(notice.date)}</span>
                     </div>
                   </div>
-                  
+
                   {notice.priority === 'high' && (
                     <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium">
                       High Priority
@@ -237,14 +237,14 @@ const Notices = () => {
 
           {notices.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No notices available at the moment.</p>
+              <p className="text-gray-400 text-lg">No notices available at the moment.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Subscribe Section */}
-      <section className="section-padding bg-gray-50">
+      {/* <section className="section-padding bg-gray-50">
         <div className="container-max max-w-2xl text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Never Miss an Update
@@ -263,7 +263,7 @@ const Notices = () => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

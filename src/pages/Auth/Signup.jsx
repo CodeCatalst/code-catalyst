@@ -53,7 +53,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -65,7 +65,7 @@ const Signup = () => {
         email: formData.email.trim(),
         password: formData.password
       })
-      
+
       if (result.success) {
         navigate('/')
       } else {
@@ -84,7 +84,7 @@ const Signup = () => {
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -109,7 +109,7 @@ const Signup = () => {
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
 
   return (
-    <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-50 py-12">
+    <div className="min-h-screen py-20 flex items-center justify-center bg-gray-900">
       <div className="max-w-md w-full mx-4">
         <div className="card">
           {/* Header */}
@@ -117,8 +117,8 @@ const Signup = () => {
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <UserPlus className="text-white" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Join Code Catalyst</h1>
-            <p className="text-gray-600">Create your account and start your tech journey</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Join Code Catalyst</h1>
+            <p className="text-gray-400">Create your account and start your tech journey</p>
           </div>
 
           {/* Error Message */}
@@ -132,7 +132,7 @@ const Signup = () => {
           {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
                 Full Name
               </label>
               <input
@@ -151,7 +151,7 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
               </label>
               <input
@@ -170,7 +170,7 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -192,7 +192,7 @@ const Signup = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              
+
               {/* Password Strength Indicator */}
               {formData.password && (
                 <div className="mt-2">
@@ -200,9 +200,8 @@ const Signup = () => {
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
-                        className={`h-1 flex-1 rounded ${
-                          i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200'
-                        }`}
+                        className={`h-1 flex-1 rounded ${i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200'
+                          }`}
                       ></div>
                     ))}
                   </div>
@@ -211,14 +210,14 @@ const Signup = () => {
                   </p>
                 </div>
               )}
-              
+
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-400 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
@@ -240,14 +239,14 @@ const Signup = () => {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              
+
               {formData.confirmPassword && formData.password === formData.confirmPassword && (
                 <div className="mt-1 flex items-center space-x-1">
                   <CheckCircle className="text-green-600" size={16} />
                   <p className="text-sm text-green-600">Passwords match</p>
                 </div>
               )}
-              
+
               {errors.confirmPassword && (
                 <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
               )}
@@ -261,13 +260,13 @@ const Signup = () => {
                 required
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded mt-1"
               />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="terms" className="ml-2 block text-sm text-gray-400">
                 I agree to the{' '}
                 <Link to="/terms" className="text-primary-600 hover:text-primary-700 transition-colors">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link to="/privacy" className="text-primary-600 hover:text-primary-700 transition-colors">
+                <Link to="/privacy" className="text-primary-600 hover:text-primary-400 transition-colors">
                   Privacy Policy
                 </Link>
               </label>
@@ -294,7 +293,7 @@ const Signup = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Already have an account?{' '}
               <Link
                 to="/login"

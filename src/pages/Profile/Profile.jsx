@@ -39,7 +39,7 @@ const Profile = () => {
 
     try {
       const result = await updateProfile(profileData)
-      
+
       if (result.success) {
         setSuccess('Profile updated successfully!')
         setTimeout(() => setSuccess(''), 3000)
@@ -55,20 +55,20 @@ const Profile = () => {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault()
-    
+
     // Validate password form
     const newErrors = {}
-    
+
     if (!passwordData.currentPassword) {
       newErrors.currentPassword = 'Current password is required'
     }
-    
+
     if (!passwordData.newPassword) {
       newErrors.newPassword = 'New password is required'
     } else if (passwordData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters'
     }
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
     }
@@ -87,7 +87,7 @@ const Profile = () => {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       })
-      
+
       if (result.success) {
         setSuccess('Password updated successfully!')
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
@@ -116,7 +116,7 @@ const Profile = () => {
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -160,11 +160,10 @@ const Profile = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                      activeTab === tab.id
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === tab.id
                         ? 'bg-primary-600 text-white'
                         : 'bg-white text-gray-700 hover:bg-gray-50'
-                    }`}
+                      }`}
                   >
                     <tab.icon size={20} />
                     <span className="font-medium">{tab.label}</span>
@@ -180,7 +179,7 @@ const Profile = () => {
                 {activeTab === 'profile' && (
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
-                    
+
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -269,7 +268,7 @@ const Profile = () => {
                 {activeTab === 'password' && (
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Change Password</h2>
-                    
+
                     <form onSubmit={handlePasswordSubmit} className="space-y-6">
                       <div>
                         <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
@@ -350,7 +349,7 @@ const Profile = () => {
                 {activeTab === 'picture' && (
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Picture</h2>
-                    
+
                     <div className="space-y-6">
                       <div className="flex items-center space-x-6">
                         <div className="w-24 h-24 bg-primary-600 rounded-full flex items-center justify-center">
@@ -366,7 +365,7 @@ const Profile = () => {
                             </span>
                           )}
                         </div>
-                        
+
                         <div>
                           <h3 className="text-lg font-medium text-gray-900 mb-2">
                             {user?.name}

@@ -183,9 +183,9 @@ const Team = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 bg-gray-900">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-primary text-white">
+      <section className="section-padding bg-gray-900 text-white">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Meet Our <span className="text-secondary-300">Team</span>
@@ -197,22 +197,21 @@ const Team = () => {
       </section>
 
       {/* Filter and View Controls */}
-      <section className="py-8 bg-gray-50 border-b">
+      <section className="py-8 border-b border-gray-700/50">
         <div className="container-max">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Department Filter */}
             <div className="flex items-center space-x-4">
-              <Filter size={20} className="text-gray-600" />
+              <Filter size={20} className="text-gray-400" />
               <div className="flex flex-wrap gap-2">
                 {departments.map((dept) => (
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                      selectedDepartment === dept
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${selectedDepartment === dept
                         ? 'bg-primary-600 text-white shadow-lg'
-                        : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                    }`}
+                        : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
+                      }`}
                   >
                     {dept}
                   </button>
@@ -221,20 +220,18 @@ const Team = () => {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2 bg-white rounded-lg p-1 border border-gray-200">
+            <div className="flex items-center space-x-2 bg-gray-900 rounded-lg p-1 border border-gray-700/50">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === 'grid' ? 'bg-primary-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-                }`}
+                className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-100'
+                  }`}
               >
                 <Grid size={18} />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-                }`}
+                className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-100'
+                  }`}
               >
                 <List size={18} />
               </button>
@@ -255,15 +252,15 @@ const Team = () => {
                     alt={member.name}
                     className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
                   />
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
                   <p className="text-primary-600 font-medium mb-1">{member.role}</p>
-                  <p className="text-gray-500 text-sm mb-4">{member.department}</p>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">{member.bio}</p>
-                  
+                  <p className="text-gray-400 text-sm mb-4">{member.department}</p>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">{member.bio}</p>
+
                   {/* Skills */}
                   <div className="flex flex-wrap gap-1 mb-4 justify-center">
                     {member.skills.slice(0, 3).map((skill, index) => (
-                      <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                      <span key={index} className="bg-gray-900 border border-gray-700 text-gray-400 px-2 py-1 rounded text-xs">
                         {skill}
                       </span>
                     ))}
@@ -279,11 +276,11 @@ const Team = () => {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-8 h-8 bg-gray-100 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
+                          className="w-8 h-8 bg-gray-900 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
                         >
-                          <IconComponent 
-                            size={16} 
-                            className="text-gray-600 group-hover:text-white transition-colors" 
+                          <IconComponent
+                            size={16}
+                            className="text-gray-400 group-hover:text-white transition-colors"
                           />
                         </a>
                       )
@@ -305,9 +302,9 @@ const Team = () => {
                     <div className="flex-grow text-center lg:text-left">
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-3">
                         <div>
-                          <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
+                          <h3 className="text-xl font-bold text-white">{member.name}</h3>
                           <p className="text-primary-600 font-medium">{member.role}</p>
-                          <p className="text-gray-500 text-sm">{member.department}</p>
+                          <p className="text-gray-400 text-sm">{member.department}</p>
                         </div>
                         <div className="flex justify-center lg:justify-end space-x-2 mt-2 lg:mt-0">
                           {Object.entries(member.social).map(([platform, url]) => {
@@ -318,23 +315,23 @@ const Team = () => {
                                 href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-8 h-8 bg-gray-100 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
+                                className="w-8 h-8 bg-gray-900 border border-gray-700/50 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
                               >
-                                <IconComponent 
-                                  size={16} 
-                                  className="text-gray-600 group-hover:text-white transition-colors" 
+                                <IconComponent
+                                  size={16}
+                                  className="text-gray-400 group-hover:text-white transition-colors"
                                 />
                               </a>
                             )
                           })}
                         </div>
                       </div>
-                      
-                      <p className="text-gray-600 mb-3">{member.bio}</p>
-                      
+
+                      <p className="text-gray-400 mb-3">{member.bio}</p>
+
                       <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                         {member.skills.map((skill, index) => (
-                          <span key={index} className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm">
+                          <span key={index} className="bg-gray-900 border border-gray-700/50 text-gray-400 px-3 py-1 rounded text-sm">
                             {skill}
                           </span>
                         ))}
@@ -348,7 +345,7 @@ const Team = () => {
 
           {filteredMembers.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No team members found in this department.</p>
+              <p className="text-gray-400 text-lg">No team members found in this department.</p>
             </div>
           )}
         </div>

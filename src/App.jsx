@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout/Layout'
 import ProtectedRoute from './components/Auth/ProtectedRoute'
+import AdminRoute from './components/Auth/AdminRoute'
 
 // Lazy load pages for better performance
 import { lazy, Suspense } from 'react'
@@ -18,6 +19,7 @@ const Login = lazy(() => import('./pages/Auth/Login'))
 const Signup = lazy(() => import('./pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'))
 const Profile = lazy(() => import('./pages/Profile/Profile'))
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
 
 function App() {
   return (
@@ -35,13 +37,21 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
                   <Profile />
                 </ProtectedRoute>
-              } 
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                // <AdminRoute>
+                  <AdminDashboard />
+                // </AdminRoute>
+              }
             />
           </Routes>
         </Suspense>

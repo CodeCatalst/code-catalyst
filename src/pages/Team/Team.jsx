@@ -39,12 +39,12 @@ const Team = () => {
           },
           {
             id: 2,
-            name: 'Alex Chen',
+            name: 'Gauranshi Bahuguna',
             role: 'Vice President',
             department: 'Executive',
-            image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Full-stack developer with expertise in React, Node.js, and cloud technologies. Passionate about creating scalable web applications and mentoring fellow students.',
-            skills: ['React', 'Node.js', 'AWS', 'TypeScript'],
+            image: '/Gauranshi_Bahuguna.jpg',
+            bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
+            skills: ['Linux', 'Networking', 'Java', 'Python','DSA'],
             social: {
               github: 'https://github.com/alexchen',
               linkedin: 'https://linkedin.com/in/alexchen',
@@ -259,7 +259,7 @@ const Team = () => {
 
                   {/* Skills */}
                   <div className="flex flex-wrap gap-1 mb-4 justify-center">
-                    {member.skills.slice(0, 3).map((skill, index) => (
+                    {member.skills.map((skill, index) => (
                       <span key={index} className="bg-gray-900 border border-gray-700 text-gray-400 px-2 py-1 rounded text-xs">
                         {skill}
                       </span>

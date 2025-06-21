@@ -147,13 +147,13 @@ const About = () => {
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-primary"></div>
 
               {timeline.map((item, index) => (
-                <div key={index} className={`relative flex items-center mb-12 ${index % 2 === 0 ? 'flex-row-reverse' : ''
+                <div key={index} className={`relative flex items-start sm:items-center mb-12 ${index % 2 === 0 ? 'flex-row-reverse' : ''
                   }`}>
                   {/* Timeline dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-primary-600 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-primary-600 rounded-full border-4 border-white shadow-lg sm:z-10"></div>
 
                   {/* Content */}
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
+                  <div className={`w-full sm:w-5/12 ${index % 2 === 0 ? 'text-left' : 'text-left'}`}>
                     <div className="card">
                       <div className="text-primary-600 font-bold text-lg mb-2">{item.year}</div>
                       <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>

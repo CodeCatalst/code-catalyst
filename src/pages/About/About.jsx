@@ -146,7 +146,7 @@ const About = () => {
   ]
 
   return (
-    <div className="min-h-screen pt-16 overflow-hidden">
+    <div className="min-h-screen overflow-hidden">
       {/* Hero Section with 3D Parallax */}
       <section 
         ref={heroRef}

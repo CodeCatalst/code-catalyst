@@ -33,7 +33,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   }
 
   return (
-    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-gray-900 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white backdrop-blur-sm shadow-lg' : 'bg-transparent'
       }`}>
       <nav className="container-max">
         <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
@@ -55,7 +55,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 to={link.href}
                 className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
                     ? 'text-primary-600'
-                    : scrolled ? 'text-white' : 'text-white'
+                    : scrolled ? 'text-gray-900' : 'text-white'
                   }`}
               >
                 {link.name}

@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react'
-import { Github, Linkedin, Twitter, Mail, Filter, Grid, List } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram } from 'lucide-react'
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
+import Card from './Card'
 
 const Team = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [teamMembers, setTeamMembers] = useState([])
   const [filteredMembers, setFilteredMembers] = useState([])
   const [selectedDepartment, setSelectedDepartment] = useState('All')
   const [viewMode, setViewMode] = useState('grid')
   const [loading, setLoading] = useState(true)
+  const heroRef = useRef(null)
 
-  const departments = ['All', 'Executive', 'Technical', 'PR & Marketing', 'HR & Events', 'Design', 'Content']
+  const departments = ['All', 'Executive', 'Technical', 'PR & Marketing', 'HR & Events', 'Design', 'Content', 'E-Sports']
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
@@ -44,17 +47,15 @@ const Team = () => {
             department: 'Executive',
             image: '/Gauranshi_Bahuguna.jpg',
             bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
-            skills: ['Linux', 'Networking', 'Java', 'Python','DSA'],
+            skills: ['Linux', 'Networking', 'Java', 'Python', 'DSA'],
             social: {
-              github: 'https://github.com/alexchen',
-              linkedin: 'https://linkedin.com/in/alexchen',
-              email: 'alex.chen@codecatalyst.edu'
+
             }
           },
           {
             id: 3,
-            name: 'Maya Patel',
-            role: 'Technical Lead',
+            name: 'Arjan',
+            role: 'Secretary',
             department: 'Technical',
             image: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=400',
             bio: 'DevOps enthusiast and open source contributor. Specializes in containerization, CI/CD pipelines, and infrastructure automation.',
@@ -67,86 +68,103 @@ const Team = () => {
           },
           {
             id: 4,
-            name: 'Jordan Smith',
+            name: 'Jeevan',
             role: 'Community Manager',
             department: 'HR & Events',
-            image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Event coordinator with a passion for bringing people together. Experienced in organizing workshops, hackathons, and networking events.',
-            skills: ['Event Planning', 'Community Building', 'Public Speaking', 'Marketing'],
+            image: './Jeevan.png',
+            bio: ' Creative Developer',
+            skills: ['Event Planning', 'Community Building', 'Public Speaking'],
             social: {
-              linkedin: 'https://linkedin.com/in/jordansmith',
-              twitter: 'https://twitter.com/jordansmith',
-              email: 'jordan.smith@codecatalyst.edu'
+              linkedin: 'https://www.linkedin.com/in/jeevanpant/',
             }
           },
           {
             id: 5,
-            name: 'Emily Rodriguez',
-            role: 'Design Lead',
-            department: 'Design',
-            image: 'https://images.pexels.com/photos/3184298/pexels-photo-3184298.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'UX/UI designer focused on creating intuitive and accessible digital experiences. Advocates for user-centered design principles.',
-            skills: ['UI/UX Design', 'Figma', 'Adobe Creative Suite', 'User Research'],
+            name: 'Prashant Thakur',
+            role: 'Technical Lead',
+            department: 'Technical',
+            image: './Prashant_Thakur.jpg',
+            bio: 'Full Stack Developer with a passion for building scalable and efficient web applications. ',
+            skills: ['React', 'Next.js', 'Node.js', 'MongoDB', 'SQL', 'TypeScript', 'Git & Github'],
             social: {
-              linkedin: 'https://linkedin.com/in/emilyrodriguez',
-              twitter: 'https://twitter.com/emilyrodriguez',
-              email: 'emily.rodriguez@codecatalyst.edu'
+              linkedin: 'https://www.linkedin.com/in/thakurprashant7949/',
+              github: 'https://github.com/prashantScripter',
             }
           },
           {
             id: 6,
-            name: 'David Kim',
-            role: 'Backend Developer',
-            department: 'Technical',
-            image: 'https://images.pexels.com/photos/3184302/pexels-photo-3184302.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Backend developer specializing in database design and API development. Interested in distributed systems and microservices architecture.',
-            skills: ['Python', 'PostgreSQL', 'Django', 'Redis'],
+            name: 'Jobin Babu',
+            role: 'Graphic Designer',
+            department: 'Design',
+            image: './Jobin_Babu.jpg',
+            bio: 'Tech enthusiast with a passion for Python, AI/ML, and creative design. Leading visual content creation to support innovative and technical projects.',
+            skills: ['Python', 'UI/UX Design', 'Figma', 'AI/ML'],
             social: {
-              github: 'https://github.com/davidkim',
-              linkedin: 'https://linkedin.com/in/davidkim',
-              email: 'david.kim@codecatalyst.edu'
+              linkedin: 'linkedin.com/in/jobin-babu 872462325',
             }
           },
           {
             id: 7,
-            name: 'Lisa Wang',
-            role: 'Marketing Director',
+            name: 'Yogesh Pandey',
+            role: 'PR Team Lead',
             department: 'PR & Marketing',
-            image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Digital marketing strategist with experience in social media management, content creation, and brand development.',
+            image: './Yogesh_Pandey.png',
+            bio: 'Turning codes into conversations. From drafting posts to hosting events—I handle the buzz. When not online, I\'m probably learning to code and vibing to DHH.',
             skills: ['Digital Marketing', 'Social Media', 'Content Strategy', 'Analytics'],
             social: {
-              linkedin: 'https://linkedin.com/in/lisawang',
-              twitter: 'https://twitter.com/lisawang',
-              email: 'lisa.wang@codecatalyst.edu'
+              linkedin: 'www.linkedin.com/in/yogesh-pandey-9a07582b3',
+              github: ' https://github.com/yogeshpandey9908',
+              Instagram: 'https://www.instagram.com/yogeshpandey9908/'
             }
           },
           {
             id: 8,
-            name: 'Michael Brown',
-            role: 'Frontend Developer',
-            department: 'Technical',
-            image: 'https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Frontend developer passionate about modern JavaScript frameworks and responsive design. Loves creating smooth user experiences.',
-            skills: ['React', 'Vue.js', 'CSS', 'JavaScript'],
+            name: 'Rahul kumar ',
+            role: 'E-Sports Support',
+            department: 'E-Sports',
+            image: './Rahul_Kumar.jpg',
+            bio: 'I have a lot of interest in gaming and I like to learn every development method of gaming and I also like to gain experience of team work, that\'s all',
+            skills: ['E-Sports'],
             social: {
-              github: 'https://github.com/michaelbrown',
+              github: 'https://github.com/rahul-kumar-007',
               linkedin: 'https://linkedin.com/in/michaelbrown',
               email: 'michael.brown@codecatalyst.edu'
             }
           },
           {
             id: 9,
-            name: 'Sophia Martinez',
-            role: 'Content Writer',
-            department: 'Content',
-            image: 'https://images.pexels.com/photos/3184356/pexels-photo-3184356.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Technical writer and content creator focused on making complex technology concepts accessible to everyone.',
-            skills: ['Technical Writing', 'Content Creation', 'SEO', 'Documentation'],
+            name: 'Poorvi Panwar ',
+            role: 'Event management',
+            department: 'HR & Events',
+            image: './Poorvi_Panwar.jpg',
+            bio: ' I am Poorvi newly inducted member of the event management team in the Code catalyst society, eager to contribute to organizing impactful and engaging technical events.',
+            skills: ['Event Management'],
             social: {
-              linkedin: 'https://linkedin.com/in/sophiamartinez',
-              twitter: 'https://twitter.com/sophiamartinez',
-              email: 'sophia.martinez@codecatalyst.edu'
+
+            }
+          },
+          {
+            id: 10,
+            name: 'Divya',
+            role: 'Content Lead',
+            department: 'Content',
+            image: './Divya.png',
+            bio: '  Driving impactful narratives and strategic communication across tech-driven platforms. Passionate about simplifying complex ideas, leading creative teams, and building content that informs, inspires, and engages the developer community.',
+            skills: ['Content Writing', 'Content Creation', 'SEO', 'Documentation'],
+            social: {
+
+            }
+          },
+          {
+            id: 11,
+            name: 'Radha Srivastav',
+            role: 'PR lead support',
+            department: 'PR & Marketing',
+            image: './Radha_Srivastav.jpg',
+            bio: 'I am passionate about learning, collaborating, and making a meaningful impact across academic, technical, and public relations environments.',
+            skills: ['PR', 'Marketing', 'Content Creation'],
+            social: {
+
             }
           }
         ]
@@ -174,6 +192,7 @@ const Team = () => {
       case 'linkedin': return Linkedin
       case 'twitter': return Twitter
       case 'email': return Mail
+      case 'Instagram': return Instagram
       default: return Mail
     }
   }
@@ -183,21 +202,66 @@ const Team = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16 bg-gray-900">
+    <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
-      <section className="section-padding bg-gray-900 text-white">
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0">
+          {/* Floating Geometric Shapes */}
+          <div
+            className="absolute w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"
+            style={{
+              left: `${20 + mousePosition.x * 0.02}%`,
+              top: `${10 + mousePosition.y * 0.02}%`,
+              transform: `translate3d(${mousePosition.x * 0.1}px, ${mousePosition.y * 0.1}px, 0)`
+            }}
+          />
+          <div
+            className="absolute w-96 h-96 bg-gradient-to-r from-pink-500/15 to-red-500/15 rounded-full blur-2xl animate-pulse delay-1000"
+            style={{
+              right: `${10 + mousePosition.x * 0.03}%`,
+              bottom: `${20 + mousePosition.y * 0.03}%`,
+              transform: `translate3d(${-mousePosition.x * 0.15}px, ${-mousePosition.y * 0.15}px, 0)`
+            }}
+          />
+
+          {/* Floating Code Elements */}
+          <div className="absolute inset-0 opacity-10">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute text-green-400 font-mono text-sm animate-float"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 5}s`,
+                  animationDuration: `${3 + Math.random() * 4}s`
+                }}
+              >
+                {['<div>', '</div>', 'function()', 'const', 'return', '{}', '[]', '=>'][Math.floor(Math.random() * 8)]}
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="container-max text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
-            Meet Our <span className="text-secondary-300">Team</span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+            Meet Our <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Team</span>
           </h1>
           <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
             The passionate individuals who make Code Catalyst a vibrant and thriving community.
           </p>
         </div>
+
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
+          </div>
+        </div>
       </section>
 
       {/* Filter and View Controls */}
-      <section className="py-8 border-b border-gray-700/50">
+      <section className="py-8 border-b border-gray-700/50 bg-gray-900">
         <div className="container-max">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Department Filter */}
@@ -209,8 +273,8 @@ const Team = () => {
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
                     className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${selectedDepartment === dept
-                        ? 'bg-primary-600 text-white shadow-lg'
-                        : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
+                      ? 'bg-primary-600 text-white shadow-lg'
+                      : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
                       }`}
                   >
                     {dept}
@@ -241,104 +305,18 @@ const Team = () => {
       </section>
 
       {/* Team Members */}
-      <section className="section-padding">
+      <section className="section-padding bg-white">
         <div className="container-max">
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredMembers.map((member) => (
-                <div key={member.id} className="card text-center hover:scale-105 transition-all duration-300">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-                  />
-                  <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                  <p className="text-primary-600 font-medium mb-1">{member.role}</p>
-                  <p className="text-gray-400 text-sm mb-4">{member.department}</p>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">{member.bio}</p>
-
-                  {/* Skills */}
-                  <div className="flex flex-wrap gap-1 mb-4 justify-center">
-                    {member.skills.map((skill, index) => (
-                      <span key={index} className="bg-gray-900 border border-gray-700 text-gray-400 px-2 py-1 rounded text-xs">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Social Links */}
-                  <div className="flex justify-center space-x-2">
-                    {Object.entries(member.social).map(([platform, url]) => {
-                      const IconComponent = getSocialIcon(platform)
-                      return (
-                        <a
-                          key={platform}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 bg-gray-900 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
-                        >
-                          <IconComponent
-                            size={16}
-                            className="text-gray-400 group-hover:text-white transition-colors"
-                          />
-                        </a>
-                      )
-                    })}
-                  </div>
-                </div>
+                <Card key={member.id} member={member} />
               ))}
             </div>
           ) : (
             <div className="space-y-6">
               {filteredMembers.map((member) => (
-                <div key={member.id} className="card hover:shadow-xl transition-all duration-300">
-                  <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-24 h-24 rounded-full object-cover flex-shrink-0 mx-auto lg:mx-0"
-                    />
-                    <div className="flex-grow text-center lg:text-left">
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-3">
-                        <div>
-                          <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                          <p className="text-primary-600 font-medium">{member.role}</p>
-                          <p className="text-gray-400 text-sm">{member.department}</p>
-                        </div>
-                        <div className="flex justify-center lg:justify-end space-x-2 mt-2 lg:mt-0">
-                          {Object.entries(member.social).map(([platform, url]) => {
-                            const IconComponent = getSocialIcon(platform)
-                            return (
-                              <a
-                                key={platform}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-8 h-8 bg-gray-900 border border-gray-700/50 hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300 group"
-                              >
-                                <IconComponent
-                                  size={16}
-                                  className="text-gray-400 group-hover:text-white transition-colors"
-                                />
-                              </a>
-                            )
-                          })}
-                        </div>
-                      </div>
-
-                      <p className="text-gray-400 mb-3">{member.bio}</p>
-
-                      <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                        {member.skills.map((skill, index) => (
-                          <span key={index} className="bg-gray-900 border border-gray-700/50 text-gray-400 px-3 py-1 rounded text-sm">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Card key={member.id} member={member} layout="list" />
               ))}
             </div>
           )}

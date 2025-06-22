@@ -20,6 +20,7 @@ const Signup = lazy(() => import('./pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'))
 const Profile = lazy(() => import('./pages/Profile/Profile'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
+const Test = lazy(() => import('./Test'))
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/test" element={<Test />} />
+            
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/gallery" element={<Gallery />} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, Instagram } from 'lucide-react';
 
 const Card = ({ member, layout = 'grid' }) => {
   const getSocialIcon = (platform) => {
@@ -9,6 +9,7 @@ const Card = ({ member, layout = 'grid' }) => {
       case 'linkedin': return Linkedin
       case 'twitter': return Twitter
       case 'email': return Mail
+      case 'Instagram': return Instagram
       default: return Mail
     }
   }

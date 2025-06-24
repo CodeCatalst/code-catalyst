@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram, ArrowRight } from 'lucide-react'
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import Card from './Card'
@@ -15,6 +15,19 @@ const Team = () => {
 
   const departments = ['All', 'Executive', 'Technical', 'PR & Marketing', 'HR & Events', 'Design', 'Content', 'E-Sports']
 
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
@@ -27,7 +40,7 @@ const Team = () => {
         const mockData = [
           {
             id: 1,
-            name: 'Sarah Johnson',
+            name: 'Divy',
             role: 'President',
             department: 'Executive',
             image: 'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -87,7 +100,7 @@ const Team = () => {
             bio: 'Full Stack Developer with a passion for building scalable and efficient web applications. ',
             skills: ['React', 'Next.js', 'Node.js', 'MongoDB', 'SQL', 'TypeScript', 'Git & Github'],
             social: {
-              linkedin: 'https://www.linkedin.com/in/thakurprashant7949/',
+              linkedin: 'https://www.linkedin.com/in/prashanthakurr/',
               github: 'https://github.com/prashantScripter',
             }
           },
@@ -100,7 +113,7 @@ const Team = () => {
             bio: 'Tech enthusiast with a passion for Python, AI/ML, and creative design. Leading visual content creation to support innovative and technical projects.',
             skills: ['Python', 'UI/UX Design', 'Figma', 'AI/ML'],
             social: {
-              linkedin: 'linkedin.com/in/jobin-babu 872462325',
+              linkedin: 'https://www.linkedin.com/in/jobin-babu-872462325/',
             }
           },
           {
@@ -112,7 +125,7 @@ const Team = () => {
             bio: 'Turning codes into conversations. From drafting posts to hosting events—I handle the buzz. When not online, I\'m probably learning to code and vibing to DHH.',
             skills: ['Digital Marketing', 'Social Media', 'Content Strategy', 'Analytics'],
             social: {
-              linkedin: 'www.linkedin.com/in/yogesh-pandey-9a07582b3',
+              linkedin: 'https://www.linkedin.com/in/yogesh-pandey-9a07582b3',
               github: ' https://github.com/yogeshpandey9908',
               Instagram: 'https://www.instagram.com/yogeshpandey9908/'
             }
@@ -126,9 +139,7 @@ const Team = () => {
             bio: 'I have a lot of interest in gaming and I like to learn every development method of gaming and I also like to gain experience of team work, that\'s all',
             skills: ['E-Sports'],
             social: {
-              github: 'https://github.com/rahul-kumar-007',
-              linkedin: 'https://linkedin.com/in/michaelbrown',
-              email: 'michael.brown@codecatalyst.edu'
+
             }
           },
           {
@@ -206,44 +217,55 @@ const Team = () => {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
-        <div className="absolute inset-0">
-          {/* Floating Geometric Shapes */}
-          <div
-            className="absolute w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"
-            style={{
-              left: `${20 + mousePosition.x * 0.02}%`,
-              top: `${10 + mousePosition.y * 0.02}%`,
-              transform: `translate3d(${mousePosition.x * 0.1}px, ${mousePosition.y * 0.1}px, 0)`
-            }}
-          />
-          <div
-            className="absolute w-96 h-96 bg-gradient-to-r from-pink-500/15 to-red-500/15 rounded-full blur-2xl animate-pulse delay-1000"
-            style={{
-              right: `${10 + mousePosition.x * 0.03}%`,
-              bottom: `${20 + mousePosition.y * 0.03}%`,
-              transform: `translate3d(${-mousePosition.x * 0.15}px, ${-mousePosition.y * 0.15}px, 0)`
-            }}
-          />
-
-          {/* Floating Code Elements */}
-          <div className="absolute inset-0 opacity-10">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute text-green-400 font-mono text-sm animate-float"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  animationDuration: `${3 + Math.random() * 4}s`
-                }}
-              >
-                {['<div>', '</div>', 'function()', 'const', 'return', '{}', '[]', '=>'][Math.floor(Math.random() * 8)]}
-              </div>
-            ))}
-          </div>
+        className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+      >
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            animation: 'grid-move 20s linear infinite'
+          }} />
         </div>
+
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
+              }}
+            >
+              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
+            </div>
+          ))}
+        </div>
+
+        {/* Particle System */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
+
         <div className="container-max text-center">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
             Meet Our <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Team</span>
@@ -252,6 +274,17 @@ const Team = () => {
             The passionate individuals who make Code Catalyst a vibrant and thriving community.
           </p>
         </div>
+
+        <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
+          onClick={() => {
+            const el = document.getElementById('team-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          <span className="relative z-10">See Our Team</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
+        </button>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
@@ -305,7 +338,7 @@ const Team = () => {
       </section>
 
       {/* Team Members */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white" id="team-section">
         <div className="container-max">
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Calendar, User, Tag, ArrowRight } from 'lucide-react'
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
@@ -6,6 +6,20 @@ import LoadingSpinner from '../../components/Common/LoadingSpinner'
 const Notices = () => {
   const [notices, setNotices] = useState([])
   const [loading, setLoading] = useState(true)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -155,21 +169,88 @@ const Notices = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16 bg-gray-900">
+    <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
-      <section className="section-padding text-white">
+
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex gap-10 flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+      >
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            animation: 'grid-move 20s linear infinite'
+          }} />
+        </div>
+
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
+              }}
+            >
+              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
+            </div>
+          ))}
+        </div>
+
+        {/* Particle System */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
         <div className="container-max text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
-            Notice <span className="text-secondary-300">Board</span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fade-in">
+            Notice <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Board</span>
           </h1>
           <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
             Stay updated with the latest announcements, events, and opportunities from Code Catalyst.
           </p>
         </div>
+
+        <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
+          onClick={() => {
+            const el = document.getElementById('notices-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          <span className="relative z-10">See Latest Notices</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
+        </button>
+
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
+          </div>
+        </div>
       </section>
 
       {/* Notices List */}
-      <section className="section-padding">
+      <section className="section-padding" id="notices-section">
         <div className="container-max max-w-4xl">
           <div className="space-y-6">
             {notices.map((notice) => (

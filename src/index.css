@@ -15,30 +15,30 @@
   .btn-primary {
     @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
   }
-  
+
   .btn-secondary {
     @apply bg-white hover:bg-gray-50 text-primary-600 font-medium py-2 px-6 rounded-lg border-2 border-primary-600 transition-all duration-300 hover:shadow-lg;
   }
-  
+
   .card {
-    @apply bg-gray-900 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6;
+    @apply bg-white border border-gray-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6;
   }
-  
+
   .input-field {
     @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
-    @apply bg-gray-800 text-gray-100 border border-gray-700 placeholder-gray-400;
-    @apply focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-gray-900;
-    box-shadow: 0 2px 8px 0 rgba(16,30,54,0.04);
+    @apply bg-transparent text-gray-100 border border-white/20 placeholder-gray-400;
+    @apply focus:ring-2 focus:ring-primary-500 focus:border-primary-50;
+    box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.04);
   }
-  
+
   .input-field::placeholder {
-    @apply text-gray-400 opacity-80;
+    @apply text-white/50;
   }
-  
+
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
   }
-  
+
   .container-max {
     @apply max-w-7xl mx-auto;
   }
@@ -48,7 +48,7 @@
   .text-gradient {
     @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
   }
-  
+
   .bg-gradient-primary {
     @apply bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-600;
   }

@@ -116,30 +116,30 @@ const About = () => {
 
   const teamMembers = [
     {
-      name: 'Sarah Johnson',
+      name: 'Divy',
       role: 'President',
       image: 'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=300',
       bio: 'CS Senior passionate about AI and community building',
       specialty: 'AI/ML'
     },
     {
-      name: 'Alex Chen',
+      name: 'Gauranshi Bahuguna',
       role: 'Vice President',
-      image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=300',
-      bio: 'Full-stack developer with expertise in React and Node.js',
-      specialty: 'Web Development'
+      image: '/Gauranshi_Bahuguna.jpg',
+      bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
+      specialty: 'Ethical Hacking'
     },
     {
-      name: 'Maya Patel',
-      role: 'Technical Lead',
+      name: 'Arjan',
+      role: 'Secretary',
       image: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=300',
       bio: 'DevOps enthusiast and open source contributor',
       specialty: 'DevOps'
     },
     {
-      name: 'Jordan Smith',
+      name: 'Jeevan',
       role: 'Community Manager',
-      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300',
+      image: './Jeevan.png',
       bio: 'Event coordinator with a passion for bringing people together',
       specialty: 'Community'
     }
@@ -147,54 +147,61 @@ const About = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Hero Section with 3D Parallax */}
-      <section 
+      <section
         ref={heroRef}
         className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
-        {/* Animated Background Elements */}
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            animation: 'grid-move 20s linear infinite'
+          }} />
+        </div>
+
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
+              }}
+            >
+              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
+            </div>
+          ))}
+        </div>
+
+        {/* Particle System */}
         <div className="absolute inset-0">
-          {/* Floating Geometric Shapes */}
-          <div 
-            className="absolute w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"
-            style={{
-              left: `${20 + mousePosition.x * 0.02}%`,
-              top: `${10 + mousePosition.y * 0.02}%`,
-              transform: `translate3d(${mousePosition.x * 0.1}px, ${mousePosition.y * 0.1}px, 0)`
-            }}
-          />
-          <div 
-            className="absolute w-96 h-96 bg-gradient-to-r from-pink-500/15 to-red-500/15 rounded-full blur-2xl animate-pulse delay-1000"
-            style={{
-              right: `${10 + mousePosition.x * 0.03}%`,
-              bottom: `${20 + mousePosition.y * 0.03}%`,
-              transform: `translate3d(${-mousePosition.x * 0.15}px, ${-mousePosition.y * 0.15}px, 0)`
-            }}
-          />
-          
-          {/* Floating Code Elements */}
-          <div className="absolute inset-0 opacity-10">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute text-green-400 font-mono text-sm animate-float"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  animationDuration: `${3 + Math.random() * 4}s`
-                }}
-              >
-                {['<div>', '</div>', 'function()', 'const', 'return', '{}', '[]', '=>'][Math.floor(Math.random() * 8)]}
-              </div>
-            ))}
-          </div>
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`
+              }}
+            />
+          ))}
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
-            <div 
+            <div
               className="transform transition-all duration-1000 ease-out"
               style={{
                 transform: `perspective(1000px) rotateX(${mousePosition.y * 0.02}deg) rotateY(${mousePosition.x * 0.02}deg)`
@@ -207,20 +214,23 @@ const About = () => {
                 </span>
               </h1>
             </div>
-            
+
             <div className="relative">
               <p className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed transform transition-all duration-700 hover:scale-105">
-                We are more than just a tech society - we're a community of innovators, learners, 
+                We are more than just a tech society - we're a community of innovators, learners,
                 and future leaders who believe in the power of technology to change the world.
               </p>
-              
+
               {/* Glowing Border Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-lg blur-xl opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10" />
             </div>
 
             {/* Interactive CTA Button */}
             <div className="pt-8">
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu">
+              <button
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
+                onClick={() => statsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <span className="relative z-10">Explore Our Journey</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
@@ -238,7 +248,7 @@ const About = () => {
       </section>
 
       {/* Animated Stats Section */}
-      <section 
+      <section
         ref={statsRef}
         className="py-20 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden"
         id="stats"
@@ -249,9 +259,8 @@ const About = () => {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className={`text-center transform transition-all duration-700 hover:scale-110 ${
-                  isVisible.stats ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-                }`}
+                className={`text-center transform transition-all duration-700 hover:scale-110 ${isVisible.stats ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+                  }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <div className="relative group">
@@ -301,7 +310,7 @@ const About = () => {
                   <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                     {value.title}
                   </h3>
-                  
+
                   <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                     {value.description}
                   </p>
@@ -332,24 +341,23 @@ const About = () => {
               {/* Animated Timeline Line */}
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 opacity-30" />
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 animate-timeline-grow" />
-              
+
               {timeline.map((item, index) => (
                 <div
                   key={index}
-                  className={`relative flex items-center mb-16 ${
-                    index % 2 === 0 ? 'flex-row-reverse' : ''
-                  }`}
+                  className={`relative flex items-center mb-16 ${index % 2 === 0 ? 'flex-row-reverse' : ''
+                    }`}
                 >
                   {/* Timeline Node */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
-                    <div className={`w-16 h-16 ${item.color} rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-125 hover:rotate-12 border-4 border-white`}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 z-10 -top-5">
+                    <div className={`w-10 h-10 sm:w-16 sm:h-16 ${item.color} rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-125 hover:rotate-12 border-2 sm:border-4 border-white`}>
                       <item.icon className="text-white" size={24} />
                     </div>
-                    <div className={`absolute inset-0 w-16 h-16 ${item.color} rounded-full opacity-0 hover:opacity-50 transition-opacity duration-500 blur-xl`} />
+                    <div className={`absolute inset-0 w-10 h-10 sm:w-16 sm:h-16 ${item.color} rounded-full opacity-0 hover:opacity-50 transition-opacity duration-500 blur-xl`} />
                   </div>
-                  
+
                   {/* Content Card */}
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
+                  <div className={`w-full sm:w-5/12 ${index % 2 === 0 ? 'text-left sm:pr-8' : 'sm:pl-8'}`}>
                     <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2">
                       <div className="text-blue-400 font-bold text-xl mb-2">{item.year}</div>
                       <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
@@ -391,7 +399,7 @@ const About = () => {
                       className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
+
                     {/* Specialty Badge */}
                     <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium transform translate-x-full group-hover:translate-x-0 transition-transform duration-500">
                       {member.specialty}
@@ -404,7 +412,7 @@ const About = () => {
                       {member.name}
                     </h3>
                     <p className="text-purple-600 font-medium mb-3">{member.role}</p>
-                    <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">{member.bio}</p>
                   </div>
 
                   {/* Hover Glow */}

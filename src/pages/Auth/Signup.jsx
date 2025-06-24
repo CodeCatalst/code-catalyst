@@ -109,9 +109,9 @@ const Signup = () => {
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
 
   return (
-    <div className="min-h-screen py-20 flex items-center justify-center bg-gray-900">
+    <div className="relative min-h-screen py-20 flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
       <div className="max-w-md w-full mx-4">
-        <div className="card">
+        <div className="card bg-transparent border-white/20">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">

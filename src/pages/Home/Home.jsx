@@ -65,11 +65,11 @@ const Home = () => {
       <StarfieldScene scrollProgress={scrollProgress} />
 
       {/* Hero Section */}
-      <section className="relative bg-gray-900/40 min-h-screen flex items-center justify-center text-white overflow-hidden">
+      <section className="relative  min-h-screen flex items-center justify-center text-white overflow-hidden">
         <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              Welcome to <span className="text-secondary-300">Code Catalyst</span>
+              Welcome to <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Code Catalyst</span>
             </h1>
             <p className="text-xl sm:text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
               Empowering students through technology, innovation, and collaboration.
@@ -97,13 +97,13 @@ const Home = () => {
       </section>
 
       {/* Highlights Section */}
-      <section className="section-padding bg-gradient-to-b from-gray-900/40 via-gray-900/90 to-gray-900 relative">
+      <section className="section-padding bg-white relative">
         <div className="container-max">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               What's Happening at <span className="text-gradient">Code Catalyst</span>
             </h2>
-            <p className="text-lg text-gray-100 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-900 max-w-2xl mx-auto">
               Stay updated with our latest events, announcements, and community highlights
             </p>
           </div>
@@ -115,7 +115,7 @@ const Home = () => {
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
                   <Calendar className="text-primary-600" size={20} />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Latest Events</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Latest Events</h3>
               </div>
 
               <div className="space-y-4">
@@ -126,13 +126,13 @@ const Home = () => {
                       alt={event.title}
                       className="w-full h-40 object-cover rounded-lg mb-4"
                     />
-                    <h4 className="font-semibold text-white mb-2">{event.title}</h4>
-                    <p className="text-gray-400 text-sm">{new Date(event.date).toLocaleDateString()}</p>
+                    <h4 className="font-semibold text-gray-900 mb-2">{event.title}</h4>
+                    <p className="text-gray-900 text-sm">{new Date(event.date).toLocaleDateString()}</p>
                   </div>
                 ))}
               </div>
 
-              <Link to="/gallery" className="inline-flex items-center text-white font-medium hover:text-primary-700 transition-colors">
+              <Link to="/gallery" className="inline-flex items-center text-gray-900 font-medium hover:text-primary-700 transition-colors">
                 View All Events <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>
@@ -143,19 +143,19 @@ const Home = () => {
                 <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center">
                   <Bell className="text-accent-600" size={20} />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Recent Notices</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Recent Notices</h3>
               </div>
 
               <div className="space-y-4">
                 {latestContent?.notices?.map((notice) => (
                   <div key={notice.id} className="card hover:scale-105 transition-transform">
-                    <h4 className="font-semibold text-gray-400 mb-2">{notice.title}</h4>
-                    <p className="text-gray-400 text-sm">{new Date(notice.date).toLocaleDateString()}</p>
+                    <h4 className="font-semibold text-gray-900 mb-2">{notice.title}</h4>
+                    <p className="text-gray-900 text-sm">{new Date(notice.date).toLocaleDateString()}</p>
                   </div>
                 ))}
               </div>
 
-              <Link to="/notices" className="inline-flex items-center text-white font-medium hover:text-primary-700 transition-colors">
+              <Link to="/notices" className="inline-flex items-center text-gray-900 font-medium hover:text-primary-700 transition-colors">
                 View All Notices <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>
@@ -166,7 +166,7 @@ const Home = () => {
                 <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
                   <Video className="text-secondary-600" size={20} />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Latest Vlogs</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Latest Vlogs</h3>
               </div>
 
               <div className="space-y-4">
@@ -177,12 +177,12 @@ const Home = () => {
                       alt={vlog.title}
                       className="w-full h-40 object-cover rounded-lg mb-4"
                     />
-                    <h4 className="font-semibold text-gray-400">{vlog.title}</h4>
+                    <h4 className="font-semibold text-gray-900">{vlog.title}</h4>
                   </div>
                 ))}
               </div>
 
-              <Link to="/vlogs" className="inline-flex items-center text-white font-medium hover:text-primary-700 transition-colors">
+              <Link to="/vlogs" className="inline-flex items-center text-gray-900 font-medium hover:text-primary-700 transition-colors">
                 Watch All Vlogs <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>
@@ -191,7 +191,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative section-padding bg-gray-900 text-white">
+      <section className="relative section-padding flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
         <div className="container-max text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-3xl lg:text-4xl font-bold">
@@ -202,14 +202,14 @@ const Home = () => {
               participate in exciting projects, and grow your technical skills.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/signup" className="group relative bg-gray-900/80 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
+              <Link to="/signup" className="group relative bg-gray-900/50 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
                 <span className="relative z-10 flex items-center">
                   <Users className="inline mr-2" size={20} />
                   Become a Member
                 </span>
               </Link>
-              <Link to="/contact" className="group relative bg-gray-900/80 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
+              <Link to="/contact" className="group relative bg-gray-900/50 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
                 <span className="relative z-10">Get in Touch</span>
               </Link>

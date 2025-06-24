@@ -70,7 +70,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -95,7 +95,7 @@ const Contact = () => {
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -106,9 +106,9 @@ const Contact = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 pt-16">
+    <div className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
       {/* Hero Section */}
-      <section className="section-padding  text-white">
+      <section className="  text-white mt-20">
         <div className="container-max text-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
             Get in <span className="text-secondary-300">Touch</span>
@@ -285,9 +285,9 @@ const Contact = () => {
                       className="w-12 h-12 bg-gray-900 border border-gray-700/50 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group"
                       aria-label={social.label}
                     >
-                      <social.icon 
-                        size={20} 
-                        className="text-gray-400 group-hover:text-white transition-colors" 
+                      <social.icon
+                        size={20}
+                        className="text-gray-400 group-hover:text-white transition-colors"
                       />
                     </a>
                   ))}

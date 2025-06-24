@@ -15,7 +15,7 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
 
     // Update ref when prop changes
     useEffect(() => {
-        scrollProgressRef.current = scrollProgress*2;
+        scrollProgressRef.current = scrollProgress * 2;
     }, [scrollProgress]);
 
     useEffect(() => {
@@ -95,9 +95,9 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
         // Responsive logo size based on screen size
         let logoSize;
         if (isMobile) {
-            logoSize = 25; 
+            logoSize = 25;
         } else if (isTablet) {
-            logoSize = 30; 
+            logoSize = 30;
         } else {
             logoSize = 38;
         }

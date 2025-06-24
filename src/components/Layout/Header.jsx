@@ -105,7 +105,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className={`font-medium hover:text-primary-600 transition-colors ${scrolled ? 'text-white' : 'text-white'
+                  className={`font-medium hover:text-primary-600 transition-colors ${scrolled ? 'text-gray-900' : 'text-white'
                     }`}
                 >
                   Login

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Rocket, Star, Play, ChevronDown, Github, ExternalLink, TrendingUp, Award, BookOpen, Coffee } from 'lucide-react'
-import api from '../../services/api'
-import LoadingSpinner from '../../components/Common/LoadingSpinner'
+import api from './services/api'
+import LoadingSpinner from './components/Common/LoadingSpinner'
 
 const Test = () => {
   const [latestContent, setLatestContent] = useState(null)
@@ -32,7 +32,7 @@ const Test = () => {
           console.error('Failed to fetch latest content:', error)
           setError('Unable to load content. Showing demo content.')
         }
-        
+
         // Set mock data for demo when API is not available
         setLatestContent({
           events: [
@@ -75,7 +75,7 @@ const Test = () => {
   useEffect(() => {
     const currentWord = techWords[currentWordIndex]
     let charIndex = 0
-    
+
     const typeInterval = setInterval(() => {
       if (charIndex <= currentWord.length) {
         setTypedText(currentWord.slice(0, charIndex))
@@ -145,19 +145,9 @@ const Test = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Error notification */}
-      {error && (
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
-          <div className="flex">
-            <div className="ml-3">
-              <p className="text-sm text-blue-700">{error}</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Hero Section with Advanced Animations */}
-      <section 
+      <section
         ref={heroRef}
         className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
@@ -187,7 +177,7 @@ const Test = () => {
                 transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
               }}
             >
-              {['{ }', '< />', '( )', '[ ]', '=>', '&&', '||', '++'][Math.floor(Math.random() * 8)]}
+              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
             </div>
           ))}
         </div>
@@ -229,7 +219,7 @@ const Test = () => {
                   Code Catalyst
                 </span>
               </h1>
-              
+
               <div className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-300">
                 Empowering{' '}
                 <span className="inline-block min-w-[200px] text-left">
@@ -240,16 +230,16 @@ const Test = () => {
                 </span>
               </div>
             </div>
-            
+
             <p className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Join our community of passionate developers, innovators, and tech enthusiasts. 
+              Join our community of passionate developers, innovators, and tech enthusiasts.
               Build the future, one line of code at a time.
             </p>
 
             {/* Interactive CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
-              <Link 
-                to="/signup" 
+              <Link
+                to="/signup"
                 className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-blue-500/25 transform-gpu overflow-hidden"
               >
                 <span className="relative z-10 flex items-center">
@@ -258,9 +248,9 @@ const Test = () => {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
-              
-              <Link 
-                to="/about" 
+
+              <Link
+                to="/about"
                 className="group px-8 py-4 border-2 border-white/30 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white/10 hover:border-white/50 backdrop-blur-sm"
               >
                 <span className="flex items-center">
@@ -299,7 +289,7 @@ const Test = () => {
       </section>
 
       {/* Features Section with 3D Cards */}
-      <section 
+      <section
         ref={featuresRef}
         className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden"
       >
@@ -332,7 +322,7 @@ const Test = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                     {feature.title}
                   </h3>
-                  
+
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     {feature.description}
                   </p>
@@ -371,13 +361,13 @@ const Test = () => {
                 </div>
                 <h3 className="text-2xl font-bold">Featured Events</h3>
               </div>
-              
+
               {latestContent?.events && latestContent.events.length > 0 && (
                 <div className="relative">
                   <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/20">
                     <div className="relative h-64">
-                      <img 
-                        src={latestContent.events[currentSlide].image} 
+                      <img
+                        src={latestContent.events[currentSlide].image}
                         alt={latestContent.events[currentSlide].title}
                         className="w-full h-full object-cover"
                       />
@@ -399,24 +389,23 @@ const Test = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Slide Indicators */}
                   <div className="flex justify-center space-x-2 mt-4">
                     {latestContent.events.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                          index === currentSlide ? 'bg-blue-500 scale-125' : 'bg-white/30 hover:bg-white/50'
-                        }`}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-blue-500 scale-125' : 'bg-white/30 hover:bg-white/50'
+                          }`}
                       />
                     ))}
                   </div>
                 </div>
               )}
-              
+
               <Link to="/gallery" className="inline-flex items-center text-blue-400 font-medium hover:text-blue-300 transition-colors group">
-                View All Events 
+                View All Events
                 <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </div>
@@ -431,7 +420,7 @@ const Test = () => {
                   </div>
                   <h3 className="text-xl font-bold">Recent Notices</h3>
                 </div>
-                
+
                 <div className="space-y-3">
                   {latestContent?.notices?.slice(0, 3).map((notice) => (
                     <div key={notice.id} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-all duration-300">
@@ -440,20 +429,19 @@ const Test = () => {
                           <h4 className="font-semibold text-white mb-1 text-sm">{notice.title}</h4>
                           <p className="text-gray-300 text-xs">{new Date(notice.date).toLocaleDateString()}</p>
                         </div>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          notice.priority === 'high' ? 'bg-red-500/20 text-red-300' :
-                          notice.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
-                          'bg-green-500/20 text-green-300'
-                        }`}>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${notice.priority === 'high' ? 'bg-red-500/20 text-red-300' :
+                            notice.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                              'bg-green-500/20 text-green-300'
+                          }`}>
                           {notice.priority}
                         </span>
                       </div>
                     </div>
                   ))}
                 </div>
-                
+
                 <Link to="/notices" className="inline-flex items-center text-orange-400 font-medium hover:text-orange-300 transition-colors group text-sm">
-                  View All Notices 
+                  View All Notices
                   <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
@@ -466,13 +454,13 @@ const Test = () => {
                   </div>
                   <h3 className="text-xl font-bold">Latest Vlogs</h3>
                 </div>
-                
+
                 <div className="space-y-3">
                   {latestContent?.vlogs?.map((vlog) => (
                     <div key={vlog.id} className="group bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden border border-white/20 hover:bg-white/20 transition-all duration-300">
                       <div className="relative">
-                        <img 
-                          src={vlog.thumbnail} 
+                        <img
+                          src={vlog.thumbnail}
                           alt={vlog.title}
                           className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -487,9 +475,9 @@ const Test = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 <Link to="/vlogs" className="inline-flex items-center text-green-400 font-medium hover:text-green-300 transition-colors group text-sm">
-                  Watch All Vlogs 
+                  Watch All Vlogs
                   <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
@@ -514,12 +502,12 @@ const Test = () => {
               Ready to Start Your Tech Journey?
             </h2>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Join Code Catalyst today and connect with like-minded students, 
+              Join Code Catalyst today and connect with like-minded students,
               participate in exciting projects, and accelerate your career in technology.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-              <Link 
-                to="/signup" 
+              <Link
+                to="/signup"
                 className="group px-8 py-4 bg-white text-purple-600 font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-110 hover:shadow-2xl transform-gpu"
               >
                 <span className="flex items-center justify-center">
@@ -528,8 +516,8 @@ const Test = () => {
                   <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
                 </span>
               </Link>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/contact"
                 className="group px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
               >
                 <span className="flex items-center justify-center">

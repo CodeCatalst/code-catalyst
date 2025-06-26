@@ -84,40 +84,6 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
         const texture2 = loader.load("https://i.ibb.co/yYS2yx5/p3-ttfn70.png");
         const texture4 = loader.load("https://i.ibb.co/yWfKkHh/p4-avirap.png");
 
-        // Logo (replacing nucleus)
-        const logoTexture = loader.load('/public-relations.png'); // Replace with your logo path
-        logoTexture.anisotropy = 16;
-        logoTexture.minFilter = THREE.LinearFilter;
-        logoTexture.magFilter = THREE.LinearFilter;
-        logoTexture.generateMipmaps = false;
-
-        // Create a plane for the logo
-        // Responsive logo size based on screen size
-        let logoSize;
-        if (isMobile) {
-            logoSize = 25;
-        } else if (isTablet) {
-            logoSize = 30;
-        } else {
-            logoSize = 38;
-        }
-
-        const logoGeometry = new THREE.PlaneGeometry(logoSize, logoSize);
-        const logoMaterial = new THREE.MeshBasicMaterial({
-            map: logoTexture,
-            transparent: true,
-            alphaTest: 0.1,
-            side: THREE.DoubleSide
-        });
-        nucleus = new THREE.Mesh(logoGeometry, logoMaterial);
-
-        // Position logo at the exact geometric center of the whole sphere in 3D space
-        // Since sphere is positioned at bottom, center is at sphere's geometric center
-        const logoCenterOffset = baseSphereRadius * 0.5; // Center of whole sphere
-        nucleus.position.set(0, -logoCenterOffset, 0); // x=0, y=center, z=0 for perfect 3D centering
-
-        scene.add(nucleus);
-
         // Sphere background
         textureSphereBg.anisotropy = 16;
         const geometrySphereBg = new THREE.SphereGeometry(baseSphereRadius, 40, 40);
@@ -217,10 +183,7 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
 
             stars.geometry.attributes.position.needsUpdate = true;
 
-            // Logo always faces camera
-            nucleus.lookAt(camera.position);
-
-            // Responsive sphere and logo scaling based on scroll progress
+            // Responsive sphere scaling based on scroll progress
             const currentIsMobile = window.innerWidth <= 768;
             const currentIsTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
             const currentIsDesktop = window.innerWidth > 1024;
@@ -237,9 +200,8 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
 
             const scaleFactor = 1 - (scrollProgressRef.current * (1 - currentMaxScale));
 
-            // Scale both sphere and logo together
+            // Scale sphere only (removed logo scaling)
             sphereBg.scale.setScalar(scaleFactor);
-            nucleus.scale.setScalar(scaleFactor);
 
             sphereBg.rotation.x += 0.002;
             sphereBg.rotation.y += 0.002;

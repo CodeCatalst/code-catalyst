@@ -105,28 +105,65 @@ const Contact = () => {
     }
   }
 
+  // For animated floating code elements
+  const floatingCodeSnippets = ['{ }', '< />', '( )', '[ ]', '<contact />', '&&', '<form />', '<div>']
+
   return (
-    <div className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
-      {/* Hero Section */}
-      <section className="  text-white mt-20">
-        <div className="container-max text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6 animate-fade-in">
-            Get in <span className="text-secondary-300">Touch</span>
+    <div className="min-h-screen overflow-hidden">
+      {/* Hero Section with Animated Background */}
+      <section
+        className="relative min-h-[60vh] flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-gray-900 overflow-hidden"
+      >
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+              animation: 'grid-move 20s linear infinite',
+            }}
+          />
+        </div>
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+              }}
+            >
+              {floatingCodeSnippets[Math.floor(Math.random() * floatingCodeSnippets.length)]}
+            </div>
+          ))}
+        </div>
+        <div className="relative z-10 container-max text-center py-20">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-white">
+            Get in <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Touch</span>
           </h1>
-          <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up text-white">
             Have questions, suggestions, or want to collaborate? We'd love to hear from you!
           </p>
         </div>
       </section>
 
-      <section className="section-padding">
+      {/* Main Contact Section */}
+      <section className="section-padding bg-white">
         <div className="container-max">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <div className="space-y-8">
+            <div className="space-y-8 card">
               <div>
-                <h2 className="text-3xl font-bold text-gray-50 mb-4">Send us a Message</h2>
-                <p className="text-gray-400">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
+                <p className="text-gray-600">
                   Fill out the form below and we'll get back to you as soon as possible.
                 </p>
               </div>
@@ -148,7 +185,7 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-600 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -185,7 +222,7 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-600 mb-2">
                     Subject *
                   </label>
                   <input
@@ -203,7 +240,7 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-600 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -243,8 +280,8 @@ const Contact = () => {
             {/* Contact Information */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-white mb-4">Contact Information</h2>
-                <p className="text-gray-400">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact Information</h2>
+                <p className="text-gray-600">
                   Reach out to us through any of these channels or visit us on campus.
                 </p>
               </div>
@@ -252,20 +289,20 @@ const Contact = () => {
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-gray-900 border border-gray-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="text-gray-400" size={24} />
+                    <div className="w-12 h-12  border border-gray-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <info.icon className="text-gray-600" size={24} />
                     </div>
                     <div>
                       <h3 className="font-semibold text-primary-600 mb-1">{info.title}</h3>
                       {info.action !== '#' ? (
                         <a
                           href={info.action}
-                          className="text-gray-400 hover:text-primary-600 transition-colors"
+                          className="text-gray-600 hover:text-primary-600 transition-colors"
                         >
                           {info.details}
                         </a>
                       ) : (
-                        <p className="text-gray-400">{info.details}</p>
+                        <p className="text-gray-600">{info.details}</p>
                       )}
                     </div>
                   </div>
@@ -274,7 +311,7 @@ const Contact = () => {
 
               {/* Social Links */}
               <div className="pt-8 border-t border-gray-700">
-                <h3 className="font-semibold text-white mb-4">Follow Us</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Follow Us</h3>
                 <div className="flex space-x-4">
                   {socialLinks.map((social) => (
                     <a
@@ -282,12 +319,12 @@ const Contact = () => {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-12 h-12 bg-gray-900 border border-gray-700/50 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group"
+                      className="w-12 h-12 border border-gray-700/50 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group"
                       aria-label={social.label}
                     >
                       <social.icon
                         size={20}
-                        className="text-gray-400 group-hover:text-white transition-colors"
+                        className="text-gray-600 group-hover:text-white transition-colors"
                       />
                     </a>
                   ))}
@@ -295,9 +332,9 @@ const Contact = () => {
               </div>
 
               {/* Office Hours */}
-              <div className="bg-gray-900 border border-gray-700/50 rounded-lg p-6">
-                <h3 className="font-semibold text-white mb-4">Office Hours</h3>
-                <div className="space-y-2 text-gray-400">
+              <div className="border border-gray-700/50 rounded-lg p-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Office Hours</h3>
+                <div className="space-y-2 text-gray-600">
                   <p><span className="font-medium">Monday - Friday:</span> 9:00 AM - 6:00 PM</p>
                   <p><span className="font-medium">Saturday:</span> 10:00 AM - 4:00 PM</p>
                   <p><span className="font-medium">Sunday:</span> Closed</p>

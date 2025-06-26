@@ -65,35 +65,38 @@ const Home = () => {
       <StarfieldScene scrollProgress={scrollProgress} />
 
       {/* Hero Section */}
-      <section className="relative  min-h-screen flex items-center justify-center text-white overflow-hidden">
-        <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              Welcome to <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Code Catalyst</span>
-            </h1>
-            <p className="text-xl sm:text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
-              Empowering students through technology, innovation, and collaboration.
-              Join our community of passionate developers and tech enthusiasts.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/signup" className="group relative flex flex-row items-center justify-center bg-gray-900/80 rounded-lg hover:bg-gray-900/70 transition-all duration-300 border border-gray-50/20 text-md px-8 py-2 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-                <span className="relative z-10">Join Our Community</span>
-                <ArrowRight className="ml-2 relative z-10 group-hover:translate-x-1 transition-transform duration-300" size={20} />
-              </Link>
-              <Link to="/about" className="group relative text-md bg-gray-900/80 rounded-lg hover:bg-gray-900/70 transition-all duration-300 border border-gray-50/20 text-md px-8 py-2 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-                <span className="relative z-10">Learn More</span>
-              </Link>
-            </div>
+      <section className="relative min-h-screen flex items-center justify-center text-white overflow-hidden">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-0 pointer-events-none before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-900/60 before:via-blue-900/40 before:to-pink-900/60 before:z-10"></div>
+        {/* Floating Shapes */}
+        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-tr from-pink-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div>
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div>
+        {/* Glassmorphism Card */}
+        <div className="relative z-20 max-w-4xl w-full mx-auto p-10 animate-fade-in text-center">
+          <h1 className="#22c55e text-5xl sm:text-6xl lg:text-6xl font-extrabold leading-tight mb-6 drop-shadow-lg">
+            Welcome to <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_2px_16px_rgba(168,85,247,0.5)]">Code Catalyst</span>
+          </h1>
+          <p className="text-md sm:text-xl text-gray-100 leading-relaxed mb-8 drop-shadow">
+            Empowering students through technology, innovation, and collaboration.
+            Join our community of passionate developers and tech enthusiasts.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link to="/signup" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-8 py-3 rounded-lg overflow-hidden font-semibold text-white">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+              <span className="relative z-10 flex items-center">
+                <ArrowRight className="mr-2" size={22} />
+                Join Our Community
+              </span>
+            </Link>
+            <Link to="/about" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-8 py-3 rounded-lg overflow-hidden font-semibold text-white">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+              <span className="relative z-10 flex items-center">
+                <Users className="mr-2" size={22} />
+                Learn More
+              </span>
+            </Link>
           </div>
         </div>
-
-        {/* Animated background elements */}
-        {/* <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-4 -left-4 w-72 h-72 bg-secondary-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-8 -right-4 w-72 h-72 bg-accent-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
-        </div> */}
       </section>
 
       {/* Highlights Section */}

@@ -9,6 +9,9 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const location = useLocation()
   const { user, isAuthenticated, logout } = useAuth()
 
+  // Determine if current page is login or signup
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup'
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
@@ -36,15 +39,15 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white backdrop-blur-sm shadow-lg' : 'bg-transparent'
       }`}>
       <nav className="container-max">
-        <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-17 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CC</span>
+          <Link to="/" className="flex flex-row items-center">
+            <div className="w-24 h-24 rounded-lg">
+              <img src={'/logo1.png'} alt="Code Catalyst" className="w-24 h-24" />
             </div>
-            <span className="font-bold text-xl text-gradient hidden sm:block">
-              Code Catalyst
-            </span>
+            {/* <p className="font-bold text-xl text-teal-400 hidden sm:block ml-2">
+              <span className="text-purple-600">Code</span> Catalyst
+            </p> */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -54,8 +57,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 key={link.name}
                 to={link.href}
                 className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
-                    ? 'text-primary-600'
-                    : scrolled ? 'text-gray-900' : 'text-white'
+                  ? 'text-primary-600'
+                  : isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'
                   }`}
               >
                 {link.name}
@@ -105,7 +108,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className={`font-medium hover:text-primary-600 transition-colors ${scrolled ? 'text-gray-900' : 'text-white'
+                  className={`font-medium hover:text-primary-600 transition-colors ${isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'
                     }`}
                 >
                   Login
@@ -123,22 +126,22 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {mobileMenuOpen ? (
-              <X size={24} className={scrolled ? 'text-white' : 'text-white'} />
+              <X size={24} className={isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'} />
             ) : (
-              <Menu size={24} className={scrolled ? 'text-white' : 'text-white'} />
+              <Menu size={24} className={isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'} />
             )}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-gray-900 shadow-lg rounded-b-2xl mx-4 mb-4">
+          <div className="lg:hidden card p-0 shadow-lg rounded-b-2xl mx-4 mb-4">
             <div className="px-4 py-6 space-y-4">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`block font-medium py-2 text-white hover:text-primary-600 ${location.pathname === link.href ? 'text-primary-600' : 'text-gray-900'
+                  className={`block font-medium py-2 text-gray-900 hover:text-primary-600 ${location.pathname === link.href ? 'text-primary-600' : 'text-gray-900'
                     }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >

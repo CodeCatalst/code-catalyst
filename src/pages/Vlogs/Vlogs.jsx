@@ -330,7 +330,7 @@ const Vlogs = () => {
         </div>
       </section>
 
-      {/* Featured Playlist Section */}
+      {/* Featured Playlist Section
       <section className="section-padding">
         <div className="container-max">
           <div className="text-center mb-12">
@@ -371,7 +371,7 @@ const Vlogs = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

@@ -270,7 +270,7 @@ const Notices = () => {
                       </span>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-white mb-3 hover:text-primary-600 transition-colors">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-primary-600 transition-colors">
                       {notice.title}
                     </h2>
 

@@ -297,7 +297,7 @@ const Vlogs = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-white group-hover:text-primary-600 transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
                     {vlog.title}
                   </h3>
 

@@ -69,8 +69,8 @@ const Home = () => {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-900/60 before:via-blue-900/40 before:to-pink-900/60 before:z-10"></div>
         {/* Floating Shapes */}
-        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-tr from-pink-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div>
+        {/* <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-tr from-pink-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div> */}
+        {/* <div className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-2xl animate-pulse z-10"></div> */}
         {/* Glassmorphism Card */}
         <div className="relative z-20 max-w-4xl w-full mx-auto p-10 animate-fade-in text-center">
           <h1 className="#22c55e text-5xl sm:text-6xl lg:text-6xl font-extrabold leading-tight mb-6 drop-shadow-lg">
@@ -81,14 +81,14 @@ const Home = () => {
             Join our community of passionate developers and tech enthusiasts.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/signup" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-8 py-3 rounded-lg overflow-hidden font-semibold text-white">
+            <Link to="/signup" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-4 py-2 sm:px-8 sm:py-3 rounded-lg overflow-hidden font-semibold text-white">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
               <span className="relative z-10 flex items-center">
                 <ArrowRight className="mr-2" size={22} />
                 Join Our Community
               </span>
             </Link>
-            <Link to="/about" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-8 py-3 rounded-lg overflow-hidden font-semibold text-white">
+            <Link to="/about" className="group relative flex flex-row items-center justify-center bg-white/10 border border-white/50 shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-md px-4 py-2 sm:px-8 sm:py-3 rounded-lg overflow-hidden font-semibold text-white">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
               <span className="relative z-10 flex items-center">
                 <Users className="mr-2" size={22} />
@@ -104,7 +104,7 @@ const Home = () => {
         <div className="container-max">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              What's Happening at <span className="text-gradient">Code Catalyst</span>
+              What's Happening at <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_2px_16px_rgba(168,85,247,0.5)]">Code Catalyst</span>
             </h2>
             <p className="text-lg text-gray-900 max-w-2xl mx-auto">
               Stay updated with our latest events, announcements, and community highlights
@@ -194,7 +194,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative section-padding flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+      <section className="relative section-padding flex items-center justify-center bg-purple-900 text-white overflow-hidden">
         <div className="container-max text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-3xl lg:text-4xl font-bold">
@@ -207,7 +207,7 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/signup" className="group relative bg-gray-900/50 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-                <span className="relative z-10 flex items-center">
+                <span className="relative z-10 flex items-center justify-center">
                   <Users className="inline mr-2" size={20} />
                   Become a Member
                 </span>

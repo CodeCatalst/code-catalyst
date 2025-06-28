@@ -298,14 +298,14 @@ const Team = () => {
         <div className="container-max">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Department Filter */}
-            <div className="flex items-center space-x-4">
-              <Filter size={20} className="text-gray-400" />
-              <div className="flex flex-wrap gap-2">
+            <div className="flex items-center space-x-4 w-full lg:w-auto">
+              <Filter size={20} className="text-gray-400 flex-shrink-0" />
+              <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide min-w-0 flex-1">
                 {departments.map((dept) => (
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${selectedDepartment === dept
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 ${selectedDepartment === dept
                       ? 'bg-primary-600 text-white shadow-lg'
                       : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
                       }`}
@@ -317,7 +317,7 @@ const Team = () => {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2 bg-gray-900 rounded-lg p-1 border border-gray-700/50">
+            <div className="flex items-center space-x-2 bg-gray-900 rounded-lg p-1 border border-gray-700/50 flex-shrink-0">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-100'

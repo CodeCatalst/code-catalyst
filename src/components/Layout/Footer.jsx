@@ -21,7 +21,7 @@ const Footer = () => {
   const contactInfo = [
     { icon: Mail, text: 'contact@codecatalyst.edu', href: 'mailto:contact@codecatalyst.edu' },
     { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-    { icon: MapPin, text: 'University Campus, Tech Building', href: '#' },
+    { icon: MapPin, text: 'JB Knowledge Park, Sector 27/A, Faridabad, Manjhawali, Haryana 121002', href: '#' },
   ]
 
   return (

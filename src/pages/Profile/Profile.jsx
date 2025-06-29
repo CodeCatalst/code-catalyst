@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Mail, Lock, Camera, Save, AlertCircle, CheckCircle } from 'lucide-react'
+import { User, Mail, Lock, Camera, Save, AlertCircle, CheckCircle, Shield } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const Profile = () => {
@@ -25,11 +25,17 @@ const Profile = () => {
     confirmPassword: ''
   })
 
+  const isAdmin = user?.role === 'admin' || user?.roles?.includes?.('admin')
+
   const tabs = [
     { id: 'profile', label: 'Profile Information', icon: User },
     { id: 'password', label: 'Change Password', icon: Lock },
-    { id: 'picture', label: 'Profile Picture', icon: Camera }
+    { id: 'picture', label: 'Profile Picture', icon: Camera },
   ]
+  // Add admin tab if user is admin
+  if (isAdmin) {
+    tabs.push({ id: 'admin', label: 'Admin Menu', icon: Shield })
+  }
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault()
@@ -395,6 +401,29 @@ const Profile = () => {
                         </ul>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* Admin Menu Tab */}
+                {activeTab === 'admin' && isAdmin && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                      <Shield className="text-primary-600" size={24} /> Admin Menu
+                    </h2>
+                    <ul className="space-y-4">
+                      <li>
+                        <a href="/admin/dashboard" className="btn-primary">Admin Dashboard</a>
+                      </li>
+                      <li>
+                        <a href="/admin/users" className="btn-secondary">User Management</a>
+                      </li>
+                      <li>
+                        <a href="/admin/forms" className="btn-secondary">Form Manager</a>
+                      </li>
+                      <li>
+                        <a href="/admin/submissions" className="btn-secondary">Submissions Viewer</a>
+                      </li>
+                    </ul>
                   </div>
                 )}
               </div>

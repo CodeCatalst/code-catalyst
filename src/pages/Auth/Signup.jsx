@@ -61,7 +61,8 @@ const Signup = () => {
     setLoading(true)
     try {
       const result = await signup({
-        name: formData.name.trim(),
+        username: formData.name.trim(),
+        full_name: formData.name.trim(),
         email: formData.email.trim(),
         password: formData.password
       })

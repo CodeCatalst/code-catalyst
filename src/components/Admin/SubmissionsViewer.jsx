@@ -300,11 +300,11 @@ const SubmissionsViewer = () => {
 
             {/* Submissions Table */}
             <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full bg-gray-900 rounded-lg">
                     <thead>
                         <tr className="border-b border-gray-700">
                             <th
-                                className="text-left py-3 px-4 text-gray-300 font-medium cursor-pointer hover:text-white"
+                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
                                 onClick={() => handleSort('date')}
                             >
                                 <div className="flex items-center gap-2">
@@ -314,7 +314,7 @@ const SubmissionsViewer = () => {
                                 </div>
                             </th>
                             <th
-                                className="text-left py-3 px-4 text-gray-300 font-medium cursor-pointer hover:text-white"
+                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
                                 onClick={() => handleSort('form')}
                             >
                                 <div className="flex items-center gap-2">
@@ -324,7 +324,7 @@ const SubmissionsViewer = () => {
                                 </div>
                             </th>
                             <th
-                                className="text-left py-3 px-4 text-gray-300 font-medium cursor-pointer hover:text-white"
+                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
                                 onClick={() => handleSort('name')}
                             >
                                 <div className="flex items-center gap-2">
@@ -333,26 +333,26 @@ const SubmissionsViewer = () => {
                                     {getSortIcon('name')}
                                 </div>
                             </th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Actions</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Status</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredSubmissions.map((submission) => (
                             <>
-                                <tr key={submission.id} className="border-b border-gray-700 hover:bg-gray-700">
+                                <tr key={submission.id} className="border-b border-gray-800 hover:bg-gray-800/70">
                                     <td className="py-4 px-4">
                                         <div className="text-sm">
-                                            <div className="text-white">{formatDate(submission.submittedAt)}</div>
+                                            <div className="text-gray-100">{formatDate(submission.submittedAt)}</div>
                                         </div>
                                     </td>
                                     <td className="py-4 px-4">
-                                        <div className="text-white font-medium">{submission.formTitle}</div>
+                                        <div className="text-primary-200 font-medium">{submission.formTitle}</div>
                                     </td>
                                     <td className="py-4 px-4">
                                         <div>
-                                            <div className="text-white font-medium">{submission.userName}</div>
-                                            <div className="text-gray-400 text-sm">{submission.userEmail}</div>
+                                            <div className="text-primary-100 font-medium">{submission.userName}</div>
+                                            <div className="text-primary-300 text-sm">{submission.userEmail}</div>
                                         </div>
                                     </td>
                                     <td className="py-4 px-4">
@@ -361,17 +361,20 @@ const SubmissionsViewer = () => {
                                         </span>
                                     </td>
                                     <td className="py-4 px-4">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={() => setExpandedSubmission(
-                                                    expandedSubmission === submission.id ? null : submission.id
-                                                )}
-                                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
-                                                title="View Details"
-                                            >
-                                                <Eye size={16} />
-                                            </button>
-                                        </div>
+                                        <button
+                                            className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
+                                            title="View Submission"
+                                            onClick={() => setExpandedSubmission(expandedSubmission === submission.id ? null : submission.id)}
+                                        >
+                                            <Eye size={16} />
+                                        </button>
+                                        <button
+                                            className="p-2 text-green-400 hover:text-green-300 hover:bg-green-900 rounded"
+                                            title="Download PDF"
+                                            onClick={exportToPDF}
+                                        >
+                                            <Download size={16} />
+                                        </button>
                                     </td>
                                 </tr>
                                 {expandedSubmission === submission.id && (
@@ -436,4 +439,4 @@ const SubmissionsViewer = () => {
     )
 }
 
-export default SubmissionsViewer 
+export default SubmissionsViewer

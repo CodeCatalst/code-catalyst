@@ -112,40 +112,40 @@ const FormBuilder = ({ onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                <div className="p-6 border-b border-gray-700">
+                <div className="p-6 border-b border-gray-700 bg-gray-900">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-2xl font-bold text-white">Create New Form</h2>
+                        <h2 className="text-2xl font-bold text-primary-400">Create New Form</h2>
                         <button
                             onClick={onClose}
-                            className="text-gray-400 hover:text-white"
+                            className="text-primary-300 hover:text-white"
                         >
                             <X size={24} />
                         </button>
                     </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 bg-gray-900">
                     {/* Form Basic Info */}
                     <div className="mb-8">
-                        <h3 className="text-xl font-semibold text-white mb-4">Form Information</h3>
+                        <h3 className="text-xl font-semibold text-primary-200 mb-4">Form Information</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-gray-300 mb-2">Form Title</label>
+                                <label className="block text-primary-300 mb-2">Form Title</label>
                                 <input
                                     type="text"
                                     value={formData.title}
                                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-primary-100"
                                     placeholder="Enter form title"
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-300 mb-2">Description</label>
+                                <label className="block text-primary-300 mb-2">Description</label>
                                 <input
                                     type="text"
                                     value={formData.description}
                                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-primary-100"
                                     placeholder="Enter form description"
                                 />
                             </div>
@@ -154,34 +154,34 @@ const FormBuilder = ({ onClose }) => {
                         {/* Availability Period */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                             <div>
-                                <label className="block text-gray-300 mb-2">Start Date</label>
+                                <label className="block text-primary-300 mb-2">Start Date</label>
                                 <input
                                     type="datetime-local"
                                     value={formData.startDate}
                                     onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-primary-100"
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-300 mb-2">End Date</label>
+                                <label className="block text-primary-300 mb-2">End Date</label>
                                 <input
                                     type="datetime-local"
                                     value={formData.endDate}
                                     onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-primary-100"
                                 />
                             </div>
                         </div>
 
                         {/* Tags */}
                         <div className="mt-4">
-                            <label className="block text-gray-300 mb-2">Tags</label>
+                            <label className="block text-primary-300 mb-2">Tags</label>
                             <div className="flex gap-2 mb-2">
                                 <input
                                     type="text"
                                     value={newTag}
                                     onChange={(e) => setNewTag(e.target.value)}
-                                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-primary-100"
                                     placeholder="Add a tag"
                                     onKeyPress={(e) => e.key === 'Enter' && addTag()}
                                 />
@@ -213,17 +213,17 @@ const FormBuilder = ({ onClose }) => {
 
                     {/* Form Fields */}
                     <div className="mb-8">
-                        <h3 className="text-xl font-semibold text-white mb-4">Form Fields</h3>
+                        <h3 className="text-xl font-semibold text-primary-200 mb-4">Form Fields</h3>
 
                         {/* Add New Field */}
                         <div className="bg-gray-700 p-4 rounded-lg mb-4">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                 <div>
-                                    <label className="block text-gray-300 mb-2">Field Type</label>
+                                    <label className="block text-primary-300 mb-2">Field Type</label>
                                     <select
                                         value={newField.type}
                                         onChange={(e) => setNewField(prev => ({ ...prev, type: e.target.value }))}
-                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white"
+                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-primary-100"
                                     >
                                         {fieldTypes.map(type => (
                                             <option key={type.id} value={type.id}>{type.label}</option>
@@ -231,17 +231,17 @@ const FormBuilder = ({ onClose }) => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-gray-300 mb-2">Field Label</label>
+                                    <label className="block text-primary-300 mb-2">Field Label</label>
                                     <input
                                         type="text"
                                         value={newField.label}
                                         onChange={(e) => setNewField(prev => ({ ...prev, label: e.target.value }))}
-                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white"
+                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-primary-100"
                                         placeholder="Enter field label"
                                     />
                                 </div>
                                 <div className="flex items-end">
-                                    <label className="flex items-center text-gray-300">
+                                    <label className="flex items-center text-primary-300">
                                         <input
                                             type="checkbox"
                                             checked={newField.required}
@@ -256,12 +256,12 @@ const FormBuilder = ({ onClose }) => {
                             {/* Options for radio/checkbox */}
                             {(newField.type === 'radio' || newField.type === 'checkbox') && (
                                 <div className="mb-4">
-                                    <label className="block text-gray-300 mb-2">Options</label>
+                                    <label className="block text-primary-300 mb-2">Options</label>
                                     <div className="flex gap-2">
                                         <input
                                             type="text"
                                             placeholder="Add option"
-                                            className="flex-1 p-2 bg-gray-600 border border-gray-500 rounded text-white"
+                                            className="flex-1 p-2 bg-gray-600 border border-gray-500 rounded text-primary-100"
                                             onKeyPress={(e) => {
                                                 if (e.key === 'Enter' && e.target.value.trim()) {
                                                     setNewField(prev => ({
@@ -312,11 +312,11 @@ const FormBuilder = ({ onClose }) => {
                                         <div className="flex-1">
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                 <div>
-                                                    <label className="block text-gray-300 mb-2">Field Type</label>
+                                                    <label className="block text-primary-300 mb-2">Field Type</label>
                                                     <select
                                                         value={field.type}
                                                         onChange={(e) => updateField(field.id, { type: e.target.value })}
-                                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white"
+                                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-primary-100"
                                                     >
                                                         {fieldTypes.map(type => (
                                                             <option key={type.id} value={type.id}>{type.label}</option>
@@ -324,16 +324,16 @@ const FormBuilder = ({ onClose }) => {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-gray-300 mb-2">Field Label</label>
+                                                    <label className="block text-primary-300 mb-2">Field Label</label>
                                                     <input
                                                         type="text"
                                                         value={field.label}
                                                         onChange={(e) => updateField(field.id, { label: e.target.value })}
-                                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white"
+                                                        className="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-primary-100"
                                                     />
                                                 </div>
                                                 <div className="flex items-end">
-                                                    <label className="flex items-center text-gray-300">
+                                                    <label className="flex items-center text-primary-300">
                                                         <input
                                                             type="checkbox"
                                                             checked={field.required}
@@ -348,12 +348,12 @@ const FormBuilder = ({ onClose }) => {
                                             {/* Options for radio/checkbox */}
                                             {(field.type === 'radio' || field.type === 'checkbox') && (
                                                 <div className="mt-4">
-                                                    <label className="block text-gray-300 mb-2">Options</label>
+                                                    <label className="block text-primary-300 mb-2">Options</label>
                                                     <div className="flex gap-2 mb-2">
                                                         <input
                                                             type="text"
                                                             placeholder="Add option"
-                                                            className="flex-1 p-2 bg-gray-600 border border-gray-500 rounded text-white"
+                                                            className="flex-1 p-2 bg-gray-600 border border-gray-500 rounded text-primary-100"
                                                             onKeyPress={(e) => {
                                                                 if (e.key === 'Enter' && e.target.value.trim()) {
                                                                     addOption(field.id)
@@ -421,4 +421,4 @@ const FormBuilder = ({ onClose }) => {
     )
 }
 
-export default FormBuilder 
+export default FormBuilder

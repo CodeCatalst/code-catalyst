@@ -151,26 +151,26 @@ const FormManager = () => {
 
             {/* Forms Table */}
             <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full bg-gray-900 rounded-lg">
                     <thead>
                         <tr className="border-b border-gray-700">
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Form</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Type</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Submissions</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Availability</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Tags</th>
-                            <th className="text-left py-3 px-4 text-gray-300 font-medium">Actions</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Form</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Type</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Status</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Submissions</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Availability</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Tags</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredForms.map((form) => (
-                            <tr key={form.id} className="border-b border-gray-700 hover:bg-gray-700">
+                            <tr key={form.id} className="border-b border-gray-800 hover:bg-gray-800/70">
                                 <td className="py-4 px-4">
                                     <div>
-                                        <h4 className="text-white font-medium">{form.title}</h4>
-                                        <p className="text-gray-400 text-sm">{form.description}</p>
-                                        <p className="text-gray-500 text-xs">Created: {form.createdAt}</p>
+                                        <h4 className="text-gray-100 font-medium">{form.title}</h4>
+                                        <p className="text-primary-200 text-sm">{form.description}</p>
+                                        <p className="text-primary-300 text-xs">Created: {form.createdAt}</p>
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
@@ -180,12 +180,12 @@ const FormManager = () => {
                                     {getStatusBadge(form.status)}
                                 </td>
                                 <td className="py-4 px-4">
-                                    <span className="text-white font-medium">{form.submissions}</span>
+                                    <span className="text-primary-100 font-medium">{form.submissions}</span>
                                 </td>
                                 <td className="py-4 px-4">
                                     <div className="text-sm">
-                                        <div className="text-gray-300">Start: {form.startDate}</div>
-                                        <div className="text-gray-400">End: {form.endDate}</div>
+                                        <div className="text-primary-200">Start: {form.startDate}</div>
+                                        <div className="text-primary-300">End: {form.endDate}</div>
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
@@ -193,7 +193,7 @@ const FormManager = () => {
                                         {form.tags.map((tag, index) => (
                                             <span
                                                 key={index}
-                                                className="px-2 py-1 bg-gray-600 text-gray-300 rounded text-xs"
+                                                className="px-2 py-1 bg-gray-700 text-primary-200 rounded text-xs"
                                             >
                                                 {tag}
                                             </span>
@@ -256,4 +256,4 @@ const FormManager = () => {
     )
 }
 
-export default FormManager 
+export default FormManager

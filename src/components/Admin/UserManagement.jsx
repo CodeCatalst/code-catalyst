@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react'
-import api from '../../services/api'
+import api, { updateUserRole, expireUserPassword } from '../../services/api'
 
 const UserManagement = ({ onUserCountUpdate }) => {
     const [users, setUsers] = useState([])
@@ -10,56 +10,29 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [deleteConfirm, setDeleteConfirm] = useState(null)
     const [message, setMessage] = useState(null)
 
-    // Mock data for demonstration - replace with actual API call
-    const mockUsers = [
-        {
-            id: 1,
-            fullName: 'John Doe',
-            email: 'john.doe@example.com',
-            role: 'HR Lead',
-            registrationDate: '2024-01-15',
-            status: 'active'
-        },
-        {
-            id: 2,
-            fullName: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            role: 'Technical Lead',
-            registrationDate: '2024-02-20',
-            status: 'active'
-        },
-        {
-            id: 3,
-            fullName: 'Mike Johnson',
-            email: 'mike.johnson@example.com',
-            role: 'Project Manager',
-            registrationDate: '2024-03-10',
-            status: 'active'
-        },
-        {
-            id: 4,
-            fullName: 'Sarah Wilson',
-            email: 'sarah.wilson@example.com',
-            role: 'Developer',
-            registrationDate: '2024-01-25',
-            status: 'active'
-        },
-        {
-            id: 5,
-            fullName: 'David Brown',
-            email: 'david.brown@example.com',
-            role: 'Designer',
-            registrationDate: '2024-02-05',
-            status: 'active'
-        }
-    ]
-
     useEffect(() => {
-        // Simulate API call
-        setTimeout(() => {
-            setUsers(mockUsers)
-            setLoading(false)
-        }, 1000)
+        // Fetch users from backend
+        const fetchUsers = async () => {
+            try {
+                setLoading(true)
+                const response = await api.get('/users')
+                // Map backend fields to frontend fields if needed
+                const usersData = response.data.map(u => ({
+                    id: u.id,
+                    fullName: u.full_name || u.username,
+                    email: u.email,
+                    role: u.role || 'User', // Adjust if you have roles
+                    registrationDate: u.created_at,
+                    status: 'active', // Adjust if you have status
+                }))
+                setUsers(usersData)
+            } catch (error) {
+                setMessage({ type: 'error', text: 'Failed to load users' })
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchUsers()
     }, [])
 
     // Update parent component with user count
@@ -82,13 +55,18 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const fetchUsers = async () => {
         try {
             setLoading(true)
-            // Replace with actual API call
-            // const response = await api.get('/admin/users')
-            // setUsers(response.data)
-            setUsers(mockUsers)
+            const response = await api.get('/users')
+            const usersData = response.data.map(u => ({
+                id: u.id,
+                fullName: u.full_name || u.username,
+                email: u.email,
+                role: u.role || 'User',
+                registrationDate: u.created_at,
+                status: 'active',
+            }))
+            setUsers(usersData)
             setMessage({ type: 'success', text: 'Users loaded successfully' })
         } catch (error) {
-            console.error('Error fetching users:', error)
             setMessage({ type: 'error', text: 'Failed to load users' })
         } finally {
             setLoading(false)
@@ -97,14 +75,33 @@ const UserManagement = ({ onUserCountUpdate }) => {
 
     const deleteUser = async (userId) => {
         try {
-            // Replace with actual API call
-            // await api.delete(`/admin/users/${userId}`)
+            await api.delete(`/users/${userId}`)
             setUsers(users.filter(user => user.id !== userId))
             setDeleteConfirm(null)
             setMessage({ type: 'success', text: 'User deleted successfully' })
         } catch (error) {
-            console.error('Error deleting user:', error)
             setMessage({ type: 'error', text: 'Failed to delete user' })
+        }
+    }
+
+    // Add handler for role change
+    const handleRoleChange = async (userId, newRole) => {
+        try {
+            await updateUserRole(userId, newRole)
+            setUsers(users => users.map(u => u.id === userId ? { ...u, role: newRole } : u))
+            setMessage({ type: 'success', text: 'Role updated successfully' })
+        } catch (error) {
+            setMessage({ type: 'error', text: 'Failed to update role' })
+        }
+    }
+
+    // Add handler for expiring password
+    const handleExpirePassword = async (userId) => {
+        try {
+            await expireUserPassword(userId)
+            setMessage({ type: 'success', text: 'Password expiration triggered' })
+        } catch (error) {
+            setMessage({ type: 'error', text: 'Failed to expire password' })
         }
     }
 
@@ -189,41 +186,51 @@ const UserManagement = ({ onUserCountUpdate }) => {
 
             {/* Users Table */}
             <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full bg-gray-900 rounded-lg">
                     <thead>
                         <tr className="border-b border-gray-700">
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">Full Name</th>
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">Email</th>
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">Role</th>
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">Registration Date</th>
-                            <th className="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Full Name</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Email</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Role</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Registration Date</th>
+                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredUsers.map((user) => (
-                            <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/50">
+                            <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/70">
                                 <td className="py-4 px-4">
                                     <div className="flex items-center">
                                         <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center mr-3">
                                             <User className="text-white" size={16} />
                                         </div>
-                                        <span className="text-white font-medium">{user.fullName}</span>
+                                        <span className="text-gray-100 font-medium">{user.fullName}</span>
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
-                                    <div className="flex items-center text-gray-300">
+                                    <div className="flex items-center text-primary-200">
                                         <Mail className="mr-2" size={16} />
                                         {user.email}
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
                                     <div className="flex items-center">
-                                        <Shield className="mr-2 text-gray-400" size={16} />
-                                        <span className="text-gray-300">{user.role}</span>
+                                        <Shield className="mr-2 text-primary-300" size={16} />
+                                        <select
+                                            value={user.role}
+                                            onChange={e => handleRoleChange(user.id, e.target.value)}
+                                            className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200"
+                                        >
+                                            <option value="User">User</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="team_lead">Team Lead</option>
+                                            <option value="team_member">Team Member</option>
+                                            <option value="community_member">Community Member</option>
+                                        </select>
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
-                                    <div className="flex items-center text-gray-300">
+                                    <div className="flex items-center text-primary-200">
                                         <Calendar className="mr-2" size={16} />
                                         {new Date(user.registrationDate).toLocaleDateString()}
                                     </div>
@@ -231,10 +238,17 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                 <td className="py-4 px-4">
                                     <button
                                         onClick={() => setDeleteConfirm(user.id)}
-                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                        className="text-red-400 hover:text-red-300 transition-colors mr-2"
                                         title="Delete Account"
                                     >
                                         <Trash2 size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleExpirePassword(user.id)}
+                                        className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                                        title="Expire Password"
+                                    >
+                                        Expire Password
                                     </button>
                                 </td>
                             </tr>
@@ -278,4 +292,4 @@ const UserManagement = ({ onUserCountUpdate }) => {
     )
 }
 
-export default UserManagement 
+export default UserManagement

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, transparentOnTop = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -10,6 +10,7 @@ const Layout = ({ children }) => {
       <Header
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
+        transparentOnTop={transparentOnTop}
       />
       <main className="flex-grow">
         {children}

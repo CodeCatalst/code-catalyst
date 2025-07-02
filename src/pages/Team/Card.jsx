@@ -127,20 +127,17 @@ const StyledWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    // box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
-    margin: 1rem;
   }
 
   .bg {
     position: absolute;
-    width: calc(100% - 5px);
-    height: calc(100% - 5px);
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
     z-index: 2;
-    background: rgba(255, 255, 255, .95);
+    background-color: #111827;
     backdrop-filter: blur(24px);
     border-radius: 10px;
     overflow: hidden;
-    outline: 2px solid white;
   }
 
   .blob {
@@ -176,14 +173,14 @@ const StyledWrapper = styled.div`
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 1rem;
-    border: 3px solid #fff;
+    border: 1px solid #374151;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
 
   .member-name {
     font-size: 1.25rem;
     font-weight: bold;
-    color: #333;
+    color: white;
     margin-bottom: 0.5rem;
   }
 
@@ -196,13 +193,13 @@ const StyledWrapper = styled.div`
 
   .member-department {
     font-size: 0.875rem;
-    color: #666;
+    color: #9ca3af;
     margin-bottom: 0.75rem;
   }
 
   .member-bio {
     font-size: 0.875rem;
-    color: #555;
+    color: #9ca3af;
     margin-bottom: 1rem;
     line-height: 1.2;
     max-height: 3.6em; /* 3 lines * 1.2em line-height */
@@ -225,9 +222,9 @@ const StyledWrapper = styled.div`
   }
 
   .skill-tag {
-    background: #f8f9fa;
+    background: #111827;
     border: 1px solid #dee2e6;
-    color: #495057;
+    color: #9ca3af;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     font-size: 0.75rem;
@@ -242,13 +239,13 @@ const StyledWrapper = styled.div`
   .social-link {
     width: 32px;
     height: 32px;
-    background: #f8f9fa;
+    background: #111827;
     border: 1px solid #dee2e6;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #6c757d;
+    color: #9ca3af;
     transition: all 0.3s ease;
     text-decoration: none;
 
@@ -289,22 +286,21 @@ const StyledListWrapper = styled.div`
     border-radius: 14px;
     overflow: hidden;
     display: flex;
-    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
-    margin: 1rem 0;
+    // margin: 1rem 0;
   }
 
   .bg {
     position: absolute;
-    // top: 5px;
-    // left: 5px;
-    width: calc(100% - 5px);
-    height: calc(100% - 5px);
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
     z-index: 2;
-    background: rgba(255, 255, 255, .95);
+    background: #111827;
     backdrop-filter: blur(24px);
     border-radius: 10px;
     overflow: hidden;
-    outline: 2px solid white;
+    outline: 1px solid #374151;
   }
 
   .blob {
@@ -355,7 +351,7 @@ const StyledListWrapper = styled.div`
   .member-name {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
+    color: white;
     margin-bottom: 0.25rem;
   }
 
@@ -368,12 +364,12 @@ const StyledListWrapper = styled.div`
 
   .member-department {
     font-size: 1rem;
-    color: #666;
+    color: #9ca3af;
   }
 
   .member-bio {
     font-size: 1rem;
-    color: #555;
+    color: #9ca3af;
     line-height: 1.5;
     margin-bottom: 1.5rem;
     flex-grow: 1;
@@ -394,9 +390,9 @@ const StyledListWrapper = styled.div`
   }
 
   .skill-tag {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #495057;
+    background: transparent;
+    border: 1px solid #374151;
+    color: white;
     padding: 0.5rem 0.75rem;
     border-radius: 0.25rem;
     font-size: 0.875rem;
@@ -411,13 +407,13 @@ const StyledListWrapper = styled.div`
   .social-link {
     width: 40px;
     height: 40px;
-    background: #f8f9fa;
+    background: transparent;
     border: 1px solid #dee2e6;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #6c757d;
+    color: #9ca3af;
     transition: all 0.3s ease;
     text-decoration: none;
 

@@ -187,9 +187,10 @@ const FormBuilder = ({ onClose }) => {
                                 />
                                 <button
                                     onClick={addTag}
-                                    className="px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                                    className="px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-2"
+                                    title="Add Tag"
                                 >
-                                    Add
+                                    <Plus size={16} />
                                 </button>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -202,6 +203,7 @@ const FormBuilder = ({ onClose }) => {
                                         <button
                                             onClick={() => removeTag(tag)}
                                             className="hover:text-red-300"
+                                            title="Remove Tag"
                                         >
                                             <X size={14} />
                                         </button>
@@ -363,9 +365,10 @@ const FormBuilder = ({ onClose }) => {
                                                         />
                                                         <button
                                                             onClick={() => addOption(field.id)}
-                                                            className="px-3 py-2 bg-primary-600 text-white rounded hover:bg-primary-700"
+                                                            className="px-3 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 flex items-center gap-2"
+                                                            title="Add Option"
                                                         >
-                                                            Add
+                                                            <Plus size={14} />
                                                         </button>
                                                     </div>
                                                     <div className="flex flex-wrap gap-2">
@@ -378,6 +381,7 @@ const FormBuilder = ({ onClose }) => {
                                                                 <button
                                                                     onClick={() => removeOption(field.id, optionIndex)}
                                                                     className="hover:text-red-300"
+                                                                    title="Remove Option"
                                                                 >
                                                                     <X size={12} />
                                                                 </button>
@@ -390,6 +394,7 @@ const FormBuilder = ({ onClose }) => {
                                         <button
                                             onClick={() => removeField(field.id)}
                                             className="ml-4 text-red-400 hover:text-red-300"
+                                            title="Remove Field"
                                         >
                                             <Trash2 size={20} />
                                         </button>
@@ -403,16 +408,19 @@ const FormBuilder = ({ onClose }) => {
                     <div className="flex justify-end gap-4">
                         <button
                             onClick={onClose}
-                            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 flex items-center gap-2"
+                            title="Cancel"
                         >
-                            Cancel
+                            <X size={18} />
+                            <span className="hidden sm:inline">Cancel</span>
                         </button>
                         <button
                             onClick={handleSave}
                             className="btn-primary flex items-center gap-2"
+                            title="Save Form"
                         >
                             <Save size={20} />
-                            Save Form
+                            <span className="hidden sm:inline">Save Form</span>
                         </button>
                     </div>
                 </div>

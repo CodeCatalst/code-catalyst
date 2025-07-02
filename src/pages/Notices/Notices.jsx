@@ -2,12 +2,16 @@ import { useState, useEffect, useRef } from 'react'
 import { Calendar, User, Tag, ArrowRight } from 'lucide-react'
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
+import { useNotices } from '../../context/NoticesContext'
 
 const Notices = () => {
-  const [notices, setNotices] = useState([])
+  const { notices, addSubmission } = useNotices()
   const [loading, setLoading] = useState(true)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const heroRef = useRef(null);
+  const heroRef = useRef(null)
+  const [activeForm, setActiveForm] = useState(null)
+  const [formValues, setFormValues] = useState({})
+  const [submittedNoticeId, setSubmittedNoticeId] = useState(null)
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -164,6 +168,27 @@ const Notices = () => {
     return `${Math.floor(diffDays / 30)} months ago`
   }
 
+  const handleInputChange = (fieldId, value) => {
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }))
+  }
+
+  const handleFormSubmit = (notice) => (e) => {
+    e.preventDefault()
+    const answers = {}
+    notice.form.fields.forEach((field) => {
+      answers[field.label] = formValues[field.id] || ''
+    })
+    addSubmission(notice.id, {
+      id: 's' + Date.now(),
+      name: formValues.name || '',
+      email: formValues.email || '',
+      answers,
+    })
+    setSubmittedNoticeId(notice.id)
+    setFormValues({})
+    setActiveForm(null)
+  }
+
   if (loading) {
     return <LoadingSpinner message="Loading notices..." />
   }
@@ -174,54 +199,8 @@ const Notices = () => {
 
       <section
         ref={heroRef}
-        className="relative min-h-screen flex gap-10 flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+        className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'grid-move 20s linear infinite'
-          }} />
-        </div>
-
-        {/* Floating Code Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-blue-400/30 font-mono text-lg animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${4 + Math.random() * 6}s`,
-                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
-              }}
-            >
-              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
-            </div>
-          ))}
-        </div>
-
-        {/* Particle System */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
         <div className="container-max text-center">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fade-in">
             Notice <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Board</span>
@@ -250,7 +229,7 @@ const Notices = () => {
       </section>
 
       {/* Notices List */}
-      <section className="section-padding" id="notices-section">
+      <section className="section-padding bg-gray-900" id="notices-section">
         <div className="container-max max-w-4xl">
           <div className="space-y-6">
             {notices.map((notice) => (
@@ -270,7 +249,7 @@ const Notices = () => {
                       </span>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-primary-600 transition-colors">
+                    <h2 className="text-2xl font-bold text-white mb-3 hover:text-primary-600 transition-colors">
                       {notice.title}
                     </h2>
 
@@ -290,6 +269,59 @@ const Notices = () => {
                           </pre>
                         </div>
                       </details>
+                    )}
+
+                    {notice.hasForm && (
+                      <div className="mb-2">
+                        <button
+                          className="btn-primary mb-2"
+                          onClick={() => setActiveForm(activeForm === notice.id ? null : notice.id)}
+                        >
+                          {activeForm === notice.id ? 'Hide Form' : 'Fill Form'}
+                        </button>
+                        {activeForm === notice.id && (
+                          <form
+                            className="bg-gray-800 p-4 rounded-lg mt-2"
+                            onSubmit={handleFormSubmit(notice)}
+                          >
+                            <div className="mb-2">
+                              <label className="block mb-1">Name</label>
+                              <input
+                                className="w-full p-2 rounded bg-gray-900 text-white"
+                                value={formValues.name || ''}
+                                onChange={(e) => handleInputChange('name', e.target.value)}
+                                required
+                              />
+                            </div>
+                            <div className="mb-2">
+                              <label className="block mb-1">Email</label>
+                              <input
+                                type="email"
+                                className="w-full p-2 rounded bg-gray-900 text-white"
+                                value={formValues.email || ''}
+                                onChange={(e) => handleInputChange('email', e.target.value)}
+                                required
+                              />
+                            </div>
+                            {notice.form.fields.map((field) => (
+                              <div className="mb-2" key={field.id}>
+                                <label className="block mb-1">{field.label}</label>
+                                <input
+                                  className="w-full p-2 rounded bg-gray-900 text-white"
+                                  type={field.type === 'email' ? 'email' : 'text'}
+                                  value={formValues[field.id] || ''}
+                                  onChange={(e) => handleInputChange(field.id, e.target.value)}
+                                  required={field.required}
+                                />
+                              </div>
+                            ))}
+                            <button type="submit" className="btn-primary mt-2">Submit</button>
+                            {submittedNoticeId === notice.id && (
+                              <div className="mt-2 text-green-400">Form submitted successfully!</div>
+                            )}
+                          </form>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -317,8 +349,8 @@ const Notices = () => {
           </div>
 
           {notices.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-400 text-lg">No notices available at the moment.</p>
+            <div className="text-center py-12 text-gray-400 text-lg font-semibold">
+              There are currently no notices available. Please check back soon for updates and announcements!
             </div>
           )}
         </div>

@@ -25,6 +25,9 @@ const Profile = () => {
     confirmPassword: ''
   })
 
+  // For image preview
+  const [selectedImage, setSelectedImage] = useState(null)
+
   const isAdmin = user?.role === 'admin' || user?.roles?.includes?.('admin')
 
   const tabs = [
@@ -132,13 +135,26 @@ const Profile = () => {
     }
   }
 
+  // Handle image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setSelectedImage(reader.result)
+        setProfileData(prev => ({ ...prev, profilePicture: reader.result }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
-    <div className="min-h-screen pt-16 bg-gray-50">
+    <div className="min-h-screen pt-16 bg-gray-900">
       <div className="section-padding">
         <div className="container-max max-w-4xl">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">Profile Settings</h1>
             <p className="text-gray-600">Manage your account settings and preferences</p>
           </div>
 
@@ -167,8 +183,8 @@ const Profile = () => {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === tab.id
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-50'
                       }`}
                   >
                     <tab.icon size={20} />
@@ -184,7 +200,7 @@ const Profile = () => {
                 {/* Profile Information Tab */}
                 {activeTab === 'profile' && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
 
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -273,7 +289,7 @@ const Profile = () => {
                 {/* Change Password Tab */}
                 {activeTab === 'password' && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Change Password</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">Change Password</h2>
 
                     <form onSubmit={handlePasswordSubmit} className="space-y-6">
                       <div>
@@ -354,14 +370,14 @@ const Profile = () => {
                 {/* Profile Picture Tab */}
                 {activeTab === 'picture' && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Picture</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">Profile Picture</h2>
 
                     <div className="space-y-6">
                       <div className="flex items-center space-x-6">
-                        <div className="w-24 h-24 bg-primary-600 rounded-full flex items-center justify-center">
-                          {profileData.profilePicture ? (
+                        <div className="w-24 h-24 bg-primary-600 rounded-full flex items-center justify-center overflow-hidden">
+                          {(selectedImage || profileData.profilePicture) ? (
                             <img
-                              src={profileData.profilePicture}
+                              src={selectedImage || profileData.profilePicture}
                               alt="Profile"
                               className="w-24 h-24 rounded-full object-cover"
                             />
@@ -373,18 +389,36 @@ const Profile = () => {
                         </div>
 
                         <div>
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">
+                          <h3 className="text-lg font-medium text-white mb-2">
                             {user?.name}
                           </h3>
                           <p className="text-gray-600 mb-4">
                             Upload a new profile picture to personalize your account
                           </p>
                           <div className="flex space-x-3">
-                            <button className="btn-primary flex items-center space-x-2">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="profilePicInput"
+                              className="hidden"
+                              onChange={handleImageChange}
+                            />
+                            <button
+                              type="button"
+                              className="btn-primary flex items-center space-x-2"
+                              onClick={() => document.getElementById('profilePicInput').click()}
+                            >
                               <Camera size={20} />
                               <span>Upload New Picture</span>
                             </button>
-                            <button className="btn-secondary">
+                            <button
+                              type="button"
+                              className="btn-secondary"
+                              onClick={() => {
+                                setSelectedImage(null)
+                                setProfileData(prev => ({ ...prev, profilePicture: '' }))
+                              }}
+                            >
                               Remove Picture
                             </button>
                           </div>
@@ -392,7 +426,7 @@ const Profile = () => {
                       </div>
 
                       <div className="border-t pt-6">
-                        <h4 className="font-medium text-gray-900 mb-2">Guidelines</h4>
+                        <h4 className="font-medium text-white mb-2">Guidelines</h4>
                         <ul className="text-sm text-gray-600 space-y-1">
                           <li>• Image should be at least 200x200 pixels</li>
                           <li>• Accepted formats: JPG, PNG, GIF</li>
@@ -407,7 +441,7 @@ const Profile = () => {
                 {/* Admin Menu Tab */}
                 {activeTab === 'admin' && isAdmin && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                       <Shield className="text-primary-600" size={24} /> Admin Menu
                     </h2>
                     <ul className="space-y-4">

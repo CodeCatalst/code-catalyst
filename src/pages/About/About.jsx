@@ -163,41 +163,6 @@ const About = () => {
           }} />
         </div>
 
-        {/* Floating Code Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-blue-400/30 font-mono text-lg animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${4 + Math.random() * 6}s`,
-                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
-              }}
-            >
-              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
-            </div>
-          ))}
-        </div>
-
-        {/* Particle System */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
-
         {/* Hero Content */}
         <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
@@ -250,7 +215,7 @@ const About = () => {
       {/* Animated Stats Section */}
       <section
         ref={statsRef}
-        className="py-20 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden"
+        className="py-20 bg-gray-900 relative overflow-hidden"
         id="stats"
         data-animate
       >
@@ -280,10 +245,10 @@ const About = () => {
       </section>
 
       {/* 3D Values Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
+      <section className="py-20 bg-gray-900 relative overflow-hidden text-white">
         <div className="container-max px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Core Values</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -298,7 +263,7 @@ const About = () => {
                 className="group relative"
                 style={{ animationDelay: value.delay }}
               >
-                <div className="relative bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:rotate-1 border border-gray-100">
+                <div className="relative bg-gray-900 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:rotate-1 border border-gray-700">
                   {/* 3D Icon Container */}
                   <div className="relative mb-6">
                     <div className={`w-16 h-16 bg-gradient-to-r ${value.color} rounded-xl flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
@@ -307,7 +272,7 @@ const About = () => {
                     <div className={`absolute inset-0 w-16 h-16 bg-gradient-to-r ${value.color} rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 blur-xl transform translate-y-2`} />
                   </div>
 
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                     {value.title}
                   </h3>
 
@@ -372,10 +337,10 @@ const About = () => {
       </section>
 
       {/* 3D Team Cards */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-purple-50">
+      <section className="py-20 bg-gray-900">
         <div className="container-max px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               Meet Our <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Leadership</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -390,7 +355,7 @@ const About = () => {
                 className="group relative perspective-1000"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d">
+                <div className="relative border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d">
                   {/* Image Container with Overlay */}
                   <div className="relative overflow-hidden">
                     <img
@@ -408,7 +373,7 @@ const About = () => {
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text transition-all duration-300">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text transition-all duration-300">
                       {member.name}
                     </h3>
                     <p className="text-purple-600 font-medium mb-3">{member.role}</p>

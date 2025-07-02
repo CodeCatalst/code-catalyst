@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { Calendar, Users, ExternalLink, X, ArrowRight } from 'lucide-react'
-import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
+
+// Mock API function (replace with real API call later)
+const getGallery = async () => {
+  return JSON.parse(localStorage.getItem('galleryEvents') || '[]')
+}
 
 const Gallery = () => {
   const [events, setEvents] = useState([])
@@ -23,100 +27,12 @@ const Gallery = () => {
   }, [])
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await api.get('/gallery')
-        setEvents(response.data)
-      } catch (error) {
-        console.error('Failed to fetch events:', error)
-        // Set mock data for demo
-        setEvents([
-          {
-            id: 1,
-            name: 'Tech Talk: AI in 2024',
-            date: '2024-01-15',
-            description: 'An inspiring session about the future of artificial intelligence and its impact on various industries.',
-            thumbnail: 'https://images.pexels.com/photos/3184398/pexels-photo-3184398.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/3184398/pexels-photo-3184398.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184633/pexels-photo-3184633.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 85,
-            category: 'Workshop'
-          },
-          {
-            id: 2,
-            name: 'Annual Hackathon 2024',
-            date: '2024-01-20',
-            description: '48-hour coding marathon where teams compete to build innovative solutions to real-world problems.',
-            thumbnail: 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 120,
-            category: 'Competition'
-          },
-          {
-            id: 3,
-            name: 'Web Development Bootcamp',
-            date: '2024-01-25',
-            description: 'Intensive 3-day bootcamp covering modern web development technologies including React, Node.js, and database design.',
-            thumbnail: 'https://images.pexels.com/photos/3184356/pexels-photo-3184356.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/3184356/pexels-photo-3184356.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 45,
-            category: 'Bootcamp'
-          },
-          {
-            id: 4,
-            name: 'Industry Networking Night',
-            date: '2024-02-01',
-            description: 'Connect with industry professionals, alumni, and fellow students in an informal networking environment.',
-            thumbnail: 'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184298/pexels-photo-3184298.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 60,
-            category: 'Networking'
-          },
-          {
-            id: 5,
-            name: 'Mobile App Development Workshop',
-            date: '2024-02-10',
-            description: 'Learn to build cross-platform mobile applications using React Native and Flutter.',
-            thumbnail: 'https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 35,
-            category: 'Workshop'
-          },
-          {
-            id: 6,
-            name: 'Open Source Contribution Day',
-            date: '2024-02-15',
-            description: 'Learn how to contribute to open source projects and make your mark in the developer community.',
-            thumbnail: 'https://images.pexels.com/photos/3184302/pexels-photo-3184302.jpeg?auto=compress&cs=tinysrgb&w=600',
-            images: [
-              'https://images.pexels.com/photos/3184302/pexels-photo-3184302.jpeg?auto=compress&cs=tinysrgb&w=800',
-              'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800'
-            ],
-            attendees: 25,
-            category: 'Workshop'
-          }
-        ])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchEvents()
+    (async () => {
+      setLoading(true)
+      const data = await getGallery()
+      setEvents(data)
+      setLoading(false)
+    })()
   }, [])
 
   const formatDate = (dateString) => {
@@ -138,7 +54,7 @@ const Gallery = () => {
   }
 
   if (loading) {
-    return <LoadingSpinner message="Loading event gallery..." />
+    return <LoadingSpinner />
   }
 
   return (
@@ -149,53 +65,6 @@ const Gallery = () => {
         ref={heroRef}
         className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'grid-move 20s linear infinite'
-          }} />
-        </div>
-
-        {/* Floating Code Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-blue-400/30 font-mono text-lg animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${4 + Math.random() * 6}s`,
-                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
-              }}
-            >
-              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
-            </div>
-          ))}
-        </div>
-
-        {/* Particle System */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
-
         <section className="section-padding text-white">
           <div className="container-max text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
@@ -226,7 +95,7 @@ const Gallery = () => {
       </section>
 
       {/* Events Grid */}
-      <section className="section-padding" id="highlights-section">
+      <section className="section-padding bg-gray-900" id="highlights-section">
         <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
@@ -249,7 +118,7 @@ const Gallery = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                  <h3 className="text-xl font-bold text-white group-hover:text-primary-600 transition-colors">
                     {event.name}
                   </h3>
 
@@ -277,11 +146,11 @@ const Gallery = () => {
       {/* Lightbox Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{selectedEvent.name}</h2>
+                <h2 className="text-2xl font-bold text-white">{selectedEvent.name}</h2>
                 <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
                   <div className="flex items-center space-x-1">
                     <Calendar size={16} />
@@ -323,6 +192,12 @@ const Gallery = () => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {events.length === 0 && (
+        <div className="bg-gray-900 text-center py-12 text-gray-400 text-lg font-semibold">
+          No gallery highlights are available at the moment. Please check back later for exciting event moments!
         </div>
       )}
     </div>

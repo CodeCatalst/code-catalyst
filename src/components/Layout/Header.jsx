@@ -25,7 +25,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'About', href: '/about' },
     { name: 'Team', href: '/team' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Vlogs', href: '/vlogs' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Notices', href: '/notices' },
     { name: 'Contact', href: '/contact' },
   ]
@@ -36,7 +36,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   }
 
   return (
-    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white backdrop-blur-sm shadow-lg' : 'bg-transparent'
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-gray-900 bg-opacity-60 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}>
       <nav className="container-max">
         <div className="flex justify-between items-center h-17 px-4 sm:px-6 lg:px-8">
@@ -58,7 +58,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 to={link.href}
                 className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
                   ? 'text-primary-600'
-                  : isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'
+                  : 'text-white'
                   }`}
               >
                 {link.name}
@@ -108,8 +108,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className={`font-medium hover:text-primary-600 transition-colors ${isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'
-                    }`}
+                  className={`font-medium hover:text-primary-600 transition-colors text-white`}
                 >
                   Login
                 </Link>
@@ -126,9 +125,9 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {mobileMenuOpen ? (
-              <X size={24} className={isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'} />
+              <X size={24} className={isAuthPage ? 'text-white' : scrolled ? 'text-white' : 'text-white'} />
             ) : (
-              <Menu size={24} className={isAuthPage ? 'text-gray-900' : scrolled ? 'text-gray-900' : 'text-white'} />
+              <Menu size={24} className={isAuthPage ? 'text-white' : scrolled ? 'text-white' : 'text-white'} />
             )}
           </button>
         </div>
@@ -141,7 +140,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`block font-medium py-2 text-gray-900 hover:text-primary-600 ${location.pathname === link.href ? 'text-primary-600' : 'text-gray-900'
+                  className={`block font-medium py-2 hover:text-primary-600 transition-colors ${location.pathname === link.href ? 'text-primary-600' : 'text-white'
                     }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -154,7 +153,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                   <>
                     <Link
                       to="/profile"
-                      className="flex items-center space-x-2 py-2 text-gray-900 hover:text-primary-600 transition-colors"
+                      className="flex items-center space-x-2 py-2 text-white hover:text-primary-600 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <User size={18} />
@@ -175,7 +174,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                   <>
                     <Link
                       to="/login"
-                      className="block py-2 text-gray-900 hover:text-primary-600 transition-colors"
+                      className="block py-2 text-white hover:text-primary-600 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Login

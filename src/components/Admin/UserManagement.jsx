@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react'
+import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckCircle, AlertCircle, Plus, KeyRound } from 'lucide-react'
 import api, { updateUserRole, expireUserPassword } from '../../services/api'
 
 const UserManagement = ({ onUserCountUpdate }) => {
@@ -9,6 +9,8 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [filterRole, setFilterRole] = useState('all')
     const [deleteConfirm, setDeleteConfirm] = useState(null)
     const [message, setMessage] = useState(null)
+    const [showForm, setShowForm] = useState(false)
+    const [editUser, setEditUser] = useState(null)
 
     useEffect(() => {
         // Fetch users from backend
@@ -105,6 +107,36 @@ const UserManagement = ({ onUserCountUpdate }) => {
         }
     }
 
+    const handleAdd = () => {
+        setEditUser(null)
+        setShowForm(true)
+    }
+    const handleEdit = (user) => {
+        setEditUser(user)
+        setShowForm(true)
+    }
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+        const form = e.target
+        const newUser = {
+            id: editUser ? editUser.id : 'u' + (users.length + 1),
+            fullName: form.fullName.value,
+            email: form.email.value,
+            role: form.role.value,
+            registrationDate: form.registrationDate.value,
+            status: 'active'
+        }
+        if (editUser) {
+            setUsers(users.map(u => u.id === editUser.id ? newUser : u))
+            setMessage({ type: 'success', text: 'User updated successfully' })
+        } else {
+            setUsers([...users, newUser])
+            setMessage({ type: 'success', text: 'User added successfully' })
+        }
+        setShowForm(false)
+        setEditUser(null)
+    }
+
     const filteredUsers = users.filter(user => {
         const matchesSearch = user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -125,7 +157,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">User Management</h2>
+                <h2 className="text-2xl font-bold text-white">Manage Users</h2>
                 <div className="flex items-center gap-4">
                     <div className="text-gray-400">
                         Total Users: {users.length}
@@ -133,10 +165,18 @@ const UserManagement = ({ onUserCountUpdate }) => {
                     <button
                         onClick={fetchUsers}
                         disabled={loading}
-                        className="text-gray-400 hover:text-white transition-colors disabled:opacity-50"
+                        className="text-gray-400 hover:text-white transition-colors disabled:opacity-50 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500"
                         title="Refresh users"
                     >
                         <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
+                    </button>
+                    <button
+                        className="btn-primary flex items-center gap-2 px-3 py-2 rounded-lg"
+                        onClick={handleAdd}
+                        title="Add User"
+                    >
+                        <Plus size={18} />
+                        <span className="hidden sm:inline">Add User</span>
                     </button>
                 </div>
             </div>
@@ -238,17 +278,17 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                 <td className="py-4 px-4">
                                     <button
                                         onClick={() => setDeleteConfirm(user.id)}
-                                        className="text-red-400 hover:text-red-300 transition-colors mr-2"
+                                        className="text-red-400 hover:text-red-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
                                         title="Delete Account"
                                     >
                                         <Trash2 size={18} />
                                     </button>
                                     <button
                                         onClick={() => handleExpirePassword(user.id)}
-                                        className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                                        className="text-yellow-400 hover:text-yellow-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 mr-2"
                                         title="Expire Password"
                                     >
-                                        Expire Password
+                                        <KeyRound size={18} />
                                     </button>
                                 </td>
                             </tr>
@@ -286,6 +326,41 @@ const UserManagement = ({ onUserCountUpdate }) => {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Add/Edit User Modal */}
+            {showForm && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+                    <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handleFormSubmit}>
+                        <h3 className="text-xl font-bold mb-4">{editUser ? 'Edit User' : 'Add User'}</h3>
+                        <div className="mb-3">
+                            <label className="block mb-1">Full Name</label>
+                            <input name="fullName" defaultValue={editUser?.fullName || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="block mb-1">Email</label>
+                            <input name="email" type="email" defaultValue={editUser?.email || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="block mb-1">Role</label>
+                            <select name="role" defaultValue={editUser?.role || 'Developer'} className="w-full p-2 rounded bg-gray-900 text-white">
+                                <option value="HR Lead">HR Lead</option>
+                                <option value="Technical Lead">Technical Lead</option>
+                                <option value="Project Manager">Project Manager</option>
+                                <option value="Developer">Developer</option>
+                                <option value="Designer">Designer</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="block mb-1">Registration Date</label>
+                            <input name="registrationDate" type="date" defaultValue={editUser?.registrationDate || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                            <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>
+                            <button type="submit" className="btn-primary">Save</button>
+                        </div>
+                    </form>
                 </div>
             )}
         </div>

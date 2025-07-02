@@ -77,7 +77,7 @@ const Login = () => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col gap-10 items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white overflow-hidden">
       <div className="max-w-md w-full my-10 py-20">
         <div className="card m-2">
           {/* Header */}
@@ -85,8 +85,8 @@ const Login = () => {
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <LogIn className="text-white" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-            <p className="text-gray-600">Sign in to your Code Catalyst account</p>
+            <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+            <p className="text-gray-400">Sign in to your Code Catalyst account</p>
           </div>
 
           {/* Error Message */}
@@ -100,7 +100,7 @@ const Login = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
               </label>
               <input
@@ -119,7 +119,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -136,7 +136,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -154,7 +154,7 @@ const Login = () => {
                   type="checkbox"
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
                   Remember me
                 </label>
               </div>
@@ -188,7 +188,7 @@ const Login = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Don't have an account?{' '}
               <Link
                 to="/signup"

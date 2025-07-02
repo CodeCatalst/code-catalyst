@@ -110,7 +110,7 @@ const Signup = () => {
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
 
   return (
-    <div className="relative min-h-screen flex flex-col gap-10 items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white overflow-hidden">
       <div className="max-w-md w-full my-10 py-20">
         <div className="card m-2">
           {/* Header */}
@@ -118,8 +118,8 @@ const Signup = () => {
             <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <UserPlus className="text-white" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Join Code Catalyst</h1>
-            <p className="text-gray-600">Create your account and start your tech journey</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Join Code Catalyst</h1>
+            <p className="text-gray-400">Create your account and start your tech journey</p>
           </div>
 
           {/* Error Message */}
@@ -133,7 +133,7 @@ const Signup = () => {
           {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
                 Full Name
               </label>
               <input
@@ -152,7 +152,7 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
               </label>
               <input
@@ -171,7 +171,7 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -206,7 +206,7 @@ const Signup = () => {
                       ></div>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-400">
                     Password strength: {strengthLabels[passwordStrength - 1] || 'Very Weak'}
                   </p>
                 </div>
@@ -218,7 +218,7 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-400 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
@@ -261,7 +261,7 @@ const Signup = () => {
                 required
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded mt-1"
               />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-600">
+              <label htmlFor="terms" className="ml-2 block text-sm text-gray-400">
                 I agree to the{' '}
                 <Link to="/terms" className="text-primary-600 hover:text-primary-700 transition-colors">
                   Terms of Service
@@ -294,7 +294,7 @@ const Signup = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Already have an account?{' '}
               <Link
                 to="/login"

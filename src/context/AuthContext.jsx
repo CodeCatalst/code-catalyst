@@ -39,16 +39,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/login', { email, password })
       const { token: newToken, user: userData } = response.data
-      
+
       localStorage.setItem('token', newToken)
       setToken(newToken)
       setUser(userData)
-      
+
       return { success: true }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.error || 'Login failed' 
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Login failed'
       }
     }
   }
@@ -57,16 +57,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/signup', userData)
       const { token: newToken, user: newUser } = response.data
-      
+
       localStorage.setItem('token', newToken)
       setToken(newToken)
       setUser(newUser)
-      
+
       return { success: true }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.error || 'Signup failed' 
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Signup failed'
       }
     }
   }
@@ -82,9 +82,9 @@ export const AuthProvider = ({ children }) => {
       await api.post('/auth/forgot-password', { email })
       return { success: true }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Failed to send reset email' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to send reset email'
       }
     }
   }
@@ -95,9 +95,9 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user)
       return { success: true }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Profile update failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Profile update failed'
       }
     }
   }

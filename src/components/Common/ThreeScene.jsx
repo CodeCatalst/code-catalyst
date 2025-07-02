@@ -5,9 +5,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createNoise3D } from 'simplex-noise';
 
 const noise = createNoise3D();
-console.log(noise(1.1, 2.2, 3.3));
-
-
 
 const StarfieldScene = ({ scrollProgress = 0 }) => {
     const containerRef = useRef();
@@ -23,8 +20,6 @@ const StarfieldScene = ({ scrollProgress = 0 }) => {
         let timeoutDebounce;
         let delta = 0;
         const noise = createNoise3D();
-
-        console.log('Simplex noise test:', noise(1, 2, 3));
 
         const blobScale = 3;
 

@@ -177,7 +177,34 @@ const Team = () => {
             social: {
 
             }
-          }
+          },
+
+          {
+            id: 12,
+            name: 'Kumkum ',
+            role: 'Technical team support',
+            department: 'Technical',
+            image: './kumkum.jpg',
+            bio: 'I am a tech enthusiast currently learning AI, machine learning, software development, driven by curiosity and a passion for innovation. ',
+            skills: ['DSA', 'Machine learning', 'AI'],
+            social: {
+              linkedin: 'https://www.linkedin.com/in/kumkum-morewal-b9291a278/'
+            }
+          },
+
+          {
+            id: 13,
+            name: 'Aditya modi ',
+            role: 'Member of technical team',
+            department: 'Technical',
+            image: './Aditya.jpg',
+            bio: " Hi readers! I'm Aditya modi.I'm a BCA undergrad with a passion for tech, creativity, and clever comebacks—currently decoding life and Codes one semester at a time.",
+            skills: [],
+            social: {
+            }
+          },
+
+
         ]
         setTeamMembers(mockData)
         setFilteredMembers(mockData)
@@ -219,56 +246,10 @@ const Team = () => {
         ref={heroRef}
         className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'grid-move 20s linear infinite'
-          }} />
-        </div>
-
-        {/* Floating Code Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-blue-400/30 font-mono text-lg animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${4 + Math.random() * 6}s`,
-                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
-              }}
-            >
-              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
-            </div>
-          ))}
-        </div>
-
-        {/* Particle System */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
 
         <div className="container-max text-center">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-            Meet Our <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Team</span>
+            Meet the <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Team</span>
           </h1>
           <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
             The passionate individuals who make Code Catalyst a vibrant and thriving community.
@@ -338,7 +319,7 @@ const Team = () => {
       </section>
 
       {/* Team Members */}
-      <section className="section-padding bg-white" id="team-section">
+      <section className=" bg-slate-900 section-padding flex justify-center" id="team-section">
         <div className="container-max">
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

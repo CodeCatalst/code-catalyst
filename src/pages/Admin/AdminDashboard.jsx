@@ -18,17 +18,20 @@ import FormBuilder from '../../components/Admin/FormBuilder'
 import FormManager from '../../components/Admin/FormManager'
 import SubmissionsViewer from '../../components/Admin/SubmissionsViewer'
 import UserManagement from '../../components/Admin/UserManagement'
+import AdminNoticesManager from '../../components/Admin/AdminNoticesManager'
+import AdminBlogsManager from '../../components/Admin/AdminBlogsManager'
+import AdminGalleryManager from '../../components/Admin/AdminGalleryManager'
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('forms')
+    const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [userCount, setUserCount] = useState(0)
 
     const tabs = [
-        { id: 'forms', label: 'Manage Forms', icon: FileText },
-        { id: 'submissions', label: 'View Submissions', icon: BarChart3 },
-        { id: 'users', label: 'User Management', icon: Users },
-        { id: 'settings', label: 'Settings', icon: Settings }
+        { id: 'notices', label: 'Manage Notice' },
+        { id: 'blogs', label: 'Manage Blogs' },
+        { id: 'users', label: 'Manage Users' },
+        { id: 'gallery', label: 'Gallery Manager' }
     ]
 
     const handleUserCountUpdate = (count) => {
@@ -37,33 +40,14 @@ const AdminDashboard = () => {
 
     const renderTabContent = () => {
         switch (activeTab) {
-            case 'forms':
-                return (
-                    <div>
-                        <div className="flex flex-col gap-4 sm:flex-row sm:gap-0 justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold text-white">Form Management</h2>
-                            <button
-                                onClick={() => setShowFormBuilder(true)}
-                                className="btn-primary flex items-center gap-2"
-                            >
-                                <Plus size={20} />
-                                Create New Form
-                            </button>
-                        </div>
-                        <FormManager />
-                    </div>
-                )
-            case 'submissions':
-                return <SubmissionsViewer />
+            case 'notices':
+                return <AdminNoticesManager />
+            case 'blogs':
+                return <AdminBlogsManager />
             case 'users':
-                return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
-            case 'settings':
-                return (
-                    <div className="card">
-                        <h2 className="text-2xl font-bold text-white mb-4">Admin Settings</h2>
-                        <p className="text-gray-400">Settings panel coming soon...</p>
-                    </div>
-                )
+                return <UserManagement />
+            case 'gallery':
+                return <AdminGalleryManager />
             default:
                 return null
         }
@@ -75,7 +59,7 @@ const AdminDashboard = () => {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-                    <p className="text-gray-400">Manage forms, view submissions, and control your application</p>
+                    <p className="text-gray-400">Manage notices, blogs, users, and gallery highlights</p>
                 </div>
 
                 {/* Stats Cards */}
@@ -133,22 +117,18 @@ const AdminDashboard = () => {
                 <div className="card">
                     <div className="border-b border-gray-700 mb-6">
                         <nav className="flex space-x-8 overflow-x-auto">
-                            {tabs.map((tab) => {
-                                const Icon = tab.icon
-                                return (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
-                                        className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                                            ? 'border-primary-500 text-primary-500'
-                                            : 'border-transparent text-gray-400 hover:text-gray-300'
-                                            }`}
-                                    >
-                                        <Icon size={20} />
-                                        {tab.label}
-                                    </button>
-                                )
-                            })}
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
+                                        ? 'border-primary-500 text-primary-500'
+                                        : 'border-transparent text-gray-400 hover:text-gray-300'
+                                        }`}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
                         </nav>
                     </div>
 

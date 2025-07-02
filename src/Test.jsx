@@ -24,12 +24,12 @@ const Test = () => {
         setLatestContent(response.data)
         setError(null)
       } catch (error) {
-        // Check if it's a backend unavailable error
+        // Removed: // Check if it's a backend unavailable error
         if (error.message === 'BACKEND_UNAVAILABLE') {
-          console.info('Backend server not available, using demo content')
+          // Removed: console.info('Backend server not available, using demo content')
           setError('Running in demo mode - backend server not connected.')
         } else {
-          console.error('Failed to fetch latest content:', error)
+          // Removed: console.error('Failed to fetch latest content:', error)
           setError('Unable to load content. Showing demo content.')
         }
 
@@ -45,7 +45,7 @@ const Test = () => {
             { id: 2, title: 'Workshop: React Fundamentals', date: '2024-01-12', priority: 'medium' },
             { id: 3, title: 'Industry Networking Night', date: '2024-01-14', priority: 'low' },
           ],
-          vlogs: [
+          blogs: [
             { id: 1, title: 'Behind the Scenes: Code Catalyst', thumbnail: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400', views: 1250 },
             { id: 2, title: 'Student Success Stories', thumbnail: 'https://images.pexels.com/photos/3184633/pexels-photo-3184633.jpeg?auto=compress&cs=tinysrgb&w=400', views: 2150 },
           ]
@@ -149,16 +149,13 @@ const Test = () => {
       {/* Hero Section with Advanced Animations */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-950 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
         {/* Animated Background Grid */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
+            backgroundImage: `radial-gradient(circle at 60% 40%, rgba(99,102,241,0.15) 0%, transparent 70%), linear-gradient(rgba(139,92,246,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.08) 1px, transparent 1px)`,
+            backgroundSize: '80px 80px',
             animation: 'grid-move 20s linear infinite'
           }} />
         </div>
@@ -291,14 +288,14 @@ const Test = () => {
       {/* Features Section with 3D Cards */}
       <section
         ref={featuresRef}
-        className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden"
+        className="py-20 bg-gradient-to-br from-slate-800 via-purple-900 to-slate-900 relative overflow-hidden"
       >
         <div className="container-max px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               Why Choose <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Code Catalyst?</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Discover what makes our community special
             </p>
           </div>
@@ -310,7 +307,7 @@ const Test = () => {
                 className="group relative perspective-1000"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d border border-gray-100">
+                <div className="relative bg-slate-800 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d border border-gray-700">
                   {/* 3D Icon */}
                   <div className="relative mb-6">
                     <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
@@ -319,15 +316,15 @@ const Test = () => {
                     <div className={`absolute inset-0 w-16 h-16 bg-gradient-to-r ${feature.color} rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 blur-xl transform translate-y-2`} />
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                     {feature.title}
                   </h3>
 
-                  <p className="text-gray-600 mb-4 leading-relaxed">
+                  <p className="text-gray-300 mb-4 leading-relaxed">
                     {feature.description}
                   </p>
 
-                  <div className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block">
+                  <div className="text-sm font-semibold text-blue-300 bg-blue-900/40 px-3 py-1 rounded-full inline-block">
                     {feature.stats}
                   </div>
 
@@ -341,7 +338,7 @@ const Test = () => {
       </section>
 
       {/* Interactive Content Showcase */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white">
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
         <div className="container-max px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-4">
@@ -410,7 +407,7 @@ const Test = () => {
               </Link>
             </div>
 
-            {/* Notices & Vlogs */}
+            {/* Notices & Blogs */}
             <div className="space-y-8">
               {/* Recent Notices */}
               <div className="space-y-4">
@@ -430,8 +427,8 @@ const Test = () => {
                           <p className="text-gray-300 text-xs">{new Date(notice.date).toLocaleDateString()}</p>
                         </div>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${notice.priority === 'high' ? 'bg-red-500/20 text-red-300' :
-                            notice.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
-                              'bg-green-500/20 text-green-300'
+                          notice.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-green-500/20 text-green-300'
                           }`}>
                           {notice.priority}
                         </span>
@@ -446,22 +443,22 @@ const Test = () => {
                 </Link>
               </div>
 
-              {/* Latest Vlogs */}
+              {/* Latest Blogs */}
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
                     <Video className="text-white" size={20} />
                   </div>
-                  <h3 className="text-xl font-bold">Latest Vlogs</h3>
+                  <h3 className="text-xl font-bold">Latest Blogs</h3>
                 </div>
 
                 <div className="space-y-3">
-                  {latestContent?.vlogs?.map((vlog) => (
-                    <div key={vlog.id} className="group bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  {latestContent?.blogs?.map((blog) => (
+                    <div key={blog.id} className="group bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden border border-white/20 hover:bg-white/20 transition-all duration-300">
                       <div className="relative">
                         <img
-                          src={vlog.thumbnail}
-                          alt={vlog.title}
+                          src={blog.thumbnail}
+                          alt={blog.title}
                           className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
@@ -469,15 +466,15 @@ const Test = () => {
                         </div>
                       </div>
                       <div className="p-3">
-                        <h4 className="font-semibold text-white text-sm mb-1">{vlog.title}</h4>
-                        <p className="text-gray-300 text-xs">{vlog.views.toLocaleString()} views</p>
+                        <h4 className="font-semibold text-white text-sm mb-1">{blog.title}</h4>
+                        <p className="text-gray-300 text-xs">{blog.views.toLocaleString()} views</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <Link to="/vlogs" className="inline-flex items-center text-green-400 font-medium hover:text-green-300 transition-colors group text-sm">
-                  Watch All Vlogs
+                <Link to="/blog" className="inline-flex items-center text-green-400 font-medium hover:text-green-300 transition-colors group text-sm">
+                  Read All Blogs
                   <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>

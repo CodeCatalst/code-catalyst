@@ -261,8 +261,9 @@ const Home = () => {
         </div>
         <div className="relative z-20 max-w-5xl w-full mx-auto p-10 animate-fade-in text-center">
           <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-400/30 backdrop-blur-sm mb-6 animate-pulse-glow">
-              <Code className="text-blue-400" size={32} />
+            <div className="inline-flex items-center justify-center w-40 h-40 rounded-full bg-black">
+                            <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-30 h-30" />
+
             </div>
           </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">

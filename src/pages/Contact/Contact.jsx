@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Mail, Phone, MapPin, Send, Github, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { Mail,  MapPin, Send, Github, Instagram, Linkedin } from 'lucide-react'
 import api from '../../services/api'
 
 const Contact = () => {
@@ -19,15 +19,15 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      details: 'contact@codecatalyst.edu',
-      action: 'mailto:contact@codecatalyst.edu'
+      details: 'code@jbcollege.in,codecatalyst@gmail.com',
+      action: 'mailto:code@jbcollege.in'
     },
-    {
-      icon: Phone,
-      title: 'Call Us',
-      details: '+1 (555) 123-4567',
-      action: 'tel:+15551234567'
-    },
+    // {
+    //   icon: Phone,
+    //   title: 'Call Us',
+    //   details: '+1 (555) 123-4567',
+    //   action: 'tel:+15551234567'
+    // },
     {
       icon: MapPin,
       title: 'Visit Us',
@@ -37,8 +37,8 @@ const Contact = () => {
   ]
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/codecatalyst', label: 'GitHub' },
-    { icon: Twitter, href: 'https://twitter.com/codecatalyst', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com/CodeCatalst', label: 'GitHub' },
+    // { icon: Twi, href: 'https://twitter.com/codecatalyst', label: 'Discord' },
     { icon: Instagram, href: 'https://instagram.com/codecatalyst', label: 'Instagram' },
     { icon: Linkedin, href: 'https://linkedin.com/company/codecatalyst', label: 'LinkedIn' },
   ]

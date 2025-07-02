@@ -59,17 +59,17 @@ function App() {
                 <Route
                   path="/profile"
                   element={
-                    // <ProtectedRoute>
-                    <Profile />
-                    // </ProtectedRoute>
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/admin"
                   element={
-                    // <AdminRoute>
-                    <AdminDashboard />
-                    // </AdminRoute>
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
                   }
                 />
               </Routes>

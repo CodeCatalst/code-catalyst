@@ -21,6 +21,7 @@ import UserManagement from '../../components/Admin/UserManagement'
 import AdminNoticesManager from '../../components/Admin/AdminNoticesManager'
 import AdminBlogsManager from '../../components/Admin/AdminBlogsManager'
 import AdminGalleryManager from '../../components/Admin/AdminGalleryManager'
+import AdminContactMessages from '../../components/Admin/AdminContactMessages'
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('notices')
@@ -31,7 +32,8 @@ const AdminDashboard = () => {
         { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
-        { id: 'gallery', label: 'Gallery Manager' }
+        { id: 'gallery', label: 'Gallery Manager' },
+        { id: 'contact', label: 'Contact Messages' }
     ]
 
     const handleUserCountUpdate = (count) => {
@@ -48,6 +50,8 @@ const AdminDashboard = () => {
                 return <UserManagement />
             case 'gallery':
                 return <AdminGalleryManager />
+            case 'contact':
+                return <AdminContactMessages />
             default:
                 return null
         }

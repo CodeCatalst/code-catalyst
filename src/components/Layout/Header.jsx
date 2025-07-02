@@ -28,7 +28,12 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Blog', href: '/blog' },
     { name: 'Notices', href: '/notices' },
     { name: 'Contact', href: '/contact' },
-  ]
+  ];
+
+  // Add admin link if user is admin
+  const adminLinks = user?.role === 'admin' ? [
+    { name: 'Admin', href: '/admin' }
+  ] : [];
 
   const handleLogout = () => {
     logout()
@@ -43,7 +48,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           {/* Logo */}
           <Link to="/" className="flex flex-row items-center">
             <div className="w-24 h-24 rounded-lg">
-              <img src={'/logo1.png'} alt="Code Catalyst" className="w-24 h-24" />
+              <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-24 h-24" />
             </div>
             {/* <p className="font-bold text-xl text-teal-400 hidden sm:block ml-2">
               <span className="text-purple-600">Code</span> Catalyst
@@ -52,7 +57,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navigationLinks.map((link) => (
+            {[...navigationLinks, ...adminLinks].map((link) => (
               <Link
                 key={link.name}
                 to={link.href}
@@ -144,7 +149,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         {mobileMenuOpen && (
           <div className="lg:hidden card p-0 shadow-lg rounded-b-2xl mx-4 mb-4">
             <div className="px-4 py-6 space-y-4">
-              {navigationLinks.map((link) => (
+              {[...navigationLinks, ...adminLinks].map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}

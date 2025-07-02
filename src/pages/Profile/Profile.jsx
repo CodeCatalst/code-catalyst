@@ -379,96 +379,15 @@ const Profile = () => {
                 )}
 
                 {/* Profile Picture Tab */}
-                {activeTab === 'picture' && (
-                  <div>
-                    <h2 className="text-2xl font-bold text-white mb-6">Profile Picture</h2>
-
-                    <div className="space-y-6">
-                      <div className="flex items-center space-x-6">
-                        <div className="w-24 h-24 bg-primary-600 rounded-full flex items-center justify-center overflow-hidden">
-                          {(selectedImage || profileData.profilePicture) ? (
-                            <img
-                              src={selectedImage || profileData.profilePicture}
-                              alt="Profile"
-                              className="w-24 h-24 rounded-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-white font-bold text-2xl">
-                              {user?.name?.charAt(0).toUpperCase()}
-                            </span>
-                          )}
-                        </div>
-
-                        <div>
-                          <h3 className="text-lg font-medium text-white mb-2">
-                            {user?.name}
-                          </h3>
-                          <p className="text-gray-600 mb-4">
-                            Upload a new profile picture to personalize your account
-                          </p>
-                          <div className="flex space-x-3">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              id="profilePicInput"
-                              className="hidden"
-                              onChange={handleImageChange}
-                            />
-                            <button
-                              type="button"
-                              className="btn-primary flex items-center space-x-2"
-                              onClick={() => document.getElementById('profilePicInput').click()}
-                            >
-                              <Camera size={20} />
-                              <span>Upload New Picture</span>
-                            </button>
-                            <button
-                              type="button"
-                              className="btn-secondary"
-                              onClick={() => {
-                                setSelectedImage(null)
-                                setProfileData(prev => ({ ...prev, profilePicture: '' }))
-                              }}
-                            >
-                              Remove Picture
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-6">
-                        <h4 className="font-medium text-white mb-2">Guidelines</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Image should be at least 200x200 pixels</li>
-                          <li>• Accepted formats: JPG, PNG, GIF</li>
-                          <li>• Maximum file size: 5MB</li>
-                          <li>• Square images work best</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
+              
 
                 {/* Admin Menu Tab */}
                 {activeTab === 'admin' && isAdmin && (
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                      <Shield className="text-primary-600" size={24} /> Admin Menu
+                      <Shield className="text-primary-600" size={24} />   <a href="/admin" className="btn-primary">Admin Dashboard</a>
                     </h2>
-                    <ul className="space-y-4">
-                      <li>
-                        <a href="/admin/dashboard" className="btn-primary">Admin Dashboard</a>
-                      </li>
-                      <li>
-                        <a href="/admin/users" className="btn-secondary">User Management</a>
-                      </li>
-                      <li>
-                        <a href="/admin/forms" className="btn-secondary">Form Manager</a>
-                      </li>
-                      <li>
-                        <a href="/admin/submissions" className="btn-secondary">Submissions Viewer</a>
-                      </li>
-                    </ul>
+                   
                   </div>
                 )}
               </div>

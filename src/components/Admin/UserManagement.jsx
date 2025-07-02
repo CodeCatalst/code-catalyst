@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckCircle, AlertCircle, Plus, KeyRound } from 'lucide-react'
-import api, { updateUserRole, expireUserPassword } from '../../services/api'
+import api, { updateUserRole, expireUserPassword, createUser, updateUser } from '../../services/api'
 
 const UserManagement = ({ onUserCountUpdate }) => {
     const [users, setUsers] = useState([])
@@ -115,26 +115,34 @@ const UserManagement = ({ onUserCountUpdate }) => {
         setEditUser(user)
         setShowForm(true)
     }
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
-        const form = e.target
-        const newUser = {
-            id: editUser ? editUser.id : 'u' + (users.length + 1),
-            fullName: form.fullName.value,
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const userData = {
+            full_name: form.fullName.value,
             email: form.email.value,
+            password: form.password ? form.password.value : undefined, // Only for new users
             role: form.role.value,
-            registrationDate: form.registrationDate.value,
-            status: 'active'
+        };
+        try {
+            if (editUser) {
+                // Update user (password not updated here)
+                await updateUser(editUser.id, userData);
+                setMessage({ type: 'success', text: 'User updated successfully' });
+            } else {
+                if (!form.password.value) {
+                    setMessage({ type: 'error', text: 'Password is required for new users' });
+                    return;
+                }
+                await createUser(userData);
+                setMessage({ type: 'success', text: 'User added successfully' });
+            }
+            fetchUsers();
+            setShowForm(false);
+            setEditUser(null);
+        } catch (error) {
+            setMessage({ type: 'error', text: 'Failed to save user' });
         }
-        if (editUser) {
-            setUsers(users.map(u => u.id === editUser.id ? newUser : u))
-            setMessage({ type: 'success', text: 'User updated successfully' })
-        } else {
-            setUsers([...users, newUser])
-            setMessage({ type: 'success', text: 'User added successfully' })
-        }
-        setShowForm(false)
-        setEditUser(null)
     }
 
     const filteredUsers = users.filter(user => {
@@ -144,7 +152,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
         return matchesSearch && matchesRole
     })
 
-    const roles = ['all', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
+    const roles = ['all', 'admin', 'user', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
 
     if (loading) {
         return (
@@ -344,7 +352,12 @@ const UserManagement = ({ onUserCountUpdate }) => {
                         </div>
                         <div className="mb-3">
                             <label className="block mb-1">Role</label>
-                            <select name="role" defaultValue={editUser?.role || 'Developer'} className="w-full p-2 rounded bg-gray-900 text-white">
+                            <select name="role" defaultValue={editUser?.role || 'user'} className="w-full p-2 rounded bg-gray-900 text-white">
+                                <option value="admin">Admin</option>
+                                <option value="user">User</option>
+                                <option value="team_lead">Team Lead</option>
+                                <option value="team_member">Team Member</option>
+                                <option value="community_member">Community Member</option>
                                 <option value="HR Lead">HR Lead</option>
                                 <option value="Technical Lead">Technical Lead</option>
                                 <option value="Project Manager">Project Manager</option>
@@ -352,10 +365,12 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                 <option value="Designer">Designer</option>
                             </select>
                         </div>
-                        <div className="mb-3">
-                            <label className="block mb-1">Registration Date</label>
-                            <input name="registrationDate" type="date" defaultValue={editUser?.registrationDate || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                        </div>
+                        {!editUser && (
+                            <div className="mb-3">
+                                <label className="block mb-1">Password</label>
+                                <input name="password" type="password" className="w-full p-2 rounded bg-gray-900 text-white" required />
+                            </div>
+                        )}
                         <div className="flex gap-2 justify-end">
                             <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>
                             <button type="submit" className="btn-primary">Save</button>

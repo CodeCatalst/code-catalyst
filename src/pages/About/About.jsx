@@ -147,9 +147,10 @@ const About = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
+      {/* Animated Hero Banner Section (from previous Home.jsx) */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+        className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
       >
         {/* Animated Background Grid */}
         <div className="absolute inset-0 opacity-20">
@@ -162,49 +163,47 @@ const About = () => {
             animation: 'grid-move 20s linear infinite'
           }} />
         </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-4xl mx-auto space-y-8">
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(15)].map((_, i) => (
             <div
-              className="transform transition-all duration-1000 ease-out"
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
               style={{
-                transform: `perspective(1000px) rotateX(${mousePosition.y * 0.02}deg) rotateY(${mousePosition.x * 0.02}deg)`
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
               }}
             >
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-                About{' '}
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">
-                  Code Catalyst
-                </span>
-              </h1>
+              {['{ }', '< />', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
             </div>
-
-            <div className="relative">
-              <p className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed transform transition-all duration-700 hover:scale-105">
-                We are more than just a tech society - we're a community of innovators, learners,
-                and future leaders who believe in the power of technology to change the world.
-              </p>
-
-              {/* Glowing Border Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-lg blur-xl opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10" />
-            </div>
-
-            {/* Interactive CTA Button */}
-            <div className="pt-8">
-              <button
-                className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
-                onClick={() => statsRef.current?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                <span className="relative z-10">Explore Our Journey</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
-
-        {/* Scroll Indicator */}
+        {/* Particle System */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
+        <div className="relative z-20 max-w-4xl w-full mx-auto p-10 animate-fade-in text-center">
+          <h1 className="text-5xl sm:text-6xl lg:text-6xl font-extrabold leading-tight mb-6 drop-shadow-lg">
+            About <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_2px_16px_rgba(168,85,247,0.5)]">Code Catalyst</span>
+          </h1>
+          <p className="text-md sm:text-xl text-gray-100 leading-relaxed mb-8 drop-shadow">
+            We are more than just a tech society - we're a community of innovators, learners, and future leaders who believe in the power of technology to change the world.
+          </p>
+        </div>
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />

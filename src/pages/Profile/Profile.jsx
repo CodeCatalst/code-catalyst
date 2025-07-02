@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User, Mail, Lock, Camera, Save, AlertCircle, CheckCircle, Shield } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
@@ -11,12 +11,23 @@ const Profile = () => {
 
   // Profile form state
   const [profileData, setProfileData] = useState({
-    name: user?.name || '',
+    full_name: user?.full_name || '',
     username: user?.username || '',
     email: user?.email || '',
     bio: user?.bio || '',
-    profilePicture: user?.profilePicture || ''
+    profile_picture_url: user?.profile_picture_url || ''
   })
+
+  // Sync profileData with user context on user change
+  useEffect(() => {
+    setProfileData({
+      full_name: user?.full_name || '',
+      username: user?.username || '',
+      email: user?.email || '',
+      bio: user?.bio || '',
+      profile_picture_url: user?.profile_picture_url || ''
+    })
+  }, [user])
 
   // Password form state
   const [passwordData, setPasswordData] = useState({
@@ -142,7 +153,7 @@ const Profile = () => {
       const reader = new FileReader()
       reader.onloadend = () => {
         setSelectedImage(reader.result)
-        setProfileData(prev => ({ ...prev, profilePicture: reader.result }))
+        setProfileData(prev => ({ ...prev, profile_picture_url: reader.result }))
       }
       reader.readAsDataURL(file)
     }
@@ -205,18 +216,18 @@ const Profile = () => {
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                            Full Name
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={profileData.name}
-                            onChange={handleProfileChange}
-                            className="input-field"
-                            placeholder="Enter your full name"
-                          />
+                        <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          id="full_name"
+                          name="full_name"
+                          value={profileData.full_name}
+                          onChange={handleProfileChange}
+                          className="input-field"
+                          placeholder="Enter your full name"
+                        />
                         </div>
 
                         <div>

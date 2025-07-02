@@ -74,13 +74,21 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-medium text-sm">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
+                  {user?.profile_picture_url ? (
+                    <img
+                      src={user.profile_picture_url}
+                      alt={user.full_name || 'Profile'}
+                      className="w-8 h-8 rounded-full object-cover border-2 border-primary-600"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                      <span className="text-white font-medium text-sm">
+                        {user?.full_name?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
                   <span className={`font-medium ${scrolled ? 'text-white' : 'text-white'}`}>
-                    {user?.name}
+                    {user?.full_name}
                   </span>
                 </button>
 
@@ -157,7 +165,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <User size={18} />
-                      <span>Profile ({user?.name})</span>
+                      <span>Profile ({user?.full_name})</span>
                     </Link>
                     <button
                       onClick={() => {

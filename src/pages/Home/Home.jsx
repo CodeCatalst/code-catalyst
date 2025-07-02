@@ -414,7 +414,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <style jsx>{`
+      <style>{`
         @keyframes grid-pulse {
           0%, 100% { opacity: 0.1; }
           50% { opacity: 0.3; }

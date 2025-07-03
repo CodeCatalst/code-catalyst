@@ -69,14 +69,14 @@ const Team = () => {
             id: 3,
             name: 'Arjan',
             role: 'Secretary',
-            department: 'Technical',
-            image: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'DevOps enthusiast and open source contributor. Specializes in containerization, CI/CD pipelines, and infrastructure automation.',
-            skills: ['Docker', 'Kubernetes', 'CI/CD', 'Linux'],
+            department: 'Executive & Technical',
+            image: '/arjan.jpg',
+            bio: 'I’m Arjan Singh Jassal, a passionate Full-Stack Developer. I lead digital innovation, event strategy, and creative tech initiatives for our vibrant tech community.',
+            skills: ['FullStack Development', 'Leadership', 'DSA'],
             social: {
-              github: 'https://github.com/mayapatel',
-              linkedin: 'https://linkedin.com/in/mayapatel',
-              email: 'maya.patel@codecatalyst.edu'
+              github: 'https://github.com/jassalarjan',
+              Link: 'https://arjansinghjassal.xyz/',
+              email: 'jassalarjan.awc@gmail.com'
             }
           },
           {

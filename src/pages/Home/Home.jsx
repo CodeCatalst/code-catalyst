@@ -277,16 +277,12 @@ const Home = () => {
             innovative projects, and a thriving community of passionate creators.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="group relative flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
+            <Link to="/signup" className="group relative flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <ArrowRight className="mr-2 transition-transform duration-300 group-hover:translate-x-1" size={22} />
               <span className="relative z-10">Join Our Community</span>
-            </button>
-            <button className="group relative flex items-center justify-center bg-transparent border-2 border-blue-400/50 hover:border-blue-400 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl backdrop-blur-sm overflow-hidden">
-              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <Users className="mr-2 transition-transform duration-300 group-hover:scale-110" size={22} />
-              <span className="relative z-10">Explore Features</span>
-            </button>
+            </Link>
+            
           </div>
         </div>
         {/* Enhanced Scroll Indicator */}

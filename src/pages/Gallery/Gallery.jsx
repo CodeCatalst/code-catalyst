@@ -2,10 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Calendar, Users, ExternalLink, X, ArrowRight } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 
-// Mock API function (replace with real API call later)
-const getGallery = async () => {
-  return JSON.parse(localStorage.getItem('galleryEvents') || '[]')
-}
+
+import { getGallery as fetchGalleryFromApi } from '../../services/gallery'
 
 const Gallery = () => {
   const [events, setEvents] = useState([])
@@ -29,11 +27,15 @@ const Gallery = () => {
   useEffect(() => {
     (async () => {
       setLoading(true)
-      const data = await getGallery()
-      setEvents(data)
-      setLoading(false)
-    })()
-  }, [])
+      try {
+        const data = await fetchGalleryFromApi();
+        setEvents(data);
+      } catch (err) {
+        setEvents([]);
+      }
+      setLoading(false);
+    })();
+  }, []);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {

@@ -64,55 +64,11 @@ const About = () => {
 
   const stats = [
     { number: '1000+', label: 'Active Members', icon: Users },
-    { number: '50+', label: 'Events Annually', icon: Calendar },
-    { number: '25+', label: 'Industry Partners', icon: Award },
-    { number: '95%', label: 'Job Placement Rate', icon: Star }
+    { number: '5+', label: 'Events per Sem', icon: Calendar },
+    { number: '15+', label: 'Associated Industry experts', icon: Award },
+    { number: '95%', label: 'Skill Acquiring', icon: Star }
   ]
 
-  const timeline = [
-    {
-      year: '2019',
-      title: 'Foundation',
-      description: 'Code Catalyst was founded by a group of passionate computer science students with a vision to create a collaborative tech community.',
-      icon: Rocket,
-      color: 'bg-blue-500'
-    },
-    {
-      year: '2020',
-      title: 'First Workshop Series',
-      description: 'Launched our signature workshop series covering web development, mobile apps, and data science fundamentals.',
-      icon: Code,
-      color: 'bg-green-500'
-    },
-    {
-      year: '2021',
-      title: 'Hackathon Success',
-      description: 'Organized our first annual hackathon with 200+ participants and partnerships with leading tech companies.',
-      icon: Zap,
-      color: 'bg-yellow-500'
-    },
-    {
-      year: '2022',
-      title: 'Industry Partnerships',
-      description: 'Established partnerships with major tech companies for internships, mentorship programs, and guest speaker series.',
-      icon: Users,
-      color: 'bg-purple-500'
-    },
-    {
-      year: '2023',
-      title: 'Community Growth',
-      description: 'Reached 1000+ active members and launched our alumni network program for continuous career support.',
-      icon: Award,
-      color: 'bg-pink-500'
-    },
-    {
-      year: '2024',
-      title: 'Innovation Hub',
-      description: 'Opened our dedicated innovation lab and launched the startup incubation program for student entrepreneurs.',
-      icon: Star,
-      color: 'bg-indigo-500'
-    }
-  ]
 
   const teamMembers = [
     {
@@ -132,9 +88,9 @@ const About = () => {
     {
       name: 'Arjan',
       role: 'Secretary',
-      image: 'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=300',
-      bio: 'DevOps enthusiast and open source contributor',
-      specialty: 'DevOps'
+      image: '/arjan.jpg',
+      bio: 'A passionate Full-Stack Developer, lead digital innovation, event strategy, and creative tech initiatives for our vibrant tech community.',
+      specialty: 'Executive & Technical'
     },
     {
       name: 'Jeevan',
@@ -288,52 +244,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Interactive Timeline */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white relative overflow-hidden">
-        <div className="container-max px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-              Our <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Journey</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              From humble beginnings to a thriving tech community
-            </p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="relative">
-              {/* Animated Timeline Line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 opacity-30" />
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 animate-timeline-grow" />
-
-              {timeline.map((item, index) => (
-                <div
-                  key={index}
-                  className={`relative flex items-center mb-16 ${index % 2 === 0 ? 'flex-row-reverse' : ''
-                    }`}
-                >
-                  {/* Timeline Node */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 z-10 -top-5">
-                    <div className={`w-10 h-10 sm:w-16 sm:h-16 ${item.color} rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-125 hover:rotate-12 border-2 sm:border-4 border-white`}>
-                      <item.icon className="text-white" size={24} />
-                    </div>
-                    <div className={`absolute inset-0 w-10 h-10 sm:w-16 sm:h-16 ${item.color} rounded-full opacity-0 hover:opacity-50 transition-opacity duration-500 blur-xl`} />
-                  </div>
-
-                  {/* Content Card */}
-                  <div className={`w-full sm:w-5/12 ${index % 2 === 0 ? 'text-left sm:pr-8' : 'sm:pl-8'}`}>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2">
-                      <div className="text-blue-400 font-bold text-xl mb-2">{item.year}</div>
-                      <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                      <p className="text-gray-300 leading-relaxed">{item.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* 3D Team Cards */}
       <section className="py-20 bg-gray-900">

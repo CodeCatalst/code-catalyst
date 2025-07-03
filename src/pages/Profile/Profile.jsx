@@ -51,6 +51,7 @@ const Profile = () => {
     tabs.push({ id: 'admin', label: 'Admin Menu', icon: Shield })
   }
 
+  // Handle profile info update
   const handleProfileSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -58,8 +59,12 @@ const Profile = () => {
     setSuccess('')
 
     try {
-      const result = await updateProfile(profileData)
-
+      const result = await updateProfile({
+        ...profileData,
+        // Only send profile info fields
+        currentPassword: undefined,
+        newPassword: undefined
+      })
       if (result.success) {
         setSuccess('Profile updated successfully!')
         setTimeout(() => setSuccess(''), 3000)
@@ -73,41 +78,33 @@ const Profile = () => {
     }
   }
 
+  // Handle password update
   const handlePasswordSubmit = async (e) => {
     e.preventDefault()
-
-    // Validate password form
     const newErrors = {}
-
     if (!passwordData.currentPassword) {
       newErrors.currentPassword = 'Current password is required'
     }
-
     if (!passwordData.newPassword) {
       newErrors.newPassword = 'New password is required'
     } else if (passwordData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters'
     }
-
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       return
     }
-
     setLoading(true)
     setErrors({})
     setSuccess('')
-
     try {
       const result = await updateProfile({
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       })
-
       if (result.success) {
         setSuccess('Password updated successfully!')
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
@@ -117,6 +114,27 @@ const Profile = () => {
       }
     } catch (error) {
       setErrors({ submit: 'Failed to update password. Please try again.' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Handle profile picture update
+  const handlePictureSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setErrors({})
+    setSuccess('')
+    try {
+      const result = await updateProfile({ profile_picture_url: profileData.profile_picture_url })
+      if (result.success) {
+        setSuccess('Profile picture updated!')
+        setTimeout(() => setSuccess(''), 3000)
+      } else {
+        setErrors({ submit: result.error })
+      }
+    } catch (error) {
+      setErrors({ submit: 'Failed to update profile picture. Please try again.' })
     } finally {
       setLoading(false)
     }
@@ -379,7 +397,47 @@ const Profile = () => {
                 )}
 
                 {/* Profile Picture Tab */}
-              
+                {activeTab === 'picture' && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-6">Profile Picture</h2>
+                    <form onSubmit={handlePictureSubmit} className="space-y-6">
+                      <div className="flex items-center space-x-6">
+                        <div>
+                          <img
+                            src={selectedImage || profileData.profile_picture_url || '/default-avatar.png'}
+                            alt="Profile Preview"
+                            className="w-24 h-24 rounded-full object-cover border-2 border-primary-600"
+                          />
+                        </div>
+                        <div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="block w-full text-sm text-gray-500"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>Updating...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Camera size={20} />
+                            <span>Update Picture</span>
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  </div>
+                )}
 
                 {/* Admin Menu Tab */}
                 {activeTab === 'admin' && isAdmin && (

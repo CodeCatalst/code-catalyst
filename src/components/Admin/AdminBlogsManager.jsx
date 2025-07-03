@@ -1,12 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2 } from 'lucide-react'
-import { useBlogs } from '../../context/NoticesContext'
+import { getBlogs, createBlog, updateBlog, deleteBlog } from '../../services/blogs'
 
 const AdminBlogsManager = () => {
-    const { blogs, addBlog, updateBlog, deleteBlog } = useBlogs()
+    const [blogs, setBlogs] = useState([])
     const [showForm, setShowForm] = useState(false)
     const [editBlog, setEditBlog] = useState(null)
     const [thumbnail, setThumbnail] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [message, setMessage] = useState(null)
+
+    useEffect(() => {
+        fetchBlogs()
+    }, [])
+
+    const fetchBlogs = async () => {
+        setLoading(true)
+        try {
+            const data = await getBlogs()
+            setBlogs(data)
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to load blogs' })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleAdd = () => {
         setEditBlog(null)
@@ -18,8 +36,14 @@ const AdminBlogsManager = () => {
         setThumbnail(blog.thumbnail || '')
         setShowForm(true)
     }
-    const handleDelete = (id) => {
-        deleteBlog(id)
+    const handleDelete = async (id) => {
+        try {
+            await deleteBlog(id)
+            setBlogs(blogs.filter(b => b.id !== id))
+            setMessage({ type: 'success', text: 'Blog deleted' })
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to delete blog' })
+        }
     }
     const handleThumbnailChange = (e) => {
         const file = e.target.files[0]
@@ -31,11 +55,10 @@ const AdminBlogsManager = () => {
             reader.readAsDataURL(file)
         }
     }
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault()
         const form = e.target
         const newBlog = {
-            id: editBlog ? editBlog.id : 'b' + Date.now(),
             title: form.title.value,
             category: form.category.value,
             author: form.author.value,
@@ -43,10 +66,18 @@ const AdminBlogsManager = () => {
             date: form.date.value,
             thumbnail: thumbnail || '',
         }
-        if (editBlog) {
-            updateBlog(editBlog.id, newBlog)
-        } else {
-            addBlog(newBlog)
+        try {
+            if (editBlog) {
+                const updated = await updateBlog(editBlog.id, newBlog)
+                setBlogs(blogs.map(b => b.id === editBlog.id ? updated : b))
+                setMessage({ type: 'success', text: 'Blog updated' })
+            } else {
+                const created = await createBlog(newBlog)
+                setBlogs([...blogs, created])
+                setMessage({ type: 'success', text: 'Blog added' })
+            }
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to save blog' })
         }
         setShowForm(false)
         setEditBlog(null)

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getStats } from '../../services/stats'
 import {
     FileText,
     Upload,
@@ -26,7 +27,17 @@ import AdminContactMessages from '../../components/Admin/AdminContactMessages'
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
-    const [userCount, setUserCount] = useState(0)
+    const [stats, setStats] = useState({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 })
+    useEffect(() => {
+        (async () => {
+            try {
+                const s = await getStats();
+                setStats({ ...s, thisMonth: 156 }); // TODO: Replace with real value if available
+            } catch {
+                setStats({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 });
+            }
+        })();
+    }, []);
 
     const tabs = [
         { id: 'notices', label: 'Manage Notice' },
@@ -75,7 +86,7 @@ const AdminDashboard = () => {
                             </div>
                             <div className="ml-4">
                                 <p className="text-gray-400 text-sm">Total Forms</p>
-                                <p className="text-2xl font-bold text-white">12</p>
+                                <p className="text-2xl font-bold text-white">{stats.totalForms}</p>
                             </div>
                         </div>
                     </div>
@@ -87,7 +98,7 @@ const AdminDashboard = () => {
                             </div>
                             <div className="ml-4">
                                 <p className="text-gray-400 text-sm">Total Submissions</p>
-                                <p className="text-2xl font-bold text-white">1,247</p>
+                                <p className="text-2xl font-bold text-white">{stats.totalSubmissions}</p>
                             </div>
                         </div>
                     </div>
@@ -99,7 +110,7 @@ const AdminDashboard = () => {
                             </div>
                             <div className="ml-4">
                                 <p className="text-gray-400 text-sm">Active Users</p>
-                                <p className="text-2xl font-bold text-white">{userCount}</p>
+                                <p className="text-2xl font-bold text-white">{stats.activeUsers}</p>
                             </div>
                         </div>
                     </div>
@@ -111,7 +122,7 @@ const AdminDashboard = () => {
                             </div>
                             <div className="ml-4">
                                 <p className="text-gray-400 text-sm">This Month</p>
-                                <p className="text-2xl font-bold text-white">156</p>
+                                <p className="text-2xl font-bold text-white">{stats.thisMonth}</p>
                             </div>
                         </div>
                     </div>

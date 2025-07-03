@@ -1,17 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Plus, Edit, Trash2, Eye } from 'lucide-react'
-import FormBuilder from './FormBuilder'
-import { useNotices } from '../../context/NoticesContext'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import FormBuilder from './FormBuilder';
+import { getNotices, createNotice, updateNotice, deleteNotice } from '../../services/notices'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const AdminNoticesManager = () => {
-    const { notices, addNotice, updateNotice, deleteNotice } = useNotices()
+    const [notices, setNotices] = useState([])
     const [showForm, setShowForm] = useState(false)
     const [editNotice, setEditNotice] = useState(null)
     const [showSubmissions, setShowSubmissions] = useState(null)
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [customForm, setCustomForm] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [message, setMessage] = useState(null)
+
+    useEffect(() => {
+        fetchNotices()
+    }, [])
+
+    const fetchNotices = async () => {
+        setLoading(true)
+        try {
+            const data = await getNotices()
+            // Ensure all notices have submissions and form fields
+            const safeData = (Array.isArray(data) ? data : []).map(n => ({
+                ...n,
+                submissions: Array.isArray(n.submissions) ? n.submissions : [],
+                form: n.form || null
+            }))
+            setNotices(safeData)
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to load notices' })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     // Handlers
     const handleAdd = () => {
@@ -23,25 +47,46 @@ const AdminNoticesManager = () => {
         setShowForm(true)
         setCustomForm(notice.form)
     }
-    const handleDelete = (id) => {
-        deleteNotice(id)
-    }
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
-        const form = e.target
-        const newNotice = {
-            id: editNotice ? editNotice.id : 'n' + (Date.now()),
-            title: form.title.value,
-            type: form.type.value,
-            hasForm: form.hasForm.checked,
-            description: form.description.value,
-            submissions: editNotice ? editNotice.submissions : [],
-            form: form.hasForm.checked ? customForm : null
+    const handleDelete = async (id) => {
+        try {
+            await deleteNotice(id)
+            setNotices(notices.filter(n => n.id !== id))
+            setMessage({ type: 'success', text: 'Notice deleted' })
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to delete notice' })
         }
-        if (editNotice) {
-            updateNotice(editNotice.id, newNotice)
-        } else {
-            addNotice(newNotice)
+    }
+    const handleFormSubmit = async (e) => {
+        e.preventDefault()
+        const formEl = e.target
+        const newNotice = {
+            title: formEl.title.value,
+            type: formEl.type.value,
+            hasForm: formEl.hasForm.checked,
+            description: formEl.description.value,
+            submissions: editNotice && Array.isArray(editNotice.submissions) ? editNotice.submissions : [],
+            form: formEl.hasForm.checked ? customForm : null
+        }
+        try {
+            if (editNotice) {
+                const updated = await updateNotice(editNotice.id, newNotice)
+                setNotices(notices.map(n => n.id === editNotice.id ? {
+                    ...updated,
+                    submissions: Array.isArray(updated.submissions) ? updated.submissions : [],
+                    form: updated.form || null
+                } : n))
+                setMessage({ type: 'success', text: 'Notice updated' })
+            } else {
+                const created = await createNotice(newNotice)
+                setNotices([...notices, {
+                    ...created,
+                    submissions: Array.isArray(created.submissions) ? created.submissions : [],
+                    form: created.form || null
+                }])
+                setMessage({ type: 'success', text: 'Notice added' })
+            }
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to save notice' })
         }
         setShowForm(false)
         setEditNotice(null)

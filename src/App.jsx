@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout/Layout'
+import ScrollToTop from './components/Layout/ScrollToTop'
 import ProtectedRoute from './components/Auth/ProtectedRoute'
 import AdminRoute from './components/Auth/AdminRoute'
 import { NoticesProvider } from './context/NoticesContext'
@@ -22,6 +23,7 @@ const Signup = lazy(() => import('./pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'))
 const Profile = lazy(() => import('./pages/Profile/Profile'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
+const Privacy = lazy(() => import('./pages/Privacy'))
 const Test = lazy(() => import('./Test'))
 
 const HERO_ROUTES = [
@@ -42,6 +44,7 @@ function App() {
     <NoticesProvider>
       <BlogsProvider>
         <AuthProvider>
+          <ScrollToTop />
           <Layout transparentOnTop={transparentOnTop}>
             <Suspense fallback={<Loader />}>
               <Routes>
@@ -72,6 +75,7 @@ function App() {
                     </AdminRoute>
                   }
                 />
+                <Route path="/privacy" element={<Privacy />} />
               </Routes>
             </Suspense>
           </Layout>

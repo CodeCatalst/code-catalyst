@@ -1,28 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Calendar, Users, Trash2, Plus, Edit2, X } from 'lucide-react'
-
-// Mock API functions (replace with real API calls later)
-const getGallery = async () => {
-    // Simulate API call
-    return JSON.parse(localStorage.getItem('galleryEvents') || '[]')
-}
-const addGalleryEvent = async (event) => {
-    const events = await getGallery()
-    const newEvents = [...events, event]
-    localStorage.setItem('galleryEvents', JSON.stringify(newEvents))
-    return event
-}
-const updateGalleryEvent = async (id, updatedEvent) => {
-    const events = await getGallery()
-    const newEvents = events.map(ev => ev.id === id ? { ...updatedEvent, id } : ev)
-    localStorage.setItem('galleryEvents', JSON.stringify(newEvents))
-    return updatedEvent
-}
-const deleteGalleryEvent = async (id) => {
-    const events = await getGallery()
-    const newEvents = events.filter(ev => ev.id !== id)
-    localStorage.setItem('galleryEvents', JSON.stringify(newEvents))
-}
+import { getGallery, createGalleryEvent, updateGalleryEvent, deleteGalleryEvent } from '../../services/gallery'
 
 const AdminGalleryManager = () => {
     const [events, setEvents] = useState([])
@@ -39,11 +17,17 @@ const AdminGalleryManager = () => {
     const [showEditModal, setShowEditModal] = useState(false)
 
     useEffect(() => {
-        (async () => {
+        fetchGallery()
+    }, [])
+
+    const fetchGallery = async () => {
+        try {
             const data = await getGallery()
             setEvents(data)
-        })()
-    }, [])
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to load gallery events' })
+        }
+    }
 
     const handleChange = (e) => {
         const { name, value, files } = e.target
@@ -65,19 +49,42 @@ const AdminGalleryManager = () => {
             setMessage({ type: 'error', text: 'All fields are required.' })
             return
         }
-        const newEvent = { ...form, id: Date.now(), thumbnail: form.imageUrl }
-        await addGalleryEvent(newEvent)
-        setEvents(await getGallery())
-        setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' })
-        setMessage({ type: 'success', text: 'Event added!' })
-        setTimeout(() => setMessage(null), 2000)
+        let imageBase64 = form.imageUrl
+        if (form.imageFile && !form.imageUrl.startsWith('data:')) {
+            const reader = new FileReader()
+            reader.onloadend = async () => {
+                imageBase64 = reader.result
+                await submitGalleryEvent(imageBase64)
+            }
+            reader.readAsDataURL(form.imageFile)
+            return
+        }
+        await submitGalleryEvent(imageBase64)
+    }
+
+    const submitGalleryEvent = async (imageBase64) => {
+        try {
+            const newEvent = { ...form, image_url: imageBase64 };
+            delete newEvent.thumbnail;
+            const created = await createGalleryEvent(newEvent);
+            setEvents([...events, created]);
+            setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' });
+            setMessage({ type: 'success', text: 'Event added!' });
+            setTimeout(() => setMessage(null), 2000);
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to add event.' });
+        }
     }
 
     const handleDelete = async (id) => {
-        await deleteGalleryEvent(id)
-        setEvents(await getGallery())
-        setMessage({ type: 'success', text: 'Event deleted.' })
-        setTimeout(() => setMessage(null), 2000)
+        try {
+            await deleteGalleryEvent(id)
+            setEvents(events.filter(ev => ev.id !== id))
+            setMessage({ type: 'success', text: 'Event deleted.' })
+            setTimeout(() => setMessage(null), 2000)
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to delete event.' })
+        }
     }
 
     const handleEdit = (event) => {
@@ -94,18 +101,18 @@ const AdminGalleryManager = () => {
     }
 
     const handleUpdate = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (!form.name || !form.date || !form.description || !form.category || (!form.imageFile && !form.imageUrl)) {
-            setMessage({ type: 'error', text: 'All fields are required.' })
-            return
+            setMessage({ type: 'error', text: 'All fields are required.' });
+            return;
         }
-        await updateGalleryEvent(editId, { ...form, thumbnail: form.imageUrl })
-        setEvents(await getGallery())
-        setEditId(null)
-        setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' })
-        setShowEditModal(false)
-        setMessage({ type: 'success', text: 'Event updated!' })
-        setTimeout(() => setMessage(null), 2000)
+        await updateGalleryEvent(editId, { ...form, image_url: form.imageUrl });
+        setEvents(await getGallery());
+        setEditId(null);
+        setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' });
+        setShowEditModal(false);
+        setMessage({ type: 'success', text: 'Event updated!' });
+        setTimeout(() => setMessage(null), 2000);
     }
 
     const handleCancelEdit = () => {

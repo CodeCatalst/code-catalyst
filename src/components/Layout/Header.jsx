@@ -24,7 +24,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Team', href: '/team' },
-    { name: 'Gallery', href: '/gallery' },
+    { name: 'Event Gallery', href: '/gallery' },
     { name: 'Blog', href: '/blog' },
     { name: 'Notices', href: '/notices' },
     { name: 'Contact', href: '/contact' },

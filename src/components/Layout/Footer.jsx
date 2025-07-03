@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom'
-import { Mail, Phone, MapPin, Github, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Instagram, Linkedin } from 'lucide-react'
+import DiscordIcon from './DiscordIcon'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
     { icon: Github, href: 'https://github.com/codecatalyst', label: 'GitHub' },
-    { icon: Twitter, href: 'https://twitter.com/codecatalyst', label: 'Twitter' },
-    { icon: Instagram, href: 'https://instagram.com/codecatalyst', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://linkedin.com/company/codecatalyst', label: 'LinkedIn' },
+    { icon: DiscordIcon, href: 'https://discord.gg/uW3BthhwDU', label: 'Discord' },
+    { icon: Instagram, href: 'https://www.instagram.com/codecatalyst.jb', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/codecatalystt/', label: 'LinkedIn' },
   ]
 
   const quickLinks = [
@@ -19,9 +20,9 @@ const Footer = () => {
   ]
 
   const contactInfo = [
-    { icon: Mail, text: 'contact@codecatalyst.edu', href: 'mailto:contact@codecatalyst.edu' },
-    { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-    { icon: MapPin, text: 'JB Knowledge Park, Sector 27/A, Faridabad, Manjhawali, Haryana 121002', href: '#' },
+    { icon: Mail, text: 'code@jbcollege.in,codecatalyst@gmail.com', href: 'mailto:code@jbcollege.in' },
+    // { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
+    { icon: MapPin, text: 'JB Knowledge Park, Manjhawali, Faridabad NCR -121 102 Nearest Metro Station: Badarpur Delhi', href: '#' },
   ]
 
   return (
@@ -123,9 +124,7 @@ const Footer = () => {
             <Link to="/privacy" className="text-gray-300 hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-gray-300 hover:text-white transition-colors">
-              Terms of Service
-            </Link>
+           
           </div>
         </div>
       </div>

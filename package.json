@@ -23,7 +23,8 @@
     "react-router-dom": "^6.20.0",
     "simplex-noise": "^4.0.1",
     "styled-components": "^6.1.19",
-    "three": "^0.158.0"
+    "three": "^0.158.0",
+    "react-feather": "^2.0.10"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

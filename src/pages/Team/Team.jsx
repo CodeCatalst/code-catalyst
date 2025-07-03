@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram, ArrowRight } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram, ArrowRight, Link } from 'lucide-react'
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import Card from './Card'
@@ -204,6 +204,32 @@ const Team = () => {
             }
           },
 
+          {
+            id: 14,
+            name: 'Aishwarya',
+            role: 'HR',
+            department: 'HR & Events',
+            image: './Aishwarya.jpg',
+            bio: 'Btech CSE 3rd year student HR in the Code Catalyst society.',
+            skills: [],
+            social: {
+              
+            }
+          },
+
+          {
+            id: 15,
+            name: 'Saksham Saxena',
+            role: 'E-sports Team Lead',
+            department: 'E-Sports',
+            image: './Saksham_Saxena.jpg',
+            bio: '',
+            skills: [],
+            social: {
+              Link:'https://guns.lol/sevy'
+            }
+          }
+
 
         ]
         setTeamMembers(mockData)
@@ -224,16 +250,17 @@ const Team = () => {
     }
   }, [selectedDepartment, teamMembers])
 
-  const getSocialIcon = (platform) => {
-    switch (platform) {
-      case 'github': return Github
-      case 'linkedin': return Linkedin
-      case 'twitter': return Twitter
-      case 'email': return Mail
-      case 'Instagram': return Instagram
-      default: return Mail
-    }
-  }
+  // const getSocialIcon = (platform) => {
+  //   switch (platform) {
+  //     case 'github': return Github
+  //     case 'linkedin': return Linkedin
+  //     case 'twitter': return Twitter
+  //     case 'email': return Mail
+  //     case 'Instagram': return Instagram
+  //     case 'Link': return Link
+  //     default: return Mail
+  //   }
+  // }
 
   if (loading) {
     return <LoadingSpinner message="Loading team members..." />

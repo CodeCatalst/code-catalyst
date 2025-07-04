@@ -94,24 +94,8 @@ const Home = () => {
   }, [particles]);
 
   useEffect(() => {
-    // Mock data for demo
-    setTimeout(() => {
-      setLatestContent({
-        events: [
-          { id: 1, title: 'Tech Talk: AI in 2024', date: '2024-01-15', image: 'https://images.pexels.com/photos/3184398/pexels-photo-3184398.jpeg?auto=compress&cs=tinysrgb&w=400' },
-          { id: 2, title: 'Hackathon Weekend', date: '2024-01-20', image: 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=400' },
-        ],
-        notices: [
-          { id: 1, title: 'New Member Registration Open', date: '2024-01-10' },
-          { id: 2, title: 'Workshop: React Fundamentals', date: '2024-01-12' },
-        ],
-        blogs: [
-          { id: 1, title: 'Behind the Scenes: Code Catalyst', thumbnail: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400' },
-          { id: 2, title: 'Student Success Stories', thumbnail: 'https://images.pexels.com/photos/3184633/pexels-photo-3184633.jpeg?auto=compress&cs=tinysrgb&w=400' },
-        ]
-      });
-      setLoading(false);
-    }, 1000);
+    // Remove mock data. You should fetch real data here.
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -341,12 +325,7 @@ const Home = () => {
               </div>
 
               <div className="space-y-4">
-                {latestContent?.notices?.map((notice) => (
-                  <div key={notice.id} className="card hover:scale-105 transition-transform">
-                    <h4 className="font-semibold text-gray-300 mb-2">{notice.title}</h4>
-                    <p className="text-gray-300 text-sm">{new Date(notice.date).toLocaleDateString()}</p>
-                  </div>
-                ))}
+                {/* Notices removed as requested */}
               </div>
 
               <Link to="/notices" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
@@ -364,16 +343,7 @@ const Home = () => {
               </div>
 
               <div className="space-y-4">
-                {latestContent?.blogs?.map((blog) => (
-                  <div key={blog.id} className="card hover:scale-105 transition-transform">
-                    <img
-                      src={blog.thumbnail}
-                      alt={blog.title}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                    <h4 className="font-semibold text-gray-300">{blog.title}</h4>
-                  </div>
-                ))}
+                {/* Blogs removed as requested */}
               </div>
 
               <Link to="/blog" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">

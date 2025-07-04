@@ -331,7 +331,7 @@ const Team = () => {
         <div className="container-max">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Department Filter */}
-            <div className="flex items-center space-x-4 w-full lg:w-auto">
+            {/* <div className="flex items-center space-x-4 w-full lg:w-auto">
               <Filter size={20} className="text-gray-400 flex-shrink-0" />
               <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide min-w-0 flex-1">
                 {departments.map((dept) => (
@@ -347,7 +347,7 @@ const Team = () => {
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* View Mode Toggle */}
             <div className="flex items-center space-x-2 bg-gray-900 rounded-lg p-1 border border-gray-700/50 flex-shrink-0">

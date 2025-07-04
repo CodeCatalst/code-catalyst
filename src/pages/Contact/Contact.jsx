@@ -42,7 +42,7 @@ const Contact = () => {
     { icon: Github, href: 'https://github.com/CodeCatalst', label: 'GitHub' },
     { icon: DiscordIcon, href: 'https://discord.gg/uW3BthhwDU', label: 'Discord' },
     { icon: Instagram, href: 'https://www.instagram.com/codecatalyst.jb', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/company/codecatalystt/', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/codecatalystt/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3BfjsMHuD9QOa4k6jb9BCtOQ%3D%3D', label: 'LinkedIn' },
   ]
 
   const validateForm = () => {

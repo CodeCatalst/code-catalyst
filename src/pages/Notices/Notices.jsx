@@ -29,93 +29,10 @@ const Notices = () => {
     const fetchNotices = async () => {
       try {
         const response = await api.get('/notices')
-        setNotices(response.data.sort((a, b) => new Date(b.date) - new Date(a.date)))
+        setNotices([]) // Always empty
       } catch (error) {
         console.error('Failed to fetch notices:', error)
-        // Set mock data for demo
-        const mockNotices = [
-          {
-            id: 1,
-            title: 'New Member Registration Open for Spring 2024',
-            description: 'We are excited to announce that registration for new members is now open! Join Code Catalyst and be part of our growing tech community. Registration deadline is February 15th, 2024.',
-            author: 'Sarah Johnson',
-            date: '2024-01-28',
-            type: 'Registration',
-            priority: 'high',
-            details: 'Visit our registration portal and complete the application form. No prior coding experience required - we welcome students from all backgrounds!'
-          },
-          {
-            id: 2,
-            title: 'Workshop: React Fundamentals - February 5th',
-            description: 'Join us for an intensive React fundamentals workshop. Perfect for beginners looking to learn modern web development.',
-            author: 'Alex Chen',
-            date: '2024-01-25',
-            type: 'Workshop',
-            priority: 'medium',
-            details: 'Date: February 5th, 2024\nTime: 2:00 PM - 5:00 PM\nLocation: Tech Building, Room 205\nPrerequisites: Basic HTML, CSS, and JavaScript knowledge'
-          },
-          {
-            id: 3,
-            title: 'Hackathon 2024: Innovation Challenge',
-            description: 'Our annual hackathon is back! 48 hours of coding, innovation, and collaboration. Amazing prizes await the winners.',
-            author: 'Maya Patel',
-            date: '2024-01-22',
-            type: 'Event',
-            priority: 'high',
-            details: 'Date: March 15-17, 2024\nTheme: Sustainable Technology Solutions\nPrizes: $5000 for first place, $3000 for second, $1000 for third\nTeam size: 2-4 members'
-          },
-          {
-            id: 4,
-            title: 'Guest Speaker: AI in Industry - January 30th',
-            description: 'Dr. Jennifer Lee from Google AI will be speaking about the current state and future of artificial intelligence in industry applications.',
-            author: 'Jordan Smith',
-            date: '2024-01-20',
-            type: 'Talk',
-            priority: 'medium',
-            details: 'Date: January 30th, 2024\nTime: 6:00 PM - 7:30 PM\nLocation: Main Auditorium\nQ&A session will follow the presentation'
-          },
-          {
-            id: 5,
-            title: 'Office Hours Schedule Update',
-            description: 'Updated office hours for Spring 2024 semester. Our team leads will be available for mentoring and project guidance.',
-            author: 'Emily Rodriguez',
-            date: '2024-01-18',
-            type: 'Information',
-            priority: 'low',
-            details: 'Monday: 2-4 PM (Technical Help)\nWednesday: 3-5 PM (Career Guidance)\nFriday: 1-3 PM (Project Mentoring)\nLocation: Code Catalyst Office, Tech Building Room 301'
-          },
-          {
-            id: 6,
-            title: 'Web Development Bootcamp - Applications Open',
-            description: 'Applications are now open for our intensive 3-day web development bootcamp. Limited seats available.',
-            author: 'David Kim',
-            date: '2024-01-15',
-            type: 'Bootcamp',
-            priority: 'medium',
-            details: 'Duration: 3 days intensive\nDates: February 20-22, 2024\nCoverage: HTML, CSS, JavaScript, React, Node.js\nApplication deadline: February 10th, 2024'
-          },
-          {
-            id: 7,
-            title: 'Code Review Sessions Starting Soon',
-            description: 'New initiative: Weekly code review sessions where experienced developers will review and provide feedback on your projects.',
-            author: 'Michael Brown',
-            date: '2024-01-12',
-            type: 'Initiative',
-            priority: 'low',
-            details: 'Every Thursday 4:00 PM - 6:00 PM\nBring your code for review and feedback\nGreat opportunity to learn best practices\nAll skill levels welcome'
-          },
-          {
-            id: 8,
-            title: 'Partnership with TechCorp for Internships',
-            description: 'Exciting news! Code Catalyst has partnered with TechCorp to provide exclusive internship opportunities for our members.',
-            author: 'Lisa Wang',
-            date: '2024-01-10',
-            type: 'Partnership',
-            priority: 'high',
-            details: 'Internship positions available in:\n- Software Development\n- UI/UX Design\n- Data Analytics\n- DevOps\nApplications open to all active members'
-          }
-        ]
-        setNotices(mockNotices)
+        setNotices([])
       } finally {
         setLoading(false)
       }

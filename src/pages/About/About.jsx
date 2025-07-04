@@ -74,9 +74,9 @@ const About = () => {
     {
       name: 'Divy',
       role: 'President',
-      image: 'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=300',
+      image: '/divy.jpg',
       bio: 'CS Senior passionate about AI and community building',
-      specialty: 'AI/ML'
+      specialty: 'Data Analytics & AI'
     },
     {
       name: 'Gauranshi Bahuguna',
@@ -97,7 +97,7 @@ const About = () => {
       role: 'Community Manager',
       image: './Jeevan.png',
       bio: 'Event coordinator with a passion for bringing people together',
-      specialty: 'Community'
+      specialty: 'Community Management'
     }
   ]
 

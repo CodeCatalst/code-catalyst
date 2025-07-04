@@ -1,33 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
-// Initial mock data
-const initialNotices = [
-    {
-        id: 'n1',
-        title: 'Hackathon Registration',
-        type: 'Event',
-        hasForm: true,
-        description: 'Register for the annual hackathon!',
-        form: {
-            title: 'Hackathon Registration Form',
-            fields: [
-                { id: 'f1', type: 'text', label: 'Team Name', required: true },
-                { id: 'f2', type: 'email', label: 'Email', required: true },
-                { id: 'f3', type: 'text', label: 'Experience', required: false },
-            ],
-        },
-        submissions: [],
-    },
-    {
-        id: 'n2',
-        title: 'General Meeting Notice',
-        type: 'Information',
-        hasForm: false,
-        description: 'Monthly meeting for all members.',
-        form: null,
-        submissions: [],
-    },
-];
+// Initial notices is now empty
+const initialNotices = [];
 
 const NoticesContext = createContext();
 
@@ -60,26 +34,7 @@ export const NoticesProvider = ({ children }) => {
 };
 
 // Blog context
-const initialBlogs = [
-    {
-        id: 'b1',
-        title: 'How to Organize a Hackathon',
-        category: 'Events',
-        author: 'Admin',
-        content: 'Tips and tricks...',
-        date: '2024-05-01',
-        thumbnail: '',
-    },
-    {
-        id: 'b2',
-        title: 'React Best Practices',
-        category: 'Tutorials',
-        author: 'Admin',
-        content: 'Use hooks...',
-        date: '2024-04-20',
-        thumbnail: '',
-    },
-];
+const initialBlogs = [];
 
 const BlogsContext = createContext();
 export const useBlogs = () => useContext(BlogsContext);

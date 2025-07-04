@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Mail,  MapPin, Send, Github, Instagram, Linkedin } from 'lucide-react'
+import DiscordIcon from '../../components/Layout/DiscordIcon';
 import api from '../../services/api'
 
 const Contact = () => {
@@ -19,8 +20,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      details: 'code@jbcollege.in,codecatalyst@gmail.com',
-      action: 'mailto:code@jbcollege.in'
+      details: 'codecatalyst@gmail.com',
+      action: 'mailto:codecatalyst@gmail.com'
     },
     // {
     //   icon: Phone,
@@ -31,16 +32,17 @@ const Contact = () => {
     {
       icon: MapPin,
       title: 'Visit Us',
-      details: 'University Campus, Tech Building Room 205',
+      details: 'JB Knowledge Park, Manjhawali, Faridabad NCR -121 102 Nearest Metro Station: Badarpur Delhi',
       action: '#'
     }
   ]
 
+  // Updated social links to match Footer
   const socialLinks = [
     { icon: Github, href: 'https://github.com/CodeCatalst', label: 'GitHub' },
-    // { icon: Twi, href: 'https://twitter.com/codecatalyst', label: 'Discord' },
-    { icon: Instagram, href: 'https://instagram.com/codecatalyst', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://linkedin.com/company/codecatalyst', label: 'LinkedIn' },
+    { icon: DiscordIcon, href: 'https://discord.gg/uW3BthhwDU', label: 'Discord' },
+    { icon: Instagram, href: 'https://www.instagram.com/codecatalyst.jb', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/codecatalystt/', label: 'LinkedIn' },
   ]
 
   const validateForm = () => {
@@ -179,12 +181,7 @@ const Contact = () => {
           </p>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
+        
       </section>
 
       {/* Main Contact Section */}
@@ -364,14 +361,7 @@ const Contact = () => {
               </div>
 
               {/* Office Hours */}
-              <div className="border border-gray-700/50 rounded-lg p-6">
-                <h3 className="font-semibold text-white mb-4">Office Hours</h3>
-                <div className="space-y-2 text-gray-400">
-                  <p><span className="font-medium">Monday - Friday:</span> 9:00 AM - 6:00 PM</p>
-                  <p><span className="font-medium">Saturday:</span> 10:00 AM - 4:00 PM</p>
-                  <p><span className="font-medium">Sunday:</span> Closed</p>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>

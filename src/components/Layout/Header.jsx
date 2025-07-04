@@ -47,8 +47,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         <div className="flex justify-between items-center h-17 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex flex-row items-center">
-            <div className="w-24 h-24 rounded-lg">
-              <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-24 h-24" />
+            <div className="w-20 h-20 rounded-lg">
+              <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-20 h-20" />
             </div>
             {/* <p className="font-bold text-xl text-teal-400 hidden sm:block ml-2">
               <span className="text-purple-600">Code</span> Catalyst

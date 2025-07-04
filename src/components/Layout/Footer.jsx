@@ -20,7 +20,8 @@ const Footer = () => {
   ]
 
   const contactInfo = [
-    { icon: Mail, text: 'code@jbcollege.in,codecatalyst@gmail.com', href: 'mailto:code@jbcollege.in' },
+    { icon: Mail, text: 'Admin: code@jbcollege.in', href: 'mailto:code@jbcollege.in' },
+    { icon: Mail, text: 'CC: codecatalyst@gmail.com', href: 'mailto:codecatalyst@gmail.com' },
     // { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
     { icon: MapPin, text: 'JB Knowledge Park, Manjhawali, Faridabad NCR -121 102 Nearest Metro Station: Badarpur Delhi', href: '#' },
   ]
@@ -32,8 +33,8 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">CC</span>
+              <div className="w-10 h-10  rounded-lg flex items-center justify-center">
+                <img src="/logo_transparent.png" alt="" />
               </div>
               <span className="font-bold text-xl">Code Catalyst</span>
             </div>

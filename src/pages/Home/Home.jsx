@@ -277,8 +277,8 @@ const Home = () => {
             innovative projects, and a thriving community of passionate creators.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link to="/signup" className="group relative flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <Link to="/signup" className="group relative flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <ArrowRight className="mr-2 transition-transform duration-300 group-hover:translate-x-1" size={22} />
               <span className="relative z-10">Join Our Community</span>
             </Link>
@@ -326,8 +326,8 @@ const Home = () => {
                 ))}
               </div>
 
-              <Link to="/gallery" className="inline-flex items-center text-gray-300 font-medium hover:text-primary-700 transition-colors">
-                View All Events <ArrowRight size={16} className="ml-1" />
+              <Link to="/gallery" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
+                View All Events <ArrowRight size={16} className="ml-1 text-white" />
               </Link>
             </div>
 
@@ -349,8 +349,8 @@ const Home = () => {
                 ))}
               </div>
 
-              <Link to="/notices" className="inline-flex items-center text-gray-300 font-medium hover:text-primary-700 transition-colors">
-                View All Notices <ArrowRight size={16} className="ml-1" />
+              <Link to="/notices" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
+                View All Notices <ArrowRight size={16} className="ml-1 text-white" />
               </Link>
             </div>
 
@@ -376,8 +376,8 @@ const Home = () => {
                 ))}
               </div>
 
-              <Link to="/blog" className="inline-flex items-center text-gray-300 font-medium hover:text-primary-700 transition-colors">
-                Read All Blogs <ArrowRight size={16} className="ml-1" />
+              <Link to="/blog" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
+                Read All Blogs <ArrowRight size={16} className="ml-1 text-white" />
               </Link>
             </div>
           </div>
@@ -396,15 +396,15 @@ const Home = () => {
               participate in exciting projects, and grow your technical skills.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/signup" className="group relative bg-gray-900/50 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+              <Link to="/signup" className="group relative bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden flex items-center justify-center">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <span className="relative z-10 flex items-center justify-center">
                   <Users className="inline mr-2" size={20} />
                   Become a Member
                 </span>
               </Link>
-              <Link to="/contact" className="group relative bg-gray-900/50 text-white border border-gray-700 hover:bg-gray-950/50 font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+              <Link to="/contact" className="group relative bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden flex items-center justify-center">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <span className="relative z-10">Get in Touch</span>
               </Link>
             </div>

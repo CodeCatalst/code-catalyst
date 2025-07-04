@@ -111,7 +111,7 @@ const Blogs = () => {
           <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
             Explore our written content featuring tutorials, tech talks, event highlights, and student success stories.
           </p>
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
+          <button className="group relative mt-4 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
             onClick={() => {
               const el = document.getElementById('blogs-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -122,12 +122,7 @@ const Blogs = () => {
             <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
           </button>
         </div>
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
+       
       </section>
       {/* Filter Bar */}
       <section className="py-8 border-b border-gray-700 bg-gray-900">

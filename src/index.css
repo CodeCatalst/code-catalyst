@@ -13,12 +13,20 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-700 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+    background-size: 200% 200%;
+    animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
   }
 
   .btn-secondary {
-    @apply bg-slate-800 hover:bg-slate-700 text-blue-300 font-medium py-2 px-6 rounded-lg border-2 border-blue-600 transition-all duration-300 hover:shadow-lg;
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg border-2 border-blue-600 transition-all duration-300 hover:shadow-lg;
+    background-size: 200% 200%;
+    animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
   }
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 
   .card {
     @apply bg-gray-900 border border-gray-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-gray-100;
@@ -51,5 +59,10 @@
 
   .bg-gradient-primary {
     @apply bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-600;
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
   }
 }

@@ -36,21 +36,18 @@ const Team = () => {
         setFilteredMembers(response.data)
       } catch (error) {
         console.error('Failed to fetch team members:', error)
-        // Set mock data for demo
+        // Set mock data for demo (manually ordered, data intact)
         const mockData = [
           {
             id: 1,
             name: 'Divy',
             role: 'President',
-            department: 'Executive',
-            image: 'https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=400',
-            bio: 'Computer Science senior passionate about AI and machine learning. Leading Code Catalyst with a vision to bridge the gap between academic learning and industry requirements.',
-            skills: ['Leadership', 'AI/ML', 'Python', 'Project Management'],
+            department: 'Visionary and Executive',
+            image: '/divy.jpg',
+            bio: 'Computer Science senior passionate about Data Analytics and AI/ML. Leading Code Catalyst with a vision to bridge the gap between academic learning and industry requirements.',
+            skills: ['Leadership', 'AI/ML', 'Python', 'Data & Business Analytics' ],
             social: {
-              github: 'https://github.com/sarahjohnson',
-              linkedin: 'https://linkedin.com/in/sarahjohnson',
-              twitter: 'https://twitter.com/sarahjohnson',
-              email: 'sarah.johnson@codecatalyst.edu'
+              email: 'code@jbcollege.in'
             }
           },
           {
@@ -62,7 +59,6 @@ const Team = () => {
             bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
             skills: ['Linux', 'Networking', 'Java', 'Python', 'DSA'],
             social: {
-
             }
           },
           {
@@ -139,7 +135,6 @@ const Team = () => {
             bio: 'I have a lot of interest in gaming and I like to learn every development method of gaming and I also like to gain experience of team work, that\'s all',
             skills: ['E-Sports'],
             social: {
-
             }
           },
           {
@@ -151,7 +146,6 @@ const Team = () => {
             bio: ' I am Poorvi newly inducted member of the event management team in the Code catalyst society, eager to contribute to organizing impactful and engaging technical events.',
             skills: ['Event Management'],
             social: {
-
             }
           },
           {
@@ -163,7 +157,6 @@ const Team = () => {
             bio: '  Driving impactful narratives and strategic communication across tech-driven platforms. Passionate about simplifying complex ideas, leading creative teams, and building content that informs, inspires, and engages the developer community.',
             skills: ['Content Writing', 'Content Creation', 'SEO', 'Documentation'],
             social: {
-
             }
           },
           {
@@ -175,10 +168,8 @@ const Team = () => {
             bio: 'I am passionate about learning, collaborating, and making a meaningful impact across academic, technical, and public relations environments.',
             skills: ['PR', 'Marketing', 'Content Creation'],
             social: {
-
             }
           },
-
           {
             id: 12,
             name: 'Kumkum ',
@@ -191,7 +182,6 @@ const Team = () => {
               linkedin: 'https://www.linkedin.com/in/kumkum-morewal-b9291a278/'
             }
           },
-
           {
             id: 13,
             name: 'Aditya modi ',
@@ -203,7 +193,6 @@ const Team = () => {
             social: {
             }
           },
-
           {
             id: 14,
             name: 'Aishwarya',
@@ -213,10 +202,8 @@ const Team = () => {
             bio: 'Btech CSE 3rd year student HR in the Code Catalyst society.',
             skills: [],
             social: {
-              
             }
           },
-
           {
             id: 15,
             name: 'Saksham Saxena',
@@ -229,8 +216,6 @@ const Team = () => {
               Link:'https://guns.lol/sevy'
             }
           }
-
-
         ]
         setTeamMembers(mockData)
         setFilteredMembers(mockData)
@@ -338,12 +323,7 @@ const Team = () => {
           <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
         </button>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
+        
       </section>
 
       {/* Filter and View Controls */}

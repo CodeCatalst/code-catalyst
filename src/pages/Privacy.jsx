@@ -45,7 +45,7 @@ const Privacy = () => (
         <h2 className="text-2xl font-bold mt-8 mb-2 text-purple-300 flex items-center gap-2"><span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>7. Changes to This Policy</h2>
         <p className="mb-4 text-gray-200">We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date.</p>
         <h2 className="text-2xl font-bold mt-8 mb-2 text-purple-300 flex items-center gap-2"><span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>8. Contact Us</h2>
-        <p className="text-gray-200">If you have any questions about this Privacy Policy, please contact us at <a href="mailto:contact@codecatalyst.edu" className="text-blue-400 underline">contact@codecatalyst.edu</a>.</p>
+        <p className="text-gray-200">If you have any questions about this Privacy Policy, please contact us at <a href="mailto:codecatalyst@gmail.com" className="text-blue-400 underline">codecatalyst@gmail.com</a>.</p>
       </div>
     </div>
   </div>

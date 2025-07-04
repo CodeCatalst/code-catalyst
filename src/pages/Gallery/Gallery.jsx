@@ -118,25 +118,10 @@ const Gallery = () => {
           <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
             Explore the highlights from our workshops, hackathons, networking events, and community gatherings.
           </p>
-
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu"
-            onClick={() => {
-              const el = document.getElementById('highlights-section');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            <span className="relative z-10">See Highlights</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
-          </button>
+          {/* Scroll Indicator removed as requested */}
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
+        
       </section>
 
       {/* Events Grid */}

@@ -20,8 +20,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      details: 'codecatalyst@gmail.com',
-      action: 'mailto:codecatalyst@gmail.com'
+      details: 'codecatalystjb@gmail.com',
+      action: 'mailto:codecatalystjb@gmail.com'
     },
     // {
     //   icon: Phone,

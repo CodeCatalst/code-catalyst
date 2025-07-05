@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useAuth } from '../../context/AuthContext'
 import { getStats } from '../../services/stats'
 import {
     FileText,
@@ -22,9 +23,12 @@ import UserManagement from '../../components/Admin/UserManagement'
 import AdminNoticesManager from '../../components/Admin/AdminNoticesManager'
 import AdminBlogsManager from '../../components/Admin/AdminBlogsManager'
 import AdminGalleryManager from '../../components/Admin/AdminGalleryManager'
+
 import AdminContactMessages from '../../components/Admin/AdminContactMessages'
+import AdminHiringRequests from '../../components/Admin/AdminHiringRequests'
 
 const AdminDashboard = () => {
+    const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [stats, setStats] = useState({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 })
@@ -44,12 +48,17 @@ const AdminDashboard = () => {
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
         { id: 'gallery', label: 'Gallery Manager' },
-        { id: 'contact', label: 'Contact Messages' }
-    ]
+        { id: 'contact', label: 'Contact Messages' },
+        ...(user && (user.role === 'HR Lead' || user.role === 'admin' || (Array.isArray(user.roles) && (user.roles.includes('HR Lead') || user.roles.includes('admin')))) ? [
+            { id: 'hiring', label: 'Hiring Requests' }
+        ] : [])
+    ];
 
     const handleUserCountUpdate = (count) => {
         setUserCount(count)
     }
+
+
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -63,6 +72,12 @@ const AdminDashboard = () => {
                 return <AdminGalleryManager />
             case 'contact':
                 return <AdminContactMessages />
+            case 'hiring':
+                if (user && (user.role === 'HR Lead' || user.role === 'admin' || (Array.isArray(user.roles) && (user.roles.includes('HR Lead') || user.roles.includes('admin'))))) {
+                    return <AdminHiringRequests />
+                } else {
+                    return <div className="text-red-500 p-4">Access denied. Only HR Lead or Admin can view hiring requests.</div>;
+                }
             default:
                 return null
         }

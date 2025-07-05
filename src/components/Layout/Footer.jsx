@@ -21,7 +21,7 @@ const Footer = () => {
 
   const contactInfo = [
     { icon: Mail, text: 'Admin: code@jbcollege.in', href: 'mailto:code@jbcollege.in' },
-    { icon: Mail, text: 'CC: codecatalyst@gmail.com', href: 'mailto:codecatalyst@gmail.com' },
+    { icon: Mail, text: 'CC: codecatalystjb@gmail.com', href: 'mailto:codecatalystjb@gmail.com' },
     // { icon: Phone, text: '+1 (555) 123-4567', href: 'tel:+15551234567' },
     { icon: MapPin, text: 'JB Knowledge Park, Manjhawali, Faridabad NCR -121 102 Nearest Metro Station: Badarpur Delhi', href: '#' },
   ]

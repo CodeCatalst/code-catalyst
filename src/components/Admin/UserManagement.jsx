@@ -274,6 +274,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                             <option value="team_lead">Team Lead</option>
                                             <option value="team_member">Team Member</option>
                                             <option value="community_member">Community Member</option>
+                                            <option value="HR Lead">HR Lead</option>
                                         </select>
                                     </div>
                                 </td>

@@ -33,6 +33,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [stats, setStats] = useState({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 })
+    const [userCount, setUserCount] = useState(0); // Track user count for Manage Users
     useEffect(() => {
         (async () => {
             try {
@@ -68,7 +69,7 @@ const AdminDashboard = () => {
             case 'blogs':
                 return <AdminBlogsManager />
             case 'users':
-                return <UserManagement />
+                return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
             case 'gallery':
                 return <AdminGalleryManager />
             case 'contact':
@@ -139,6 +140,18 @@ const AdminDashboard = () => {
                             <div className="ml-4">
                                 <p className="text-gray-400 text-sm">This Month</p>
                                 <p className="text-2xl font-bold text-white">{stats.thisMonth}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
+                                <Users className="text-white" size={24} />
+                            </div>
+                            <div className="ml-4">
+                                <p className="text-gray-400 text-sm">Total Users</p>
+                                <p className="text-2xl font-bold text-white">{userCount}</p>
                             </div>
                         </div>
                     </div>

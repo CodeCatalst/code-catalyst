@@ -140,6 +140,27 @@ const Profile = () => {
     }
   }
 
+  // Password Reset Prompt
+  const [resetPrompt, setResetPrompt] = useState('');
+  const { forgotPassword } = useAuth();
+
+  const handlePasswordReset = async () => {
+    setLoading(true);
+    setResetPrompt('');
+    try {
+      const result = await forgotPassword(user.email);
+      if (result.success) {
+        setResetPrompt('Password reset email sent! Please check your inbox.');
+      } else {
+        setResetPrompt(result.error || 'Failed to send reset email.');
+      }
+    } catch (error) {
+      setResetPrompt('Failed to send reset email.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleProfileChange = (e) => {
     const { name, value } = e.target
     setProfileData(prev => ({
@@ -319,7 +340,20 @@ const Profile = () => {
                 {activeTab === 'password' && (
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-6">Change Password</h2>
-
+                    <button
+                      type="button"
+                      className="mb-4 btn-secondary"
+                      onClick={handlePasswordReset}
+                      disabled={loading}
+                    >
+                      Send Password Reset Email
+                    </button>
+                    {resetPrompt && (
+                      <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${resetPrompt.includes('sent') ? 'bg-green-900/50 border border-green-700 text-green-300' : 'bg-red-900/50 border border-red-700 text-red-300'}`}>
+                        {resetPrompt.includes('sent') ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+                        {resetPrompt}
+                      </div>
+                    )}
                     <form onSubmit={handlePasswordSubmit} className="space-y-6">
                       <div>
                         <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">

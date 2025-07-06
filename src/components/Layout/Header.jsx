@@ -31,10 +31,11 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Hiring', href: '/hiring' },
   ];
 
-  // Add admin link if user is admin
-  const adminLinks = user?.role === 'admin' ? [
-    { name: 'Admin', href: '/admin' }
-  ] : [];
+  // Add admin link if user is in allowed admin roles
+  const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member'];
+  const adminLinks = allowedAdminRoles.includes(user?.role)
+    ? [{ name: 'Admin', href: '/admin' }]
+    : [];
 
   const handleLogout = () => {
     logout()

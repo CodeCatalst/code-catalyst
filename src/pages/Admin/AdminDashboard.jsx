@@ -26,6 +26,7 @@ import AdminGalleryManager from '../../components/Admin/AdminGalleryManager'
 
 import AdminContactMessages from '../../components/Admin/AdminContactMessages'
 import AdminHiringRequests from '../../components/Admin/AdminHiringRequests'
+import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper'
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -43,16 +44,16 @@ const AdminDashboard = () => {
         })();
     }, []);
 
+    // Only show tabs the user has access to
+    const accessibleTabs = getAccessibleTabs(user?.role);
     const tabs = [
         { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
         { id: 'gallery', label: 'Gallery Manager' },
         { id: 'contact', label: 'Contact Messages' },
-        ...(user && (user.role === 'HR Lead' || user.role === 'admin' || (Array.isArray(user.roles) && (user.roles.includes('HR Lead') || user.roles.includes('admin')))) ? [
-            { id: 'hiring', label: 'Hiring Requests' }
-        ] : [])
-    ];
+        { id: 'hiring', label: 'Hiring Requests' },
+    ].filter(tab => accessibleTabs.includes(tab.id));
 
     const handleUserCountUpdate = (count) => {
         setUserCount(count)
@@ -177,4 +178,4 @@ const AdminDashboard = () => {
     )
 }
 
-export default AdminDashboard 
+export default AdminDashboard

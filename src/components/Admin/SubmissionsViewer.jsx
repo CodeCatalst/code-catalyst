@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import AdminAccessWrapper from './AdminAccessWrapper';
 
 const SubmissionsViewer = () => {
     const [searchTerm, setSearchTerm] = useState('')
@@ -243,199 +244,201 @@ const SubmissionsViewer = () => {
     }
 
     return (
-        <div>
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">Form Submissions</h2>
-                <button
-                    onClick={exportToPDF}
-                    className="btn-primary flex items-center gap-2"
-                >
-                    <Download size={20} />
-                    Export PDF
-                </button>
-            </div>
+        <AdminAccessWrapper permission="submissions_view">
+            <div>
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-white">Form Submissions</h2>
+                    <button
+                        onClick={exportToPDF}
+                        className="btn-primary flex items-center gap-2"
+                    >
+                        <Download size={20} />
+                        Export PDF
+                    </button>
+                </div>
 
-            {/* Filters and Search */}
-            <div className="mb-6">
-                <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-1">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                            <input
-                                type="text"
-                                placeholder="Search by name, email, or form..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                            />
+                {/* Filters and Search */}
+                <div className="mb-6">
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="flex-1">
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <input
+                                    type="text"
+                                    placeholder="Search by name, email, or form..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4  overflow-x-auto">
+                            <select
+                                value={formFilter}
+                                onChange={(e) => setFormFilter(e.target.value)}
+                                className="px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                            >
+                                <option value="all">All Forms</option>
+                                {forms.map(form => (
+                                    <option key={form.id} value={form.id}>{form.title}</option>
+                                ))}
+                            </select>
+
+                            <select
+                                value={dateFilter}
+                                onChange={(e) => setDateFilter(e.target.value)}
+                                className="px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                            >
+                                <option value="all">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
                         </div>
                     </div>
-
-                    <div className="flex gap-4  overflow-x-auto">
-                        <select
-                            value={formFilter}
-                            onChange={(e) => setFormFilter(e.target.value)}
-                            className="px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                        >
-                            <option value="all">All Forms</option>
-                            {forms.map(form => (
-                                <option key={form.id} value={form.id}>{form.title}</option>
-                            ))}
-                        </select>
-
-                        <select
-                            value={dateFilter}
-                            onChange={(e) => setDateFilter(e.target.value)}
-                            className="px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                        >
-                            <option value="all">All Dates</option>
-                            <option value="today">Today</option>
-                            <option value="week">This Week</option>
-                            <option value="month">This Month</option>
-                        </select>
-                    </div>
                 </div>
-            </div>
 
-            {/* Submissions Table */}
-            <div className="overflow-x-auto">
-                <table className="w-full bg-gray-900 rounded-lg">
-                    <thead>
-                        <tr className="border-b border-gray-700">
-                            <th
-                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
-                                onClick={() => handleSort('date')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <Calendar size={16} />
-                                    Submitted
-                                    {getSortIcon('date')}
-                                </div>
-                            </th>
-                            <th
-                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
-                                onClick={() => handleSort('form')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <FileText size={16} />
-                                    Form
-                                    {getSortIcon('form')}
-                                </div>
-                            </th>
-                            <th
-                                className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
-                                onClick={() => handleSort('name')}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <User size={16} />
-                                    User
-                                    {getSortIcon('name')}
-                                </div>
-                            </th>
-                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Status</th>
-                            <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredSubmissions.map((submission) => (
-                            <>
-                                <tr key={submission.id} className="border-b border-gray-800 hover:bg-gray-800/70">
-                                    <td className="py-4 px-4">
-                                        <div className="text-sm">
-                                            <div className="text-gray-100">{formatDate(submission.submittedAt)}</div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-4">
-                                        <div className="text-primary-200 font-medium">{submission.formTitle}</div>
-                                    </td>
-                                    <td className="py-4 px-4">
-                                        <div>
-                                            <div className="text-primary-100 font-medium">{submission.userName}</div>
-                                            <div className="text-primary-300 text-sm">{submission.userEmail}</div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-4">
-                                        <span className="px-2 py-1 bg-green-600 text-white rounded-full text-xs font-medium">
-                                            {submission.status}
-                                        </span>
-                                    </td>
-                                    <td className="py-4 px-4">
-                                        <button
-                                            className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
-                                            title="View Submission"
-                                            onClick={() => setExpandedSubmission(expandedSubmission === submission.id ? null : submission.id)}
-                                        >
-                                            <Eye size={16} />
-                                        </button>
-                                        <button
-                                            className="p-2 text-green-400 hover:text-green-300 hover:bg-green-900 rounded"
-                                            title="Download PDF"
-                                            onClick={exportToPDF}
-                                        >
-                                            <Download size={16} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                {expandedSubmission === submission.id && (
-                                    <tr>
-                                        <td colSpan="5" className="px-4 py-4 bg-gray-800">
-                                            <div className="space-y-4">
-                                                <h4 className="text-lg font-semibold text-white mb-3">Submission Details</h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    {Object.entries(submission.responses).map(([question, answer]) => (
-                                                        <div key={question} className="bg-gray-700 p-3 rounded">
-                                                            <div className="text-gray-300 text-sm font-medium mb-1">{question}</div>
-                                                            <div className="text-white">
-                                                                {Array.isArray(answer) ? answer.join(', ') : answer}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                {/* Submissions Table */}
+                <div className="overflow-x-auto">
+                    <table className="w-full bg-gray-900 rounded-lg">
+                        <thead>
+                            <tr className="border-b border-gray-700">
+                                <th
+                                    className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
+                                    onClick={() => handleSort('date')}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Calendar size={16} />
+                                        Submitted
+                                        {getSortIcon('date')}
+                                    </div>
+                                </th>
+                                <th
+                                    className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
+                                    onClick={() => handleSort('form')}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <FileText size={16} />
+                                        Form
+                                        {getSortIcon('form')}
+                                    </div>
+                                </th>
+                                <th
+                                    className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900 cursor-pointer hover:text-white"
+                                    onClick={() => handleSort('name')}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <User size={16} />
+                                        User
+                                        {getSortIcon('name')}
+                                    </div>
+                                </th>
+                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Status</th>
+                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredSubmissions.map((submission) => (
+                                <>
+                                    <tr key={submission.id} className="border-b border-gray-800 hover:bg-gray-800/70">
+                                        <td className="py-4 px-4">
+                                            <div className="text-sm">
+                                                <div className="text-gray-100">{formatDate(submission.submittedAt)}</div>
                                             </div>
                                         </td>
+                                        <td className="py-4 px-4">
+                                            <div className="text-primary-200 font-medium">{submission.formTitle}</div>
+                                        </td>
+                                        <td className="py-4 px-4">
+                                            <div>
+                                                <div className="text-primary-100 font-medium">{submission.userName}</div>
+                                                <div className="text-primary-300 text-sm">{submission.userEmail}</div>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 px-4">
+                                            <span className="px-2 py-1 bg-green-600 text-white rounded-full text-xs font-medium">
+                                                {submission.status}
+                                            </span>
+                                        </td>
+                                        <td className="py-4 px-4">
+                                            <button
+                                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
+                                                title="View Submission"
+                                                onClick={() => setExpandedSubmission(expandedSubmission === submission.id ? null : submission.id)}
+                                            >
+                                                <Eye size={16} />
+                                            </button>
+                                            <button
+                                                className="p-2 text-green-400 hover:text-green-300 hover:bg-green-900 rounded"
+                                                title="Download PDF"
+                                                onClick={exportToPDF}
+                                            >
+                                                <Download size={16} />
+                                            </button>
+                                        </td>
                                     </tr>
-                                )}
-                            </>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                    {expandedSubmission === submission.id && (
+                                        <tr>
+                                            <td colSpan="5" className="px-4 py-4 bg-gray-800">
+                                                <div className="space-y-4">
+                                                    <h4 className="text-lg font-semibold text-white mb-3">Submission Details</h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        {Object.entries(submission.responses).map(([question, answer]) => (
+                                                            <div key={question} className="bg-gray-700 p-3 rounded">
+                                                                <div className="text-gray-300 text-sm font-medium mb-1">{question}</div>
+                                                                <div className="text-white">
+                                                                    {Array.isArray(answer) ? answer.join(', ') : answer}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
-            {filteredSubmissions.length === 0 && (
-                <div className="text-center py-12">
-                    <FileText className="mx-auto text-gray-500 mb-4" size={48} />
-                    <h3 className="text-xl font-medium text-gray-400 mb-2">No submissions found</h3>
-                    <p className="text-gray-500">Try adjusting your search or filters</p>
-                </div>
-            )}
+                {filteredSubmissions.length === 0 && (
+                    <div className="text-center py-12">
+                        <FileText className="mx-auto text-gray-500 mb-4" size={48} />
+                        <h3 className="text-xl font-medium text-gray-400 mb-2">No submissions found</h3>
+                        <p className="text-gray-500">Try adjusting your search or filters</p>
+                    </div>
+                )}
 
-            {/* Summary Stats */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="card text-center">
-                    <div className="text-2xl font-bold text-white">{filteredSubmissions.length}</div>
-                    <div className="text-gray-400 text-sm">Total Submissions</div>
-                </div>
-                <div className="card text-center">
-                    <div className="text-2xl font-bold text-green-500">
-                        {filteredSubmissions.filter(s => s.status === 'completed').length}
+                {/* Summary Stats */}
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="card text-center">
+                        <div className="text-2xl font-bold text-white">{filteredSubmissions.length}</div>
+                        <div className="text-gray-400 text-sm">Total Submissions</div>
                     </div>
-                    <div className="text-gray-400 text-sm">Completed</div>
-                </div>
-                <div className="card text-center">
-                    <div className="text-2xl font-bold text-blue-500">
-                        {new Set(filteredSubmissions.map(s => s.formId)).size}
+                    <div className="card text-center">
+                        <div className="text-2xl font-bold text-green-500">
+                            {filteredSubmissions.filter(s => s.status === 'completed').length}
+                        </div>
+                        <div className="text-gray-400 text-sm">Completed</div>
                     </div>
-                    <div className="text-gray-400 text-sm">Forms</div>
-                </div>
-                <div className="card text-center">
-                    <div className="text-2xl font-bold text-purple-500">
-                        {new Set(filteredSubmissions.map(s => s.userEmail)).size}
+                    <div className="card text-center">
+                        <div className="text-2xl font-bold text-blue-500">
+                            {new Set(filteredSubmissions.map(s => s.formId)).size}
+                        </div>
+                        <div className="text-gray-400 text-sm">Forms</div>
                     </div>
-                    <div className="text-gray-400 text-sm">Unique Users</div>
+                    <div className="card text-center">
+                        <div className="text-2xl font-bold text-purple-500">
+                            {new Set(filteredSubmissions.map(s => s.userEmail)).size}
+                        </div>
+                        <div className="text-gray-400 text-sm">Unique Users</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </AdminAccessWrapper>
     )
 }
 

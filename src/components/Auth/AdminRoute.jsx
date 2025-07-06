@@ -14,12 +14,13 @@ const AdminRoute = ({ children }) => {
         return <Navigate to="/login" state={{ from: location }} replace />
     }
 
-    // Check if user has admin role
-    if (!user?.role || user.role !== 'admin') {
+    // Check if user has an allowed admin role
+    const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member'];
+    if (!user?.role || !allowedAdminRoles.includes(user.role)) {
         return <Navigate to="/" replace />
     }
 
     return children
 }
 
-export default AdminRoute 
+export default AdminRoute

@@ -72,17 +72,17 @@ const Team = () => {
             social: {
               github: 'https://github.com/jassalarjan',
               Link: 'https://arjansinghjassal.xyz/',
-              email: 'jassalarjan.awc@gmail.com'
+              mail: 'mailto:jassalarjan.awc@gmail.com'
             }
           },
           {
             id: 4,
             name: 'Jeevan',
             role: 'Community Manager',
-            department: 'HR & Events',
+            department: 'Executive & Management',
             image: './Jeevan.png',
             bio: ' Creative Developer',
-            skills: ['Event Planning', 'Community Building', 'Public Speaking'],
+            skills: ['Content Designing', 'Community Building', 'Public Speaking'],
             social: {
               linkedin: 'https://www.linkedin.com/in/jeevanpant/',
             }

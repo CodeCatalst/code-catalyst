@@ -64,7 +64,7 @@ const AdminHiringRequests = () => {
           Download Excel
         </button>
       </div>
-      <h2 className="text-2xl font-bold mb-4">Hiring Requests</h2>
+
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}
       {!loading && !error && (

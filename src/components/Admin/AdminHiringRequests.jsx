@@ -1,7 +1,8 @@
-
 // eslint-disable-next-line no-undef
 const API_URL = import.meta.env.VITE_API_BASE;
 import { useEffect, useState } from 'react';
+// Add xlsx for Excel export
+import * as XLSX from 'xlsx';
 
 const AdminHiringRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -26,8 +27,43 @@ const AdminHiringRequests = () => {
     fetchRequests();
   }, []);
 
+  // Excel download handler
+  const handleDownloadExcel = () => {
+    // Prepare worksheet data
+    const wsData = [
+      [
+        'Name', 'Phone', 'Email', 'Course', 'Sem/Year', 'Position', 'About', 'CV', 'Submitted'
+      ],
+      ...requests.map(req => [
+        req.name,
+        req.phone,
+        req.email,
+        req.course,
+        req.sem_year || req.semYear,
+        req.position,
+        req.about,
+        req.cv_link || req.cv,
+        req.submitted_at ? new Date(req.submitted_at).toLocaleString() : ''
+      ])
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'HiringRequests');
+    XLSX.writeFile(wb, 'hiring_requests.xlsx');
+  };
+
   return (
     <div className="p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Hiring Requests</h2>
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow"
+          disabled={requests.length === 0}
+        >
+          Download Excel
+        </button>
+      </div>
       <h2 className="text-2xl font-bold mb-4">Hiring Requests</h2>
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}

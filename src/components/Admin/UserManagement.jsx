@@ -3,6 +3,7 @@ import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckC
 import api, { updateUserRole, expireUserPassword, createUser, updateUser } from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 import AdminAccessWrapper from './AdminAccessWrapper'
+import * as XLSX from 'xlsx'
 
 const UserManagement = ({ onUserCountUpdate }) => {
     const [users, setUsers] = useState([])
@@ -157,6 +158,24 @@ const UserManagement = ({ onUserCountUpdate }) => {
 
     const roles = ['all', 'admin', 'user', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
 
+    // Excel download handler
+    const handleDownloadExcel = () => {
+        const wsData = [
+            ['Full Name', 'Email', 'Role', 'Registration Date', 'Status'],
+            ...filteredUsers.map(user => [
+                user.fullName,
+                user.email,
+                user.role,
+                user.registrationDate ? new Date(user.registrationDate).toLocaleDateString() : '',
+                user.status
+            ])
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Users');
+        XLSX.writeFile(wb, 'users.xlsx');
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -189,6 +208,13 @@ const UserManagement = ({ onUserCountUpdate }) => {
                         >
                             <Plus size={18} />
                             <span className="hidden sm:inline">Add User</span>
+                        </button>
+                        <button
+                            onClick={handleDownloadExcel}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow"
+                            disabled={filteredUsers.length === 0}
+                        >
+                            Download Excel
                         </button>
                     </div>
                 </div>

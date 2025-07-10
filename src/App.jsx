@@ -49,7 +49,7 @@ function App() {
           <Layout transparentOnTop={transparentOnTop}>
             <Suspense fallback={<Loader />}>
               <Routes>
-                <Route path="/hiring" element={<Hiring />} />
+                {/* <Route path="/hiring" element={<Hiring />} /> */}
                 <Route path="/" element={<Home />} />
                 <Route path="/test" element={<Test />} />
                 <Route path="/about" element={<About />} />

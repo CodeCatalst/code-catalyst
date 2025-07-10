@@ -14,7 +14,7 @@ import Loader from './components/Common/LoadingSpinner'
 const Home = lazy(() => import('./pages/Home/Home'))
 const About = lazy(() => import('./pages/About/About'))
 const Contact = lazy(() => import('./pages/Contact/Contact'))
-// const Hiring = lazy(() => import('./pages/Hiring/Hiring'))
+const Hiring = lazy(() => import('./pages/Hiring/Hiring'))
 const Gallery = lazy(() => import('./pages/Gallery/Gallery'))
 const Team = lazy(() => import('./pages/Team/Team'))
 const Blog = lazy(() => import('./pages/Blog/Blog'))

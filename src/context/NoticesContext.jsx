@@ -26,7 +26,7 @@ export const NoticesProvider = ({ children }) => {
 
     return (
         <NoticesContext.Provider
-            value={{ notices, addNotice, updateNotice, deleteNotice, addSubmission }}
+            value={{ notices, setNotices, addNotice, updateNotice, deleteNotice, addSubmission }}
         >
             {children}
         </NoticesContext.Provider>

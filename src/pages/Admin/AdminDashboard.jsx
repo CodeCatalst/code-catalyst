@@ -16,17 +16,18 @@ import {
     Filter,
     Search
 } from 'lucide-react'
-import FormBuilder from '../../components/Admin/FormBuilder'
-import FormManager from '../../components/Admin/FormManager'
-import SubmissionsViewer from '../../components/Admin/SubmissionsViewer'
-import UserManagement from '../../components/Admin/UserManagement'
-import AdminNoticesManager from '../../components/Admin/AdminNoticesManager'
-import AdminBlogsManager from '../../components/Admin/AdminBlogsManager'
-import AdminGalleryManager from '../../components/Admin/AdminGalleryManager'
-
-import AdminContactMessages from '../../components/Admin/AdminContactMessages'
-import AdminHiringRequests from '../../components/Admin/AdminHiringRequests'
-import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper'
+import FormBuilder from '../../components/Admin/FormBuilder';
+import FormManager from '../../components/Admin/FormManager';
+import SubmissionsViewer from '../../components/Admin/SubmissionsViewer';
+import UserManagement from '../../components/Admin/UserManagement';
+import AdminNoticesManager from '../../components/Admin/AdminNoticesManager';
+import AdminBlogsManager from '../../components/Admin/AdminBlogsManager';
+import AdminGalleryManager from '../../components/Admin/AdminGalleryManager';
+import CoreTeamFeedback from "../../components/Admin/CoreTeamFeedback.jsx";
+import CoreTeamFeedbackResponses from "../../components/Admin/CoreTeamFeedbackResponses.jsx";
+import AdminContactMessages from '../../components/Admin/AdminContactMessages';
+import AdminHiringRequests from '../../components/Admin/AdminHiringRequests';
+import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -45,16 +46,17 @@ const AdminDashboard = () => {
         })();
     }, []);
 
-    // Only show tabs the user has access to
-    const accessibleTabs = getAccessibleTabs(user?.role);
+    // Show all tabs to every member (no access filtering)
     const tabs = [
         { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
-        { id: 'gallery', label: 'Gallery Manager' },
+        { id: 'gallery', label: 'Manage Gallery' },
+        { id: 'CoreTeamFeedback', label: 'Feedback Form' },
+        { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
         { id: 'contact', label: 'Contact Messages' },
         { id: 'hiring', label: 'Hiring Requests' },
-    ].filter(tab => accessibleTabs.includes(tab.id));
+    ];
 
     const handleUserCountUpdate = (count) => {
         setUserCount(count)
@@ -66,12 +68,22 @@ const AdminDashboard = () => {
         switch (activeTab) {
             case 'notices':
                 return <AdminNoticesManager />
+            case 'CoreTeamFeedback':
+                return <CoreTeamFeedback />
             case 'blogs':
                 return <AdminBlogsManager />
             case 'users':
                 return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
             case 'gallery':
                 return <AdminGalleryManager />
+            case 'CoreTeamFeedbackResponses':
+                // Only allow admins
+                if (!user || user.role !== 'admin') {
+                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
+                }
+                else{
+                    return <CoreTeamFeedbackResponses />
+                }
             case 'contact':
                 return <AdminContactMessages />
             case 'hiring':

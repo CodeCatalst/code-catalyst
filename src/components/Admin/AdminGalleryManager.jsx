@@ -11,7 +11,7 @@ const AdminGalleryManager = () => {
         description: '',
         category: '',
         imageFile: null,
-        imageUrl: '',
+        imageUrl: '', // always base64 or preview url
     })
     const [message, setMessage] = useState(null)
     const [editId, setEditId] = useState(null)
@@ -31,36 +31,34 @@ const AdminGalleryManager = () => {
     }
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target
+        const { name, value, files } = e.target;
         if (name === 'imageFile') {
-            const file = files[0]
-            setForm({
-                ...form,
-                imageFile: file,
-                imageUrl: file ? URL.createObjectURL(file) : '',
-            })
+            const file = files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setForm({
+                        ...form,
+                        imageFile: file,
+                        imageUrl: reader.result // base64 string for backend
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setForm({ ...form, imageFile: null, imageUrl: '' });
+            }
         } else {
-            setForm({ ...form, [name]: value })
+            setForm({ ...form, [name]: value });
         }
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!form.name || !form.date || !form.description || !form.category || !form.imageFile) {
-            setMessage({ type: 'error', text: 'All fields are required.' })
-            return
+        e.preventDefault();
+        if (!form.name || !form.date || !form.description || !form.category || !form.imageUrl) {
+            setMessage({ type: 'error', text: 'All fields are required.' });
+            return;
         }
-        let imageBase64 = form.imageUrl
-        if (form.imageFile && !form.imageUrl.startsWith('data:')) {
-            const reader = new FileReader()
-            reader.onloadend = async () => {
-                imageBase64 = reader.result
-                await submitGalleryEvent(imageBase64)
-            }
-            reader.readAsDataURL(form.imageFile)
-            return
-        }
-        await submitGalleryEvent(imageBase64)
+        await submitGalleryEvent(form.imageUrl);
     }
 
     const submitGalleryEvent = async (imageBase64) => {
@@ -89,21 +87,21 @@ const AdminGalleryManager = () => {
     }
 
     const handleEdit = (event) => {
-        setEditId(event.id)
+        setEditId(event.id);
         setForm({
             name: event.name,
             date: event.date,
             description: event.description,
             category: event.category,
             imageFile: null,
-            imageUrl: event.thumbnail,
-        })
-        setShowEditModal(true)
+            imageUrl: event.image_url || '',
+        });
+        setShowEditModal(true);
     }
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        if (!form.name || !form.date || !form.description || !form.category || (!form.imageFile && !form.imageUrl)) {
+        if (!form.name || !form.date || !form.description || !form.category || !form.imageUrl) {
             setMessage({ type: 'error', text: 'All fields are required.' });
             return;
         }
@@ -165,8 +163,8 @@ const AdminGalleryManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {events.map(event => (
                         <div key={event.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative">
-                            {event.thumbnail && (
-                                <img src={event.thumbnail} alt={event.name} className="w-full h-48 object-cover" />
+                            {event.image_url && (
+                                <img src={event.image_url} alt={event.name} className="w-full h-48 object-cover" />
                             )}
                             <div className="p-4">
                                 <div className="flex items-center justify-between mb-2">

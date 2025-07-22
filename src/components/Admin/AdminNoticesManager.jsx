@@ -15,6 +15,7 @@ const AdminNoticesManager = () => {
     const [customForm, setCustomForm] = useState(null)
     const [loading, setLoading] = useState(true)
     const [message, setMessage] = useState(null)
+    // Removed unused images state
 
     useEffect(() => {
         fetchNotices()
@@ -60,14 +61,28 @@ const AdminNoticesManager = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault()
         const formEl = e.target
+        // Handle images
+        const imageFiles = formEl.images?.files;
+        let imageArr = [];
+        if (imageFiles && imageFiles.length > 0) {
+            imageArr = await Promise.all(Array.from(imageFiles).map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+            }));
+        }
+        // Defensive: ensure form is a valid object if attached
         const newNotice = {
             title: formEl.title.value,
             type: formEl.type.value,
             hasForm: formEl.hasForm.checked,
             description: formEl.description.value,
             submissions: editNotice && Array.isArray(editNotice.submissions) ? editNotice.submissions : [],
-            form: formEl.hasForm.checked ? customForm : null
-        }
+            form: formEl.hasForm.checked && customForm ? customForm : null,
+            images: imageArr
+        };
         try {
             if (editNotice) {
                 const updated = await updateNotice(editNotice.id, newNotice)
@@ -155,7 +170,16 @@ const AdminNoticesManager = () => {
                         ) : (
                             notices.map(notice => (
                                 <tr key={notice.id} className="border-b border-gray-800">
-                                    <td className="py-2 px-4">{notice.title}</td>
+                                    <td className="py-2 px-4">
+                                        {notice.title}
+                                        {Array.isArray(notice.images) && notice.images.length > 0 && (
+                                            <div className="flex gap-2 mt-2">
+                                                {notice.images.map((img, idx) => (
+                                                    <img key={idx} src={img} alt="Notice" className="h-10 w-10 object-cover rounded" />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="py-2 px-4">{notice.type}</td>
                                     <td className="py-2 px-4">{notice.hasForm ? 'Yes' : 'No'}</td>
                                     <td className="py-2 px-4 flex gap-2">
@@ -200,6 +224,28 @@ const AdminNoticesManager = () => {
                             <div className="mb-3">
                                 <label className="block mb-1">Type</label>
                                 <input name="type" defaultValue={editNotice?.type || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                            </div>
+                            <div className="mb-3">
+                                <label className="block mb-1">Images</label>
+                                <input name="images" type="file" accept="image/*" multiple className="w-full p-2 rounded bg-gray-900 text-white" onChange={e => {
+                                    const files = e.target.files;
+                                    const preview = document.getElementById('image-preview');
+                                    if (preview) preview.innerHTML = '';
+                                    if (files && files.length > 0) {
+                                        Array.from(files).forEach(file => {
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                const img = document.createElement('img');
+                                                img.src = reader.result;
+                                                img.className = 'h-10 w-10 object-cover rounded';
+                                                if (preview) preview.appendChild(img);
+                                            };
+                                            reader.readAsDataURL(file);
+                                        });
+                                    }
+                                }} />
+                                {/* Preview selected images */}
+                                <div id="image-preview" className="flex gap-2 mt-2"></div>
                             </div>
                             <div className="mb-3">
                                 <label className="inline-flex items-center">

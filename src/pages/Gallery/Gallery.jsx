@@ -133,7 +133,7 @@ const Gallery = () => {
                 onClick={() => openLightbox(event)}>
                 <div className="relative overflow-hidden rounded-lg mb-4">
                   <img
-                    src={event.thumbnail}
+                    src={event.image_url}
                     alt={event.name}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -176,12 +176,12 @@ const Gallery = () => {
       {/* Lightbox Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-gray-900 shadow-2xl flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b">
+            <div className="flex items-center justify-between p-6 border-b border-gray-800">
               <div>
-                <h2 className="text-2xl font-bold text-white">{selectedEvent.name}</h2>
-                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                <h2 className="text-2xl font-bold text-white mb-2">{selectedEvent.name}</h2>
+                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-400">
                   <div className="flex items-center space-x-1">
                     <Calendar size={16} />
                     <span>{formatDate(selectedEvent.date)}</span>
@@ -197,28 +197,43 @@ const Gallery = () => {
               </div>
               <button
                 onClick={closeLightbox}
-                className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center transition-colors border border-gray-700"
+                aria-label="Close"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6">
-              <p className="text-gray-400 mb-6 leading-relaxed">
-                {selectedEvent.description}
-              </p>
-
-              {/* Event Images */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {selectedEvent.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`${selectedEvent.name} - Image ${index + 1}`}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                ))}
+            <div className="flex flex-col md:flex-row gap-8 p-6 items-center justify-center">
+              {/* Full Image Showcase */}
+              <div className="flex-1 flex items-center justify-center">
+                {Array.isArray(selectedEvent.images) && selectedEvent.images.length > 0 ? (
+                  selectedEvent.images.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`${selectedEvent.name} - Image ${index + 1}`}
+                      className="max-h-[70vh] w-auto rounded-lg shadow-lg border border-gray-800"
+                      style={{ objectFit: 'contain', marginBottom: '1rem' }}
+                    />
+                  ))
+                ) : (
+                  selectedEvent.image_url && (
+                    <img
+                      src={selectedEvent.image_url}
+                      alt={selectedEvent.name}
+                      className="max-h-[70vh] w-auto rounded-lg shadow-lg border border-gray-800"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  )
+                )}
+              </div>
+              {/* Description */}
+              <div className="flex-1">
+                <p className="text-gray-300 mb-6 leading-relaxed text-lg">
+                  {selectedEvent.description}
+                </p>
               </div>
             </div>
           </div>

@@ -39,11 +39,18 @@ const Notices = () => {
           } catch (e) {
             content = {};
           }
+          // Defensive: images and form
+          let imagesArr = Array.isArray(n.images) ? n.images : [];
+          if (typeof n.images === 'string') {
+            try { imagesArr = JSON.parse(n.images); } catch {}
+          }
           return {
             id: n.id,
             title: n.title,
             description: content.description,
             date: n.created_at,
+            images: imagesArr,
+            form: content.form || null
           };
         });
         setNotices(mapped)
@@ -140,6 +147,13 @@ const Notices = () => {
               <h2 className="text-2xl font-bold mb-2">{notice.title}</h2>
               <div className="text-gray-400 mb-2">{notice.date && (new Date(notice.date).toLocaleString())}</div>
               <p className="text-gray-200 whitespace-pre-line">{notice.description}</p>
+              {Array.isArray(notice.images) && notice.images.length > 0 && (
+                <div className="flex gap-2 mt-4">
+                  {notice.images.map((img, idx) => (
+                    <img key={idx} src={img} alt="Notice" className="h-24 w-24 object-cover rounded" />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

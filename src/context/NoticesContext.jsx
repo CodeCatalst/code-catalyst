@@ -47,7 +47,7 @@ export const BlogsProvider = ({ children }) => {
     const deleteBlog = (id) => setBlogs((prev) => prev.filter((b) => b.id !== id));
 
     return (
-        <BlogsContext.Provider value={{ blogs, addBlog, updateBlog, deleteBlog }}>
+        <BlogsContext.Provider value={{ blogs, setBlogs, addBlog, updateBlog, deleteBlog }}>
             {children}
         </BlogsContext.Provider>
     );

@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
-import { Play, Filter, Calendar, Eye, ArrowRight } from 'lucide-react'
+import { Play, Filter, Calendar, Eye, ArrowRight, X } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import { useBlogs } from '../../context/NoticesContext'
+import { getBlogs, getBlogById } from '../../services/blogs'
 
 const Blogs = () => {
-  const { blogs } = useBlogs()
+  const { blogs, setBlogs } = useBlogs()
   const [filteredBlogs, setFilteredBlogs] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const heroRef = useRef(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalBlog, setModalBlog] = useState(null)
+  const [modalLoading, setModalLoading] = useState(false)
 
   const categories = ['All', 'Tech Talks', 'Events', 'Tutorials', 'Behind the Scenes', 'Student Stories']
 
@@ -32,6 +36,21 @@ const Blogs = () => {
     )
   }, [selectedCategory, blogs])
 
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      setLoading(true)
+      try {
+        const data = await getBlogs()
+        setBlogs(Array.isArray(data) ? data : [])
+      } catch (err) {
+        setBlogs([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchBlogs()
+  }, [setBlogs])
+
   const formatDate = (dateString) => {
     if (!dateString) return ''
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -47,6 +66,19 @@ const Blogs = () => {
       return `${(views / 1000).toFixed(1)}K`
     }
     return views.toString()
+  }
+
+  const handleReadClick = async (id) => {
+    setModalLoading(true)
+    setModalOpen(true)
+    try {
+      const blog = await getBlogById(id)
+      setModalBlog(blog)
+    } catch {
+      setModalBlog(null)
+    } finally {
+      setModalLoading(false)
+    }
   }
 
   if (loading) {
@@ -123,6 +155,7 @@ const Blogs = () => {
           </button>
         </div>
        
+
       </section>
       {/* Filter Bar */}
       <section className="py-8 border-b border-gray-700 bg-gray-900">
@@ -160,7 +193,12 @@ const Blogs = () => {
                   />
                   {/* Read Button Overlay */}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                    <a href={blog.url || '#'} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 font-bold text-primary-600 text-lg">Read</a>
+                    <button
+                      onClick={() => handleReadClick(blog.id)}
+                      className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 font-bold text-primary-600 text-lg focus:outline-none"
+                    >
+                      Read
+                    </button>
                   </div>
                   {/* Duration */}
                   <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-sm font-medium">
@@ -214,6 +252,60 @@ const Blogs = () => {
       {blogs.length === 0 && (
         <div className="bg-gray-900 text-center py-12 text-gray-400 text-lg font-semibold">
           There are no blogs available at the moment. Please check back soon for insightful articles and stories!
+        </div>
+      )}
+
+      {/* Blog Details Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-slate-900 rounded-lg shadow-2xl max-w-3xl w-full mx-4 relative p-0 text-white animate-fade-in flex flex-col md:flex-row overflow-hidden">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-white focus:outline-none"
+              onClick={() => { setModalOpen(false); setModalBlog(null); }}
+              aria-label="Close"
+            >
+              <X size={28} />
+            </button>
+            {modalLoading ? (
+              <div className="flex-1 flex items-center justify-center min-h-[400px]">
+                <LoadingSpinner message="Loading blog..." />
+              </div>
+            ) : modalBlog ? (
+              <>
+                {/* Image Side */}
+                <div className="md:w-1/2 w-full h-full flex items-center justify-center bg-slate-800 p-6">
+                  <img
+                    src={modalBlog.thumbnail}
+                    alt={modalBlog.title}
+                    className="rounded-lg object-cover w-full h-[320px] md:h-[400px] max-h-[400px]"
+                    style={{ maxWidth: '100%', maxHeight: '400px' }}
+                  />
+                </div>
+                {/* Text Side */}
+                <div className="md:w-1/2 w-full h-full flex flex-col p-6 overflow-y-auto max-h-[400px]">
+                  <h2 className="text-2xl font-bold mb-2">{modalBlog.title}</h2>
+                  <div className="flex items-center space-x-4 text-gray-400 mb-4">
+                    <span className="flex items-center space-x-1">
+                      <Calendar size={16} />
+                      <span>{formatDate(modalBlog.publishedAt)}</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <Eye size={16} />
+                      <span>{formatViews(modalBlog.views)} views</span>
+                    </span>
+                    <span className="bg-primary-600 text-white px-2 py-1 rounded text-sm font-medium">
+                      {modalBlog.category}
+                    </span>
+                  </div>
+                  <div className="prose prose-invert max-w-none text-base mb-2 overflow-y-auto" style={{ maxHeight: '300px' }}>
+                    {modalBlog.content}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex-1 flex items-center justify-center min-h-[400px] text-center py-12 text-red-500">Blog not found.</div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -63,13 +63,13 @@ const CoreTeamFeedback = () => {
         </div>
         <div className="mb-4">
           <span className="text-lg block mb-2">Feedback</span>
-          <input
-            type="text"
-            name="feedback"
-            value={form.feedback}
+          <textarea
+            name="suggestions"
+            value={form.suggestions}
             onChange={handleChange}
             className="w-full p-2 rounded bg-gray-700 text-white"
-            placeholder="Enter your feedback..."
+            rows={5}
+            placeholder="Share your feedback..."
             required
           />
         </div>

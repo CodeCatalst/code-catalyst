@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { getStats } from '../../services/stats'
+import api, { getUsers } from '../../services/api'
 import {
     FileText,
     Upload,
@@ -33,15 +34,38 @@ const AdminDashboard = () => {
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
-    const [stats, setStats] = useState({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 })
-    const [userCount, setUserCount] = useState(0); // Track user count for Manage Users
+    const [stats, setStats] = useState({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
     useEffect(() => {
         (async () => {
             try {
-                const s = await getStats();
-                setStats({ ...s, thisMonth: 156 }); // TODO: Replace with real value if available
+                // Fetch users
+                const users = await getUsers();
+                const totalUsers = Array.isArray(users) ? users.length : 0;
+
+                // Count core team members by role
+                const coreRoles = [
+                  'admin', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer'
+                ];
+                const totalCore = Array.isArray(users) ? users.filter(u => coreRoles.includes(u.role)).length : 0;
+
+                // Fetch hiring requests from backend
+                const API_URL = import.meta.env.VITE_API_BASE;
+                let totalHiringRequests = 0;
+                try {
+                  const res = await fetch(`${API_URL}/api/hiring`);
+                  if (res.ok) {
+                    const data = await res.json();
+                    totalHiringRequests = Array.isArray(data.requests) ? data.requests.length : 0;
+                  }
+                } catch {}
+
+                setStats({
+                    totalUsers,
+                    totalCore,
+                    totalHiringRequests
+                });
             } catch {
-                setStats({ totalForms: 0, totalSubmissions: 0, activeUsers: 0, thisMonth: 0 });
+                setStats({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
             }
         })();
     }, []);
@@ -67,13 +91,31 @@ const AdminDashboard = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'notices':
+                // Only allow admins
+                if (!user || user.role !== 'admin') {
+                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
+                }
+                else{
                 return <AdminNoticesManager />
+                }
+            case 'blogs':
+                // Only allow admins
+                if (!user || user.role !== 'admin') {
+                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
+                }
+                else{
+                return <AdminBlogsManager />
+                }
+            case 'users':
+                // Only allow admins
+                if (!user || user.role !== 'admin') {
+                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
+                }
+                else{
+                return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
+                }
             case 'CoreTeamFeedback':
                 return <CoreTeamFeedback />
-            case 'blogs':
-                return <AdminBlogsManager />
-            case 'users':
-                return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
             case 'gallery':
                 return <AdminGalleryManager />
             case 'CoreTeamFeedbackResponses':
@@ -106,64 +148,38 @@ const AdminDashboard = () => {
                     <p className="text-gray-400">Manage notices, blogs, users, and gallery highlights</p>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
-                                <FileText className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Total Forms</p>
-                                <p className="text-2xl font-bold text-white">{stats.totalForms}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                                <BarChart3 className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Total Submissions</p>
-                                <p className="text-2xl font-bold text-white">{stats.totalSubmissions}</p>
-                            </div>
-                        </div>
-                    </div>
-
+                {/* Stats Cards - Updated */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="card">
                         <div className="flex items-center">
                             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                                 <Users className="text-white" size={24} />
                             </div>
                             <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Active Users</p>
-                                <p className="text-2xl font-bold text-white">{stats.activeUsers}</p>
+                                <p className="text-gray-400 text-sm">Total Users</p>
+                                <p className="text-2xl font-bold text-white">{stats.totalUsers}</p>
                             </div>
                         </div>
                     </div>
-
                     <div className="card">
                         <div className="flex items-center">
-                            <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                                <Calendar className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">This Month</p>
-                                <p className="text-2xl font-bold text-white">{stats.thisMonth}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
+                            <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
                                 <Users className="text-white" size={24} />
                             </div>
                             <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Total Users</p>
-                                <p className="text-2xl font-bold text-white">{userCount}</p>
+                                <p className="text-gray-400 text-sm">Total Core Team</p>
+                                <p className="text-2xl font-bold text-white">{stats.totalCore}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
+                                <BarChart3 className="text-white" size={24} />
+                            </div>
+                            <div className="ml-4">
+                                <p className="text-gray-400 text-sm">Hiring Requests</p>
+                                <p className="text-2xl font-bold text-white">{stats.totalHiringRequests}</p>
                             </div>
                         </div>
                     </div>

@@ -35,6 +35,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [stats, setStats] = useState({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
+    const [userCount, setUserCount] = useState(0);
     useEffect(() => {
         (async () => {
             try {

@@ -147,16 +147,9 @@ const AdminHiringRequests = () => {
             <thead>
               <tr>
                 <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Phone</th>
                 <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Course</th>
-                <th className="px-4 py-2">Sem/Year</th>
                 <th className="px-4 py-2">Position</th>
-                <th className="px-4 py-2">About</th>
-                <th className="px-4 py-2">CV</th>
-                <th className="px-4 py-2">Submitted</th>
                 <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Notes</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -167,21 +160,8 @@ const AdminHiringRequests = () => {
                 requests.map((req) => (
                   <tr key={req.id} className="border-b border-gray-700">
                     <td className="px-4 py-2">{req.name}</td>
-                    <td className="px-4 py-2">{req.phone}</td>
                     <td className="px-4 py-2">{req.email}</td>
-                    <td className="px-4 py-2">{req.course}</td>
-                    <td className="px-4 py-2">{req.sem_year || req.semYear}</td>
                     <td className="px-4 py-2">{req.position}</td>
-                    <td className="px-4 py-2 max-w-[120px] truncate">
-                      {req.about?.length > 40 ? (
-                        <>
-                          {req.about.slice(0, 40)}...{' '}
-                          <button className="text-blue-400 underline text-xs" onClick={() => openModal(req)}>View</button>
-                        </>
-                      ) : req.about}
-                    </td>
-                    <td className="px-4 py-2"><a href={req.cv_link || req.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">CV</a></td>
-                    <td className="px-4 py-2">{req.submitted_at ? new Date(req.submitted_at).toLocaleString() : ''}</td>
                     <td className="px-4 py-2">
                       <select
                         value={req.status || 'pending'}
@@ -194,27 +174,14 @@ const AdminHiringRequests = () => {
                         ))}
                       </select>
                     </td>
-                    <td className="px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="text"
-                          value={editingNotes[req.id] !== undefined ? editingNotes[req.id] : (req.notes || '')}
-                          onChange={e => handleNotesInputChange(req.id, e.target.value)}
-                          disabled={savingNotesId === req.id}
-                          placeholder={req.notes || 'Add notes...'}
-                          className="rounded bg-gray-800 border border-gray-700 text-primary-100 px-2 py-1 w-32 focus:ring-primary-500"
-                          title={req.notes || 'No previous notes'}
-                        />
-                        <button
-                          onClick={() => handleNotesSave(req.id)}
-                          disabled={savingNotesId === req.id || (editingNotes[req.id] === req.notes)}
-                          className="bg-primary-600 hover:bg-primary-700 text-white px-2 py-1 rounded text-xs font-semibold disabled:opacity-60"
-                        >
-                          {savingNotesId === req.id ? 'Saving...' : 'Save'}
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-2 flex gap-2">
+                      <button
+                        className="text-blue-400 underline text-xs"
+                        onClick={() => openModal(req)}
+                        title="View Details"
+                      >
+                        View
+                      </button>
                       <button
                         onClick={() => handleDelete(req.id)}
                         disabled={deletingId === req.id}

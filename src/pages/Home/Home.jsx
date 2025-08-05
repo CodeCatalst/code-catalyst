@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Star } from 'lucide-react';
 import api from '../../services/api';
+import { getGallery } from '../../services/gallery';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const Home = () => {
@@ -94,8 +95,27 @@ const Home = () => {
   }, [particles]);
 
   useEffect(() => {
-    // Remove mock data. You should fetch real data here.
-    setLoading(false);
+    // Fetch latest events, notices, and blogs
+    async function fetchLatestContent() {
+      setLoading(true);
+      try {
+        const [galleryEvents, noticesRes, blogsRes] = await Promise.all([
+          getGallery(),
+          api.get('/notices'),
+          api.get('/blogs'),
+        ]);
+        console.log('Gallery Events API response:', galleryEvents);
+        setLatestContent({
+          events: galleryEvents.slice(0, 3),
+          notices: noticesRes.data.slice(0, 3),
+          blogs: blogsRes.data.slice(0, 3),
+        });
+      } catch (err) {
+        setLatestContent({ events: [], notices: [], blogs: [] });
+      }
+      setLoading(false);
+    }
+    fetchLatestContent();
   }, []);
 
   useEffect(() => {
@@ -299,13 +319,16 @@ const Home = () => {
               <div className="space-y-4">
                 {latestContent?.events?.map((event) => (
                   <div key={event.id} className="card hover:scale-105 transition-transform">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                    <h4 className="font-semibold text-white mb-2">{event.title}</h4>
-                    <p className="text-gray-300 text-sm">{new Date(event.date).toLocaleDateString()}</p>
+                    {event.image && (
+                      <img
+                        src={event.image}
+                        alt={event.title || event.name}
+                        className="w-full h-40 object-cover rounded-lg mb-4"
+                      />
+                    )}
+                    <h4 className="font-semibold text-white mb-2">{event.title || event.name}</h4>
+                    <p className="text-gray-300 text-sm mb-2">{event.description}</p>
+                    <p className="text-gray-400 text-xs">{event.date ? new Date(event.date).toLocaleDateString() : ''}</p>
                   </div>
                 ))}
               </div>
@@ -325,7 +348,13 @@ const Home = () => {
               </div>
 
               <div className="space-y-4">
-                {/* Notices removed as requested */}
+                {latestContent?.notices?.map((notice) => (
+                  <div key={notice.id} className="card hover:scale-105 transition-transform">
+                    <h4 className="font-semibold text-white mb-1">{notice.title}</h4>
+                    <p className="text-gray-300 text-sm mb-1">{notice.description}</p>
+                    <p className="text-gray-400 text-xs">{new Date(notice.created_at).toLocaleDateString()}</p>
+                  </div>
+                ))}
               </div>
 
               <Link to="/notices" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
@@ -343,7 +372,20 @@ const Home = () => {
               </div>
 
               <div className="space-y-4">
-                {/* Blogs removed as requested */}
+                {latestContent?.blogs?.map((blog) => (
+                  <div key={blog.id} className="card hover:scale-105 transition-transform">
+                    {blog.thumbnail && (
+                      <img
+                        src={blog.thumbnail}
+                        alt={blog.title}
+                        className="w-full h-40 object-cover rounded-lg mb-2"
+                      />
+                    )}
+                    <h4 className="font-semibold text-white mb-1">{blog.title}</h4>
+                    <p className="text-gray-300 text-sm mb-1">{blog.author}</p>
+                    <p className="text-gray-400 text-xs">{new Date(blog.date || blog.created_at).toLocaleDateString()}</p>
+                  </div>
+                ))}
               </div>
 
               <Link to="/blog" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">

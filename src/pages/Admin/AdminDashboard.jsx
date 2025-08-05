@@ -29,6 +29,7 @@ import CoreTeamFeedbackResponses from "../../components/Admin/CoreTeamFeedbackRe
 import AdminContactMessages from '../../components/Admin/AdminContactMessages';
 import AdminHiringRequests from '../../components/Admin/AdminHiringRequests';
 import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper';
+import AdminAccessWrapper from '../../components/Admin/AdminAccessWrapper';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -92,51 +93,55 @@ const AdminDashboard = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'notices':
-                // Only allow admins
-                if (!user || user.role !== 'admin') {
-                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
-                }
-                else{
-                return <AdminNoticesManager />
-                }
+                return (
+                  <AdminAccessWrapper permission="notices_management">
+                    <AdminNoticesManager />
+                  </AdminAccessWrapper>
+                );
             case 'blogs':
-                // Only allow admins
-                if (!user || user.role !== 'admin') {
-                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
-                }
-                else{
-                return <AdminBlogsManager />
-                }
+                return (
+                  <AdminAccessWrapper permission="blogs_management">
+                    <AdminBlogsManager />
+                  </AdminAccessWrapper>
+                );
             case 'users':
-                // Only allow admins
-                if (!user || user.role !== 'admin') {
-                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
-                }
-                else{
-                return <UserManagement onUserCountUpdate={handleUserCountUpdate} />
-                }
+                return (
+                  <AdminAccessWrapper permission="user_management">
+                    <UserManagement onUserCountUpdate={handleUserCountUpdate} />
+                  </AdminAccessWrapper>
+                );
             case 'CoreTeamFeedback':
-                return <CoreTeamFeedback />
+                return (
+                  <AdminAccessWrapper permission="core_team_feedback">
+                    <CoreTeamFeedback />
+                  </AdminAccessWrapper>
+                );
             case 'gallery':
-                return <AdminGalleryManager />
+                return (
+                  <AdminAccessWrapper permission="gallery_management">
+                    <AdminGalleryManager />
+                  </AdminAccessWrapper>
+                );
             case 'CoreTeamFeedbackResponses':
-                // Only allow admins
-                if (!user || user.role !== 'admin') {
-                    return <div className="text-red-500 p-4">Access denied. Only admins can view feedback responses.</div>;
-                }
-                else{
-                    return <CoreTeamFeedbackResponses />
-                }
+                return (
+                  <AdminAccessWrapper permission="core_team_feedback_responses">
+                    <CoreTeamFeedbackResponses />
+                  </AdminAccessWrapper>
+                );
             case 'contact':
-                return <AdminContactMessages />
+                return (
+                  <AdminAccessWrapper permission="contact_messages">
+                    <AdminContactMessages />
+                  </AdminAccessWrapper>
+                );
             case 'hiring':
-                if (user && (user.role === 'HR Lead' || user.role === 'admin' || (Array.isArray(user.roles) && (user.roles.includes('HR Lead') || user.roles.includes('admin'))))) {
-                    return <AdminHiringRequests />
-                } else {
-                    return <div className="text-red-500 p-4">Access denied. Only HR Lead or Admin can view hiring requests.</div>;
-                }
+                return (
+                  <AdminAccessWrapper permission="hiring_requests">
+                    <AdminHiringRequests />
+                  </AdminAccessWrapper>
+                );
             default:
-                return null
+                return null;
         }
     }
 

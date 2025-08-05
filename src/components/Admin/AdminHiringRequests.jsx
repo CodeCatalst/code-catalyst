@@ -176,10 +176,11 @@ const AdminHiringRequests = () => {
                     </td>
                     <td className="px-4 py-2 flex gap-2">
                       <button
-                        className="text-blue-400 underline text-xs"
+                        className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         onClick={() => openModal(req)}
                         title="View Details"
                       >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         View
                       </button>
                       <button
@@ -200,18 +201,26 @@ const AdminHiringRequests = () => {
       {/* Modal for full details */}
       {modalRequest && (
         <Modal onClose={closeModal}>
-          <div className="p-4 max-w-lg">
-            <h3 className="text-xl font-bold mb-2">{modalRequest.name} - {modalRequest.position}</h3>
-            <div className="mb-2"><b>Email:</b> {modalRequest.email}</div>
-            <div className="mb-2"><b>Phone:</b> {modalRequest.phone}</div>
-            <div className="mb-2"><b>Course:</b> {modalRequest.course}</div>
-            <div className="mb-2"><b>Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
-            <div className="mb-2"><b>About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1">{modalRequest.about}</pre></div>
-            <div className="mb-2"><b>CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
-            <div className="mb-2"><b>Status:</b> {modalRequest.status || 'pending'}</div>
-            <div className="mb-2"><b>Notes:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1">{modalRequest.notes}</pre></div>
-            <div className="mb-2"><b>Submitted:</b> {modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</div>
-            <button onClick={closeModal} className="mt-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Close</button>
+          <div className="max-w-lg">
+            <h3 className="text-2xl font-bold mb-4 text-blue-700 border-b border-gray-200 pb-2">{modalRequest.name} <span className="text-base font-medium text-gray-500">({modalRequest.position})</span></h3>
+            <div className="space-y-3">
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Email:</span> <span className="text-gray-900">{modalRequest.email}</span></div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Phone:</span> <span className="text-gray-900">{modalRequest.phone}</span></div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Course:</span> <span className="text-gray-900">{modalRequest.course}</span></div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Sem/Year:</span> <span className="text-gray-900">{modalRequest.sem_year || modalRequest.semYear}</span></div>
+              <div>
+                <div className="font-semibold text-gray-600 mb-1">About:</div>
+                <div className="bg-gray-50 border border-gray-200 rounded p-3 text-gray-800 whitespace-pre-wrap text-sm max-h-40 overflow-auto">{modalRequest.about}</div>
+              </div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">CV:</span> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">View CV</a></div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Status:</span> <span className="text-gray-900 capitalize">{modalRequest.status || 'pending'}</span></div>
+              <div>
+                <div className="font-semibold text-gray-600 mb-1">Notes:</div>
+                <div className="bg-gray-50 border border-gray-200 rounded p-3 text-gray-800 whitespace-pre-wrap text-sm max-h-32 overflow-auto">{modalRequest.notes}</div>
+              </div>
+              <div className="flex items-center"><span className="w-28 font-semibold text-gray-600">Submitted:</span> <span className="text-gray-900">{modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</span></div>
+            </div>
+            <button onClick={closeModal} className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow transition-colors duration-150">Close</button>
           </div>
         </Modal>
       )}

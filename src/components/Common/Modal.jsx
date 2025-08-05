@@ -1,11 +1,11 @@
 import React from 'react';
 
 const Modal = ({ children, onClose }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 animate-fadeIn">
-    <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-lg w-full mx-4 p-0 overflow-hidden animate-modalPop">
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300 animate-fadeIn">
+    <div className="relative bg-white rounded-xl shadow-2xl border border-gray-200 max-w-lg w-full mx-4 p-0 overflow-hidden animate-modalPop">
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-primary-500 transition-colors duration-200 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-primary-400 rounded-full bg-gray-100 dark:bg-gray-800 p-1 shadow hover:shadow-md"
+        className="absolute top-4 right-4 text-gray-500 hover:text-blue-600 transition-colors duration-200 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-full bg-white p-1 shadow hover:shadow-md"
         aria-label="Close"
         tabIndex={0}
       >
@@ -13,7 +13,7 @@ const Modal = ({ children, onClose }) => (
           <path d="M6 6L14 14M6 14L14 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
       </button>
-      <div className="p-8 sm:p-10 bg-white dark:bg-gray-900">
+      <div className="p-8 sm:p-10 bg-white">
         {children}
       </div>
     </div>

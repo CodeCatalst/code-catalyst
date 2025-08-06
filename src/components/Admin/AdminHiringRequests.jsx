@@ -156,6 +156,7 @@ const AdminHiringRequests = () => {
                 <th className="px-4 py-2">CV</th>
                 <th className="px-4 py-2">Submitted</th>
                 <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Notes</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -201,7 +202,7 @@ const AdminHiringRequests = () => {
                           onChange={e => handleNotesInputChange(req.id, e.target.value)}
                           disabled={savingNotesId === req.id}
                           placeholder={req.notes || 'Add notes...'}
-                          className="rounded bg-gray-800 border border-gray-700 text-primary-100 px-2 py-1 w-32 focus:ring-primary-500"
+                          className="rounded bg-gray-800 border border-gray-700 text-primary-100 px-2 py-1 w-36 focus:ring-primary-500"
                           title={req.notes || 'No previous notes'}
                         />
                         <button
@@ -213,7 +214,15 @@ const AdminHiringRequests = () => {
                         </button>
                       </div>
                     </td>
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-2 flex gap-2">
+                      <button
+                        className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        onClick={() => openModal(req)}
+                        title="View Details"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        View
+                      </button>
                       <button
                         onClick={() => handleDelete(req.id)}
                         disabled={deletingId === req.id}

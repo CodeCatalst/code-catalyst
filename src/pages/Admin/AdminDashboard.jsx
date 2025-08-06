@@ -78,8 +78,8 @@ const AdminDashboard = () => {
         { id: 'blogs', label: 'Manage Blogs' },
         // { id: 'users', label: 'Manage Users' },
         { id: 'gallery', label: 'Manage Gallery' },
-        { id: 'CoreTeamFeedback', label: 'Feedback Form' },
-        { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
+        // { id: 'CoreTeamFeedback', label: 'Feedback Form' },
+        // { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
         { id: 'contact', label: 'Contact Messages' },
         { id: 'hiring', label: 'Hiring Requests' },
     ];

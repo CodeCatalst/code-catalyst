@@ -74,9 +74,9 @@ const AdminDashboard = () => {
 
     // Show all tabs to every member (no access filtering)
     const tabs = [
-        { id: 'notices', label: 'Manage Notice' },
+        // { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
-        { id: 'users', label: 'Manage Users' },
+        // { id: 'users', label: 'Manage Users' },
         { id: 'gallery', label: 'Manage Gallery' },
         { id: 'CoreTeamFeedback', label: 'Feedback Form' },
         { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },

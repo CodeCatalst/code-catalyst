@@ -161,10 +161,7 @@ const Gallery = () => {
                       <Calendar size={16} />
                       <span>{formatDate(event.date)}</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <Users size={16} />
-                      <span>{event.attendees} attendees</span>
-                    </div>
+                    
                   </div>
                 </div>
               </div>

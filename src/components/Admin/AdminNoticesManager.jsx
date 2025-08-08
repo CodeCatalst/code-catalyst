@@ -1,326 +1,365 @@
-import React, { useState,useEffect } from 'react'
-import { Plus, Edit, Trash2, Eye } from 'lucide-react'
-import FormBuilder from './FormBuilder';
-import { getNotices, createNotice, updateNotice, deleteNotice } from '../../services/notices'
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import AdminAccessWrapper from './AdminAccessWrapper';
+import React, { useState, useEffect } from 'react';
+import {
+  getNotices,
+  createNotice,
+  updateNotice,
+  deleteNotice
+} from '../../services/notices';
 
-const AdminNoticesManager = () => {
-    const [notices, setNotices] = useState([])
-    const [showForm, setShowForm] = useState(false)
-    const [editNotice, setEditNotice] = useState(null)
-    const [showSubmissions, setShowSubmissions] = useState(null)
-    const [showFormBuilder, setShowFormBuilder] = useState(false)
-    const [customForm, setCustomForm] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [message, setMessage] = useState(null)
-    // Removed unused images state
+const AdminNoticeManager = () => {
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingNotice, setEditingNotice] = useState(null);
+  const [newTag, setNewTag] = useState('');
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    image: null,
+    images: [],
+    tags: [],
+    isHidden: false
+  });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-    useEffect(() => {
-        fetchNotices()
-    }, [])
+  useEffect(() => {
+    fetchNotices();
+  }, []);
 
-    const fetchNotices = async () => {
-        setLoading(true)
-        try {
-            const data = await getNotices()
-            // Ensure all notices have submissions and form fields
-            const safeData = (Array.isArray(data) ? data : []).map(n => ({
-                ...n,
-                submissions: Array.isArray(n.submissions) ? n.submissions : [],
-                form: n.form || null
-            }))
-            setNotices(safeData)
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to load notices' })
-        } finally {
-            setLoading(false)
-        }
+  const fetchNotices = async () => {
+    try {
+      setLoading(true);
+      const response = await getNotices();
+      if (Array.isArray(response)) {
+        setNotices(response);
+      } else if (response && Array.isArray(response.data)) {
+        setNotices(response.data);
+      } else {
+        setNotices([]);
+      }
+    } catch (err) {
+      setError('Failed to fetch notices');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Handlers
-    const handleAdd = () => {
-        setEditNotice(null)
-        setShowForm(true)
-    }
-    const handleEdit = (notice) => {
-        setEditNotice(notice)
-        setShowForm(true)
-        setCustomForm(notice.form)
-    }
-    const handleDelete = async (id) => {
-        try {
-            await deleteNotice(id)
-            setNotices(notices.filter(n => n.id !== id))
-            setMessage({ type: 'success', text: 'Notice deleted' })
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to delete notice' })
-        }
-    }
-    const handleFormSubmit = async (e) => {
-        e.preventDefault()
-        const formEl = e.target
-        // Handle images
-        const imageFiles = formEl.images?.files;
-        let imageArr = [];
-        if (imageFiles && imageFiles.length > 0) {
-            imageArr = await Promise.all(Array.from(imageFiles).map(file => {
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(file);
-                });
-            }));
-        }
-        // Defensive: ensure form is a valid object if attached
-        const newNotice = {
-            title: formEl.title.value,
-            type: formEl.type.value,
-            hasForm: formEl.hasForm.checked,
-            description: formEl.description.value,
-            submissions: editNotice && Array.isArray(editNotice.submissions) ? editNotice.submissions : [],
-            form: formEl.hasForm.checked && customForm ? customForm : null,
-            images: imageArr
-        };
-        try {
-            if (editNotice) {
-                const updated = await updateNotice(editNotice.id, newNotice)
-                setNotices(notices.map(n => n.id === editNotice.id ? {
-                    ...updated,
-                    submissions: Array.isArray(updated.submissions) ? updated.submissions : [],
-                    form: updated.form || null
-                } : n))
-                setMessage({ type: 'success', text: 'Notice updated' })
-            } else {
-                const created = await createNotice(newNotice)
-                setNotices([...notices, {
-                    ...created,
-                    submissions: Array.isArray(created.submissions) ? created.submissions : [],
-                    form: created.form || null
-                }])
-                setMessage({ type: 'success', text: 'Notice added' })
-            }
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to save notice' })
-        }
-        setShowForm(false)
-        setEditNotice(null)
-        setCustomForm(null)
-        setShowFormBuilder(false)
-    }
-    const exportToPDF = (notice) => {
-        const doc = new jsPDF()
-        doc.setFontSize(18)
-        doc.text(`Submissions for: ${notice.title}`, 14, 22)
-        doc.setFontSize(12)
-        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 32)
-        const tableData = (notice.submissions || []).map((sub, idx) => [
-            idx + 1,
-            sub.name,
-            sub.email,
-            ...Object.values(sub.answers || {})
-        ])
-        const head = [
-            ['#', 'Name', 'Email', ...(notice.form?.fields?.map(f => f.label) || [])]
-        ]
-        autoTable(doc, {
-            startY: 40,
-            head,
-            body: tableData,
-            theme: 'grid',
-            headStyles: { fillColor: [59, 130, 246], textColor: 255, fontSize: 10, fontStyle: 'bold' },
-            bodyStyles: { fontSize: 9 },
-            alternateRowStyles: { fillColor: [248, 250, 252] },
-            margin: { top: 10 }
-        })
-        doc.save(`${notice.title.replace(/\s+/g, '_')}_submissions.pdf`)
-    }
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
-    return (
-        <AdminAccessWrapper permission="notices_management">
-            <div className="text-white">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Manage Notice</h2>
-                    <button
-                        className="btn-primary flex items-center gap-2 px-3 py-2 rounded-lg"
-                        onClick={handleAdd}
-                        title="Add Notice"
-                    >
-                        <Plus size={18} />
-                        <span className="hidden sm:inline">Add Notice</span>
-                    </button>
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, image: reader.result, images: [reader.result] }));
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddTag = () => {
+    const tag = newTag.trim();
+    if (tag && !formData.tags.includes(tag)) {
+      setFormData((prev) => ({ ...prev, tags: [...prev.tags, tag] }));
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((tag) => tag !== tagToRemove)
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    try {
+      const noticePayload = {
+        ...formData,
+        images: formData.image ? [formData.image] : [],
+        image: formData.image || '',
+        description: formData.content,
+        publishedAt: editingNotice ? (formData.publishedAt || new Date().toISOString()) : new Date().toISOString(),
+      };
+      if (editingNotice) {
+        await updateNotice(editingNotice.id, noticePayload);
+      } else {
+        await createNotice(noticePayload);
+      }
+      await fetchNotices();
+      resetForm();
+    } catch (err) {
+      setError(editingNotice ? 'Failed to update notice' : 'Failed to create notice');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      content: '',
+      image: null,
+      images: [],
+      tags: [],
+      isHidden: false
+    });
+    setEditingNotice(null);
+    setShowForm(false);
+    setNewTag('');
+    setImagePreview(null);
+  };
+
+  const handleEdit = (notice) => {
+    setFormData({
+      title: notice.title,
+      content: notice.content || notice.description || '',
+      image: notice.image || (Array.isArray(notice.images) ? notice.images[0] : null),
+      images: Array.isArray(notice.images) ? notice.images : (notice.image ? [notice.image] : []),
+      tags: notice.tags || [],
+      isHidden: notice.isHidden,
+      publishedAt: notice.publishedAt
+    });
+    setImagePreview(notice.image || (Array.isArray(notice.images) ? notice.images[0] : null));
+    setEditingNotice(notice);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this notice?')) {
+      try {
+        await deleteNotice(id);
+        await fetchNotices();
+      } catch (err) {
+        setError('Failed to delete notice');
+      }
+    }
+  };
+
+  const handleToggleVisibility = async (id, currentStatus) => {
+    try {
+      await updateNotice(id, { isHidden: !currentStatus });
+      await fetchNotices();
+    } catch (err) {
+      setError('Failed to update notice visibility');
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  return (
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-2xl">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-blue-700">Notice Management</h1>
+        <button
+          className={`px-5 py-2 rounded-lg font-semibold shadow transition bg-blue-600 text-white hover:bg-blue-700 ${showForm ? 'ring-2 ring-blue-400' : ''}`}
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? 'Cancel' : 'Create New Notice'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleSubmit} className="bg-gray-50 rounded-xl p-6 mb-8 shadow flex flex-col gap-6">
+          <h2 className="text-xl font-semibold text-blue-600 mb-2">{editingNotice ? 'Edit Notice' : 'Create New Notice'}</h2>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 flex flex-col gap-4">
+              <div>
+                <label className="block font-medium mb-1">Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
+                  maxLength={100}
+                  placeholder="Notice title"
+                />
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Content</label>
+                <textarea
+                  name="content"
+                  value={formData.content}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400 min-h-[80px]"
+                  maxLength={1000}
+                  placeholder="Notice content"
+                />
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Tags</label>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    placeholder="Add a custom tag"
+                    className="rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
+                    maxLength={20}
+                    onKeyDown={e => (e.key === 'Enter' ? (e.preventDefault(), handleAddTag()) : null)}
+                  />
+                  <button type="button" className="px-3 py-2 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200" onClick={handleAddTag}>
+                    Add
+                  </button>
                 </div>
-                <table className="w-full bg-gray-900 rounded-lg mb-6">
-                    <thead>
-                        <tr className="border-b border-gray-700">
-                            <th className="py-2 px-4 text-left">Title</th>
-                            <th className="py-2 px-4 text-left">Type</th>
-                            <th className="py-2 px-4 text-left">Has Form</th>
-                            <th className="py-2 px-4 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {notices.length === 0 ? (
-                            <tr>
-                                <td colSpan="4" className="text-center py-8 text-gray-400 font-semibold">
-                                    No notices have been posted yet. Start by adding a new notice to keep everyone informed!
-                                </td>
-                            </tr>
-                        ) : (
-                            notices.map(notice => (
-                                <tr key={notice.id} className="border-b border-gray-800">
-                                    <td className="py-2 px-4">
-                                        {notice.title}
-                                        {Array.isArray(notice.images) && notice.images.length > 0 && (
-                                            <div className="flex gap-2 mt-2">
-                                                {notice.images.map((img, idx) => (
-                                                    <img key={idx} src={img} alt="Notice" className="h-10 w-10 object-cover rounded" />
-                                                ))}
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4">{notice.type}</td>
-                                    <td className="py-2 px-4">{notice.hasForm ? 'Yes' : 'No'}</td>
-                                    <td className="py-2 px-4 flex gap-2">
-                                        <button
-                                            className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
-                                            onClick={() => handleEdit(notice)}
-                                            title="Edit Notice"
-                                        >
-                                            <Edit size={16} />
-                                        </button>
-                                        <button
-                                            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-900 rounded"
-                                            onClick={() => handleDelete(notice.id)}
-                                            title="Delete Notice"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                        {notice.hasForm && (
-                                            <button
-                                                className="p-2 text-green-400 hover:text-green-300 hover:bg-green-900 rounded"
-                                                onClick={() => setShowSubmissions(notice)}
-                                                title="View Submissions"
-                                            >
-                                                <Eye size={16} />
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-                {/* Add/Edit Notice Modal */}
-                {showForm && (
-                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-                        <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handleFormSubmit}>
-                            <h3 className="text-xl font-bold mb-4">{editNotice ? 'Edit Notice' : 'Add Notice'}</h3>
-                            <div className="mb-3">
-                                <label className="block mb-1">Title</label>
-                                <input name="title" defaultValue={editNotice?.title || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Type</label>
-                                <input name="type" defaultValue={editNotice?.type || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Images</label>
-                                <input name="images" type="file" accept="image/*" multiple className="w-full p-2 rounded bg-gray-900 text-white" onChange={e => {
-                                    const files = e.target.files;
-                                    const preview = document.getElementById('image-preview');
-                                    if (preview) preview.innerHTML = '';
-                                    if (files && files.length > 0) {
-                                        Array.from(files).forEach(file => {
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => {
-                                                const img = document.createElement('img');
-                                                img.src = reader.result;
-                                                img.className = 'h-10 w-10 object-cover rounded';
-                                                if (preview) preview.appendChild(img);
-                                            };
-                                            reader.readAsDataURL(file);
-                                        });
-                                    }
-                                }} />
-                                {/* Preview selected images */}
-                                <div id="image-preview" className="flex gap-2 mt-2"></div>
-                            </div>
-                            <div className="mb-3">
-                                <label className="inline-flex items-center">
-                                    <input type="checkbox" name="hasForm" defaultChecked={editNotice?.hasForm || false} className="mr-2"
-                                        onChange={e => setShowFormBuilder(e.target.checked)}
-                                    />
-                                    Attach Form
-                                </label>
-                            </div>
-                            {showFormBuilder && (
-                                <div className="mb-3">
-                                    <FormBuilder
-                                        onClose={() => setShowFormBuilder(false)}
-                                        onSave={form => { setCustomForm(form); setShowFormBuilder(false); }}
-                                        initialForm={customForm}
-                                    />
-                                    {customForm && (
-                                        <div className="mt-2 text-green-400">Form attached!</div>
-                                    )}
-                                </div>
-                            )}
-                            <div className="mb-3">
-                                <label className="block mb-1">Description</label>
-                                <textarea name="description" defaultValue={editNotice?.description || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="flex gap-2 justify-end">
-                                <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                )}
-                {/* Submissions Modal */}
-                {showSubmissions && (
-                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-                        <div className="bg-gray-800 p-6 rounded-lg w-full max-w-2xl">
-                            <h3 className="text-xl font-bold mb-4">Submissions for: {showSubmissions.title}</h3>
-                            {showSubmissions.submissions.length === 0 ? (
-                                <div className="text-gray-400">No submissions yet.</div>
-                            ) : (
-                                <table className="w-full bg-gray-900 rounded-lg mb-4">
-                                    <thead>
-                                        <tr className="border-b border-gray-700">
-                                            <th className="py-2 px-4 text-left">Name</th>
-                                            <th className="py-2 px-4 text-left">Email</th>
-                                            <th className="py-2 px-4 text-left">Answers</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {showSubmissions.submissions.map((sub, idx) => (
-                                            <tr key={sub.id || idx} className="border-b border-gray-800">
-                                                <td className="py-2 px-4">{sub.name}</td>
-                                                <td className="py-2 px-4">{sub.email}</td>
-                                                <td className="py-2 px-4">
-                                                    <pre className="bg-gray-950 p-2 rounded text-xs whitespace-pre-wrap">{JSON.stringify(sub.answers, null, 2)}</pre>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
-                            <div className="flex justify-end gap-2">
-                                <button className="btn-secondary" onClick={() => setShowSubmissions(null)}>Close</button>
-                                {showSubmissions.submissions.length > 0 && (
-                                    <button className="btn-primary" onClick={() => exportToPDF(showSubmissions)}>
-                                        Export as PDF
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <div className="flex flex-wrap gap-2">
+                  {formData.tags.map(tag => (
+                    <span key={tag} className="inline-flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-medium">
+                      {tag}
+                      <button type="button" className="ml-2 text-blue-500 hover:text-red-500" onClick={() => handleRemoveTag(tag)}>
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-2">
+                <input
+                  type="checkbox"
+                  name="isHidden"
+                  checked={formData.isHidden}
+                  onChange={handleInputChange}
+                  className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-400"
+                />
+                <label className="font-medium">Hide this notice</label>
+              </div>
             </div>
-        </AdminAccessWrapper>
-    )
-}
+            <div className="flex flex-col gap-2 min-w-[180px]">
+              <label className="block font-medium mb-1">Attach Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
+              />
+              {imagePreview && (
+                <div className="relative mt-2 w-28 h-28 rounded-lg overflow-hidden shadow border border-gray-200">
+                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  <button type="button" className="absolute top-1 right-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, image: null, images: [] })); setImagePreview(null); }}>
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-4 mt-2">
+            <button type="submit" className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" disabled={submitting}>
+              {submitting ? 'Saving...' : editingNotice ? 'Update Notice' : 'Create Notice'}
+            </button>
+            <button type="button" onClick={resetForm} className="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold shadow hover:bg-gray-300 transition">
+              Cancel
+            </button>
+          </div>
+          {error && <div className="text-red-600 font-semibold mt-2">{error}</div>}
+        </form>
+      )}
 
-export default AdminNoticesManager
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-blue-700 mb-4">Published Notices</h2>
+        {loading ? (
+          <div className="text-blue-600 font-semibold">Loading notices...</div>
+        ) : notices.length === 0 ? (
+          <p className="text-gray-500">No notices found</p>
+        ) : (
+          <div className="overflow-x-auto rounded-xl shadow">
+            <table className="min-w-full bg-white rounded-xl">
+              <thead>
+                <tr className="bg-blue-50 text-blue-700">
+                  <th className="py-3 px-4 text-left font-semibold">Title</th>
+                  <th className="py-3 px-4 text-left font-semibold">Content</th>
+                  <th className="py-3 px-4 text-left font-semibold">Image</th>
+                  <th className="py-3 px-4 text-left font-semibold">Published</th>
+                  <th className="py-3 px-4 text-left font-semibold">Tags</th>
+                  <th className="py-3 px-4 text-left font-semibold">Status</th>
+                  <th className="py-3 px-4 text-left font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(notices) ? notices : []).map((notice) => {
+                  const content = typeof notice.content === 'string' ? notice.content : (notice.description || '');
+                  const tags = Array.isArray(notice.tags) ? notice.tags : [];
+                  const imageSrc = notice.image || (Array.isArray(notice.images) ? notice.images[0] : null);
+                  return (
+                    <tr key={notice.id} className={notice.isHidden ? 'bg-gray-100 text-gray-400' : ''}>
+                      <td className="py-3 px-4 font-medium max-w-[180px] truncate" title={notice.title}>{notice.title}</td>
+                      <td className="py-3 px-4 max-w-[260px] truncate" title={content}>{content.length > 100 ? content.substring(0, 100) + '...' : content}</td>
+                      <td className="py-3 px-4">
+                        {imageSrc ? (
+                          <img src={imageSrc} alt="Notice" className="w-14 h-14 object-cover rounded shadow border border-gray-200" />
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-sm">{formatDate(notice.publishedAt)}</td>
+                      <td className="py-3 px-4">
+                        {tags.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {tags.map((tag) => (
+                              <span key={tag} className="inline-block bg-blue-100 text-blue-700 rounded-full px-2 py-1 text-xs font-medium mr-1 mb-1">{tag}</span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">No tags</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${notice.isHidden ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
+                          {notice.isHidden ? 'Hidden' : 'Visible'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleToggleVisibility(notice.id, notice.isHidden)}
+                            className="px-3 py-1 rounded bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition text-xs"
+                            title={notice.isHidden ? 'Unhide' : 'Hide'}
+                          >
+                            {notice.isHidden ? 'Show' : 'Hide'}
+                          </button>
+                          <button
+                            onClick={() => handleEdit(notice)}
+                            className="px-3 py-1 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition text-xs"
+                            title="Edit"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(notice.id)}
+                            className="px-3 py-1 rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition text-xs"
+                            title="Delete"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {error && <div className="text-red-600 font-semibold mt-2">{error}</div>}
+      </div>
+    </div>
+  );
+};
+
+export default AdminNoticeManager;

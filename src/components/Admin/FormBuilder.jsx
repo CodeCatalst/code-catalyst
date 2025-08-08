@@ -13,8 +13,8 @@ import {
 } from 'lucide-react'
 import AdminAccessWrapper from './AdminAccessWrapper'
 
-const FormBuilder = ({ onClose }) => {
-    const [formData, setFormData] = useState({
+const FormBuilder = ({ onClose, onSave, initialForm }) => {
+    const [formData, setFormData] = useState(initialForm || {
         title: '',
         description: '',
         startDate: '',
@@ -105,8 +105,7 @@ const FormBuilder = ({ onClose }) => {
     }
 
     const handleSave = () => {
-        // Here you would typically save to your backend
-        console.log('Saving form:', formData)
+        if (onSave) onSave(formData)
         onClose()
     }
 

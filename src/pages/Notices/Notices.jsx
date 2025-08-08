@@ -22,7 +22,6 @@ const Notices = () => {
         y: (e.clientY / window.innerHeight) * 100
       })
     }
-
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
@@ -31,35 +30,8 @@ const Notices = () => {
     const fetchNotices = async () => {
       try {
         const response = await api.get('/notices')
-        // Defensive: parse backend notices and map fields for frontend
-        const backendNotices = Array.isArray(response.data) ? response.data : [];
-        // Minimal mapping: just get title and description from backend
-        const mapped = backendNotices.map(n => {
-          let content = {};
-          try {
-            content = typeof n.content === 'string' ? JSON.parse(n.content) : (n.content || {});
-          } catch (e) {
-            content = {};
-          }
-          // Defensive: images and form
-          let imagesArr = Array.isArray(n.images) ? n.images : [];
-          if (typeof n.images === 'string') {
-            try { imagesArr = JSON.parse(n.images); } catch {}
-          }
-          return {
-            id: n.id,
-            title: n.title || content.title || '',
-            type: n.type || content.type || '',
-            description: n.description || content.description || n.content || '',
-            date: n.created_at || n.date || '',
-            images: imagesArr,
-            hasForm: n.hasForm || content.hasForm || false,
-            form: content.form || null
-          };
-        });
-        setNotices(mapped)
+        setNotices(Array.isArray(response.data) ? response.data : [])
       } catch (error) {
-        console.error('Failed to fetch notices:', error)
         setNotices([])
       } finally {
         setLoading(false)
@@ -68,48 +40,14 @@ const Notices = () => {
     fetchNotices()
   }, [])
 
-  const getTypeColor = (type) => {
-    const colors = {
-      'Registration': 'bg-primary-100 text-primary-800',
-      'Workshop': 'bg-secondary-100 text-secondary-800',
-      'Event': 'bg-accent-100 text-accent-800',
-      'Talk': 'bg-purple-100 text-purple-800',
-      'Information': 'bg-gray-100 text-gray-800',
-      'Bootcamp': 'bg-green-100 text-green-800',
-      'Initiative': 'bg-blue-100 text-blue-800',
-      'Partnership': 'bg-yellow-100 text-yellow-800'
-    }
-    return colors[type] || 'bg-gray-100 text-gray-800'
-  }
-
-  const getPriorityIndicator = (priority) => {
-    const colors = {
-      'high': 'border-l-red-500',
-      'medium': 'border-l-yellow-500',
-      'low': 'border-l-green-500'
-    }
-    return colors[priority] || 'border-l-gray-300'
-  }
-
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     })
-  }
-
-  const formatRelativeDate = (dateString) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = now - date
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 0) return 'Today'
-    if (diffDays === 1) return 'Yesterday'
-    if (diffDays < 7) return `${diffDays} days ago`
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-    return `${Math.floor(diffDays / 30)} months ago`
   }
 
   const handleInputChange = (fieldId, value) => {
@@ -139,28 +77,37 @@ const Notices = () => {
     return <LoadingSpinner message="Loading notices..." />
   }
 
+  // Debug: log all notices
+  console.log('All notices from backend:', notices);
+  // Only show notices where hidden is not true
+  const visibleNotices = notices.filter(n => !n.hidden);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-3xl font-bold mb-8">Notices</h1>
-      {notices.length === 0 ? (
+      {visibleNotices.length === 0 ? (
         <div className="text-center py-12 text-gray-400 text-lg font-semibold">
           There are currently no notices available. Please check back soon for updates and announcements!
         </div>
       ) : (
         <div className="space-y-8 max-w-2xl mx-auto">
-          {notices.map((notice) => (
+          {visibleNotices.map((notice) => (
             <div key={notice.id} className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 mb-6 transition-all">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
                 <h2 className="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-1 sm:mb-0 tracking-tight">{notice.title}</h2>
-                {notice.type && (
-                  <span className="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-semibold px-3 py-1 rounded-full ml-0 sm:ml-2 mb-2 sm:mb-0 border border-blue-200 dark:border-blue-700">{notice.type}</span>
+                {notice.tags && notice.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {notice.tags.map(tag => (
+                      <span key={tag} className="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200 dark:border-blue-700">{tag}</span>
+                    ))}
+                  </div>
                 )}
               </div>
               <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400 mb-2 text-sm">
                 <Calendar className="w-4 h-4" />
-                <span>{notice.date && (new Date(notice.date).toLocaleString())}</span>
+                <span>{notice.date && formatDate(notice.date)}</span>
               </div>
-              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line mb-3 text-base leading-relaxed">{notice.description}</p>
+              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line mb-3 text-base leading-relaxed">{notice.content || notice.description}</p>
               {Array.isArray(notice.images) && notice.images.length > 0 && (
                 <div className="flex gap-3 mt-3 flex-wrap">
                   {notice.images.map((img, idx) => (

@@ -173,7 +173,7 @@ const AdminHiringRequests = () => {
                         ))}
                       </select>
                     </td>
-                    <td className="px-4 py-2">{req.submitted_at ? new Date(req.submitted_at).toLocaleString() : ''}</td>
+                    <td className="px-4 py-2">{req.submitted_at ? new Date(req.submitted_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}</td>
                     <td className="px-4 py-2 flex gap-2">
                       <button
                         className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -201,18 +201,38 @@ const AdminHiringRequests = () => {
       {/* Modal for full details */}
       {modalRequest && (
         <Modal onClose={closeModal}>
-          <div className="p-6 max-w-lg bg-gray-900 text-white rounded-2xl shadow-xl border border-gray-700">
-            <h3 className="text-2xl font-bold mb-4 text-blue-300">{modalRequest.name} - {modalRequest.position}</h3>
-            <div className="mb-2"><b className="text-blue-200">Email:</b> {modalRequest.email}</div>
-            <div className="mb-2"><b className="text-blue-200">Phone:</b> {modalRequest.phone}</div>
-            <div className="mb-2"><b className="text-blue-200">Course:</b> {modalRequest.course}</div>
-            <div className="mb-2"><b className="text-blue-200">Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
-            <div className="mb-2"><b className="text-blue-200">About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.about}</pre></div>
-            <div className="mb-2"><b className="text-blue-200">CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
-            <div className="mb-2"><b className="text-blue-200">Status:</b> {modalRequest.status || 'pending'}</div>
-            <div className="mb-2"><b className="text-blue-200">Notes:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.notes}</pre></div>
-            <div className="mb-2"><b className="text-blue-200">Submitted:</b> {modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</div>
-            <button onClick={closeModal} className="mt-4 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded shadow">Close</button>
+          <div className="p-4 max-w-lg w-full bg-gray-900 text-white rounded-2xl shadow-xl border border-gray-700 mx-auto" style={{ background: '#18181b' }}>
+            <h3 className="text-2xl font-bold mb-3 text-blue-300">{modalRequest.name} - {modalRequest.position}</h3>
+            <div className="mb-1"><b className="text-blue-200">Email:</b> {modalRequest.email}</div>
+            <div className="mb-1"><b className="text-blue-200">Phone:</b> {modalRequest.phone}</div>
+            <div className="mb-1"><b className="text-blue-200">Course:</b> {modalRequest.course}</div>
+            <div className="mb-1"><b className="text-blue-200">Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
+            <div className="mb-1"><b className="text-blue-200">About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.about}</pre></div>
+            <div className="mb-1"><b className="text-blue-200">CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
+            <div className="mb-1"><b className="text-blue-200">Status:</b> {modalRequest.status || 'pending'}</div>
+            <div className="mb-1">
+              <b className="text-blue-200">Notes:</b>
+              <div className="flex gap-2 items-start mt-1">
+                <textarea
+                  value={editingNotes[modalRequest.id] !== undefined ? editingNotes[modalRequest.id] : (modalRequest.notes || '')}
+                  onChange={e => handleNotesInputChange(modalRequest.id, e.target.value)}
+                  disabled={savingNotesId === modalRequest.id}
+                  placeholder={modalRequest.notes || 'Add notes...'}
+                  className="rounded bg-gray-800 border border-gray-700 text-white px-2 py-1 w-full min-h-[60px] resize-y focus:ring-blue-500"
+                  style={{ fontFamily: 'inherit', fontSize: '1rem' }}
+                  rows={Math.max(3, (editingNotes[modalRequest.id] || modalRequest.notes || '').split('\n').length)}
+                />
+                <button
+                  onClick={() => handleNotesSave(modalRequest.id)}
+                  disabled={savingNotesId === modalRequest.id || (editingNotes[modalRequest.id] === modalRequest.notes)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold disabled:opacity-60 mt-1"
+                >
+                  {savingNotesId === modalRequest.id ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </div>
+            <div className="mb-1"><b className="text-blue-200">Submitted:</b> {modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</div>
+            <button onClick={closeModal} className="mt-3 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded shadow">Close</button>
           </div>
         </Modal>
       )}

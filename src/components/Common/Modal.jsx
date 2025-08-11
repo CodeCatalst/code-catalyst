@@ -13,7 +13,7 @@ const Modal = ({ children, onClose }) => (
           <path d="M6 6L14 14M6 14L14 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
       </button>
-      <div className="p-8 sm:p-10 bg-white">
+      <div className="p-8 sm:p-10 bg-transparent">
         {children}
       </div>
     </div>

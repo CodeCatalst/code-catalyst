@@ -12,15 +12,16 @@ const AdminNoticeManager = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingNotice, setEditingNotice] = useState(null);
+  const [newTag, setNewTag] = useState('');
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
-    images: '',
+    content: '',
+    image: null,
+    images: [],
     tags: [],
     hidden: false,
   });
   const [imagePreview, setImagePreview] = useState(null);
-  const [newTag, setNewTag] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -31,11 +32,13 @@ const AdminNoticeManager = () => {
     try {
       setLoading(true);
       const response = await getNotices();
-      // Support both array and object with data field
-      const noticesArr = Array.isArray(response)
-        ? response
-        : (response && Array.isArray(response.data) ? response.data : []);
-      setNotices(noticesArr);
+      if (Array.isArray(response)) {
+        setNotices(response);
+      } else if (response && Array.isArray(response.data)) {
+        setNotices(response.data);
+      } else {
+        setNotices([]);
+      }
     } catch (err) {
       setError('Failed to fetch notices');
     } finally {
@@ -45,7 +48,10 @@ const AdminNoticeManager = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -53,7 +59,7 @@ const AdminNoticeManager = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, images: reader.result }));
+        setFormData((prev) => ({ ...prev, image: reader.result, images: [reader.result] }));
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
@@ -69,28 +75,10 @@ const AdminNoticeManager = () => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setFormData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== tagToRemove) }));
-  };
-
-  const parseTags = (tags) => {
-    if (!tags) return [];
-    if (Array.isArray(tags)) return tags;
-    if (typeof tags === 'string') {
-      try {
-        // Try to parse as JSON array
-        const parsed = JSON.parse(tags);
-        if (Array.isArray(parsed)) return parsed;
-        // Otherwise, treat as comma-separated string
-        return tags.split(',').map(t => t.trim()).filter(Boolean);
-      } catch {
-        return tags.split(',').map(t => t.trim()).filter(Boolean);
-      }
-    }
-    if (typeof tags === 'object') {
-      // If tags is an object, get its values
-      return Object.values(tags).map(t => String(t));
-    }
-    return [];
+    setFormData((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((tag) => tag !== tagToRemove)
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -99,17 +87,16 @@ const AdminNoticeManager = () => {
     setError(null);
     try {
       const noticePayload = {
-        title: formData.title,
-        description: formData.description,
-        images: formData.images || '',
-        hidden: !!formData.hidden,
-        tags: parseTags(formData.tags),
+        ...formData,
+        images: formData.image ? [formData.image] : [],
+        image: formData.image || '',
+        description: formData.content,
+        publishedAt: editingNotice ? (formData.publishedAt || new Date().toISOString()) : new Date().toISOString(),
       };
-      let response;
       if (editingNotice) {
-        response = await updateNotice(editingNotice.id, noticePayload);
+        await updateNotice(editingNotice.id, noticePayload);
       } else {
-        response = await createNotice(noticePayload);
+        await createNotice(noticePayload);
       }
       await fetchNotices();
       resetForm();
@@ -121,22 +108,31 @@ const AdminNoticeManager = () => {
   };
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', images: '', tags: [], hidden: false });
+    setFormData({
+      title: '',
+      content: '',
+      image: null,
+      images: [],
+      tags: [],
+      isHidden: false
+    });
     setEditingNotice(null);
     setShowForm(false);
-    setImagePreview(null);
     setNewTag('');
+    setImagePreview(null);
   };
 
   const handleEdit = (notice) => {
     setFormData({
       title: notice.title,
-      description: notice.description || '',
-      images: notice.images || '',
-      tags: parseTags(notice.tags),
-      hidden: !!notice.hidden,
+      content: notice.content || notice.description || '',
+      image: notice.image || (Array.isArray(notice.images) ? notice.images[0] : null),
+      images: Array.isArray(notice.images) ? notice.images : (notice.image ? [notice.image] : []),
+      tags: notice.tags || [],
+      isHidden: notice.isHidden,
+      publishedAt: notice.publishedAt
     });
-    setImagePreview(notice.images || null);
+    setImagePreview(notice.image || (Array.isArray(notice.images) ? notice.images[0] : null));
     setEditingNotice(notice);
     setShowForm(true);
   };
@@ -153,33 +149,24 @@ const AdminNoticeManager = () => {
   };
 
   const handleToggleVisibility = async (id, currentStatus) => {
-    setError(null);
-    setSubmitting(true);
     try {
-      const notice = notices.find(n => n.id === id);
-      if (!notice) throw new Error('Notice not found');
-      const noticePayload = {
-        title: notice.title,
-        content: notice.content,
-        images: notice.images || '',
-        hidden: !currentStatus,
-        tags: parseTags(notice.tags).join(','),
-      };
-      await updateNotice(id, noticePayload);
+      await updateNotice(id, { isHidden: !currentStatus });
       await fetchNotices();
     } catch (err) {
       setError('Failed to update notice visibility');
-    } finally {
-      setSubmitting(false);
     }
   };
 
   const formatDate = (dateString) => {
-    return dateString ? new Date(dateString).toLocaleString() : '';
+    return new Date(dateString).toLocaleString();
   };
 
   return (
+<<<<<<< HEAD
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-gray-900 rounded-2xl shadow-xl border border-gray-800 text-white">
+=======
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-2xl">
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-blue-300">Notice Management</h1>
         <button
@@ -189,13 +176,23 @@ const AdminNoticeManager = () => {
           {showForm ? 'Cancel' : 'Create New Notice'}
         </button>
       </div>
+
       {showForm && (
+<<<<<<< HEAD
         <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6 mb-8 shadow flex flex-col gap-6 border border-gray-700 text-white">
           <h2 className="text-xl font-semibold text-blue-300 mb-2">{editingNotice ? 'Edit Notice' : 'Create New Notice'}</h2>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1 flex flex-col gap-4">
               <div>
                 <label className="block font-medium mb-1 text-blue-300">Title</label>
+=======
+        <form onSubmit={handleSubmit} className="bg-gray-50 rounded-xl p-6 mb-8 shadow flex flex-col gap-6">
+          <h2 className="text-xl font-semibold text-blue-600 mb-2">{editingNotice ? 'Edit Notice' : 'Create New Notice'}</h2>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 flex flex-col gap-4">
+              <div>
+                <label className="block font-medium mb-1">Title</label>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
                 <input
                   type="text"
                   name="title"
@@ -208,10 +205,14 @@ const AdminNoticeManager = () => {
                 />
               </div>
               <div>
+<<<<<<< HEAD
                 <label className="block font-medium mb-1 text-blue-300">Content</label>
+=======
+                <label className="block font-medium mb-1">Content</label>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
                 <textarea
-                  name="description"
-                  value={formData.description}
+                  name="content"
+                  value={formData.content}
                   onChange={handleInputChange}
                   required
                   className="w-full rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 min-h-[80px] bg-gray-900 text-white placeholder-gray-400"
@@ -220,7 +221,11 @@ const AdminNoticeManager = () => {
                 />
               </div>
               <div>
+<<<<<<< HEAD
                 <label className="block font-medium mb-1 text-blue-300">Tags</label>
+=======
+                <label className="block font-medium mb-1">Tags</label>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -236,8 +241,13 @@ const AdminNoticeManager = () => {
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
+<<<<<<< HEAD
                   {parseTags(formData.tags).map(tag => (
                     <span key={tag} className="inline-flex items-center bg-blue-800 text-blue-200 rounded-full px-3 py-1 text-sm font-medium">
+=======
+                  {formData.tags.map(tag => (
+                    <span key={tag} className="inline-flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-medium">
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
                       {tag}
                       <button type="button" className="ml-2 text-blue-400 hover:text-red-400" onClick={() => handleRemoveTag(tag)}>
                         ×
@@ -249,16 +259,24 @@ const AdminNoticeManager = () => {
               <div className="flex items-center gap-3 mt-2">
                 <input
                   type="checkbox"
-                  name="hidden"
-                  checked={formData.hidden}
+                  name="isHidden"
+                  checked={formData.isHidden}
                   onChange={handleInputChange}
                   className="h-5 w-5 text-blue-400 border-gray-700 rounded focus:ring-blue-400 bg-gray-900"
                 />
+<<<<<<< HEAD
                 <label className="font-medium text-blue-300">Hide this notice</label>
               </div>
             </div>
             <div className="flex flex-col gap-2 min-w-[180px]">
               <label className="block font-medium mb-1 text-blue-300">Attach Image</label>
+=======
+                <label className="font-medium">Hide this notice</label>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 min-w-[180px]">
+              <label className="block font-medium mb-1">Attach Image</label>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
               <input
                 type="file"
                 accept="image/*"
@@ -268,7 +286,11 @@ const AdminNoticeManager = () => {
               {imagePreview && (
                 <div className="relative mt-2 w-28 h-28 rounded-lg overflow-hidden shadow border border-gray-700">
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+<<<<<<< HEAD
                   <button type="button" className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, images: '' })); setImagePreview(null); }}>
+=======
+                  <button type="button" className="absolute top-1 right-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, image: null, images: [] })); setImagePreview(null); }}>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
                     Remove
                   </button>
                 </div>
@@ -286,6 +308,7 @@ const AdminNoticeManager = () => {
           {error && <div className="text-red-400 font-semibold mt-2">{error}</div>}
         </form>
       )}
+
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-blue-300 mb-4">Published Notices</h2>
         {loading ? (
@@ -293,6 +316,7 @@ const AdminNoticeManager = () => {
         ) : notices.length === 0 ? (
           <p className="text-gray-400">No notices found</p>
         ) : (
+<<<<<<< HEAD
           <div className="grid gap-8 md:grid-cols-2">
             {notices.map((notice) => (
               <div key={notice.id} className={`bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col justify-between border border-gray-700 ${notice.hidden ? 'opacity-50' : ''}`}>
@@ -325,6 +349,84 @@ const AdminNoticeManager = () => {
                 </div>
               </div>
             ))}
+=======
+          <div className="overflow-x-auto rounded-xl shadow">
+            <table className="min-w-full bg-white rounded-xl">
+              <thead>
+                <tr className="bg-blue-50 text-blue-700">
+                  <th className="py-3 px-4 text-left font-semibold">Title</th>
+                  <th className="py-3 px-4 text-left font-semibold">Content</th>
+                  <th className="py-3 px-4 text-left font-semibold">Image</th>
+                  <th className="py-3 px-4 text-left font-semibold">Published</th>
+                  <th className="py-3 px-4 text-left font-semibold">Tags</th>
+                  <th className="py-3 px-4 text-left font-semibold">Status</th>
+                  <th className="py-3 px-4 text-left font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(notices) ? notices : []).map((notice) => {
+                  const content = typeof notice.content === 'string' ? notice.content : (notice.description || '');
+                  const tags = Array.isArray(notice.tags) ? notice.tags : [];
+                  const imageSrc = notice.image || (Array.isArray(notice.images) ? notice.images[0] : null);
+                  return (
+                    <tr key={notice.id} className={notice.isHidden ? 'bg-gray-100 text-gray-400' : ''}>
+                      <td className="py-3 px-4 font-medium max-w-[180px] truncate" title={notice.title}>{notice.title}</td>
+                      <td className="py-3 px-4 max-w-[260px] truncate" title={content}>{content.length > 100 ? content.substring(0, 100) + '...' : content}</td>
+                      <td className="py-3 px-4">
+                        {imageSrc ? (
+                          <img src={imageSrc} alt="Notice" className="w-14 h-14 object-cover rounded shadow border border-gray-200" />
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-sm">{formatDate(notice.publishedAt)}</td>
+                      <td className="py-3 px-4">
+                        {tags.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {tags.map((tag) => (
+                              <span key={tag} className="inline-block bg-blue-100 text-blue-700 rounded-full px-2 py-1 text-xs font-medium mr-1 mb-1">{tag}</span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">No tags</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${notice.isHidden ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
+                          {notice.isHidden ? 'Hidden' : 'Visible'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleToggleVisibility(notice.id, notice.isHidden)}
+                            className="px-3 py-1 rounded bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition text-xs"
+                            title={notice.isHidden ? 'Unhide' : 'Hide'}
+                          >
+                            {notice.isHidden ? 'Show' : 'Hide'}
+                          </button>
+                          <button
+                            onClick={() => handleEdit(notice)}
+                            className="px-3 py-1 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition text-xs"
+                            title="Edit"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(notice.id)}
+                            className="px-3 py-1 rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition text-xs"
+                            title="Delete"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+>>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
           </div>
         )}
         {error && <div className="text-red-400 font-semibold mt-2">{error}</div>}

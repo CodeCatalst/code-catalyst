@@ -19,7 +19,7 @@ const AdminNoticeManager = () => {
     image: null,
     images: [],
     tags: [],
-    hidden: false,
+    isHidden: false
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);

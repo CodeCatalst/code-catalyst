@@ -2,7 +2,7 @@ import React from 'react';
 
 const Modal = ({ children, onClose }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300 animate-fadeIn">
-    <div className="relative bg-white rounded-xl shadow-2xl border border-gray-200 max-w-lg w-full mx-4 p-0 overflow-hidden animate-modalPop">
+    <div className="relative bg-transparent rounded-xl shadow-2xl border border-gray-200 max-w-lg w-full mx-4 p-0 overflow-hidden animate-modalPop">
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-gray-500 hover:text-blue-600 transition-colors duration-200 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-full bg-white p-1 shadow hover:shadow-md"

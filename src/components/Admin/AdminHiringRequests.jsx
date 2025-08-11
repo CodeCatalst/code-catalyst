@@ -147,41 +147,20 @@ const AdminHiringRequests = () => {
             <thead>
               <tr>
                 <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Phone</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Course</th>
-                <th className="px-4 py-2">Sem/Year</th>
                 <th className="px-4 py-2">Position</th>
-                <th className="px-4 py-2">About</th>
-                <th className="px-4 py-2">CV</th>
-                <th className="px-4 py-2">Submitted</th>
                 <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Notes</th>
+                <th className="px-4 py-2">Submitted</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {requests.length === 0 ? (
-                <tr><td colSpan={12} className="text-center py-4">No hiring requests found.</td></tr>
+                <tr><td colSpan={5} className="text-center py-4">No hiring requests found.</td></tr>
               ) : (
                 requests.map((req) => (
                   <tr key={req.id} className="border-b border-gray-700">
                     <td className="px-4 py-2">{req.name}</td>
-                    <td className="px-4 py-2">{req.phone}</td>
-                    <td className="px-4 py-2">{req.email}</td>
-                    <td className="px-4 py-2">{req.course}</td>
-                    <td className="px-4 py-2">{req.sem_year || req.semYear}</td>
                     <td className="px-4 py-2">{req.position}</td>
-                    <td className="px-4 py-2 max-w-[120px] truncate">
-                      {req.about?.length > 40 ? (
-                        <>
-                          {req.about.slice(0, 40)}...{' '}
-                          <button className="text-blue-400 underline text-xs" onClick={() => openModal(req)}>View</button>
-                        </>
-                      ) : req.about}
-                    </td>
-                    <td className="px-4 py-2"><a href={req.cv_link || req.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">CV</a></td>
-                    <td className="px-4 py-2">{req.submitted_at ? new Date(req.submitted_at).toLocaleString() : ''}</td>
                     <td className="px-4 py-2">
                       <select
                         value={req.status || 'pending'}
@@ -194,26 +173,7 @@ const AdminHiringRequests = () => {
                         ))}
                       </select>
                     </td>
-                    <td className="px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="text"
-                          value={editingNotes[req.id] !== undefined ? editingNotes[req.id] : (req.notes || '')}
-                          onChange={e => handleNotesInputChange(req.id, e.target.value)}
-                          disabled={savingNotesId === req.id}
-                          placeholder={req.notes || 'Add notes...'}
-                          className="rounded bg-gray-800 border border-gray-700 text-primary-100 px-2 py-1 w-36 focus:ring-primary-500"
-                          title={req.notes || 'No previous notes'}
-                        />
-                        <button
-                          onClick={() => handleNotesSave(req.id)}
-                          disabled={savingNotesId === req.id || (editingNotes[req.id] === req.notes)}
-                          className="bg-primary-600 hover:bg-primary-700 text-white px-2 py-1 rounded text-xs font-semibold disabled:opacity-60"
-                        >
-                          {savingNotesId === req.id ? 'Saving...' : 'Save'}
-                        </button>
-                      </div>
-                    </td>
+                    <td className="px-4 py-2">{req.submitted_at ? new Date(req.submitted_at).toLocaleString() : ''}</td>
                     <td className="px-4 py-2 flex gap-2">
                       <button
                         className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full shadow transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -241,18 +201,18 @@ const AdminHiringRequests = () => {
       {/* Modal for full details */}
       {modalRequest && (
         <Modal onClose={closeModal}>
-          <div className="p-4 max-w-lg">
-            <h3 className="text-xl font-bold mb-2">{modalRequest.name} - {modalRequest.position}</h3>
-            <div className="mb-2"><b>Email:</b> {modalRequest.email}</div>
-            <div className="mb-2"><b>Phone:</b> {modalRequest.phone}</div>
-            <div className="mb-2"><b>Course:</b> {modalRequest.course}</div>
-            <div className="mb-2"><b>Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
-            <div className="mb-2"><b>About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1">{modalRequest.about}</pre></div>
-            <div className="mb-2"><b>CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
-            <div className="mb-2"><b>Status:</b> {modalRequest.status || 'pending'}</div>
-            <div className="mb-2"><b>Notes:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1">{modalRequest.notes}</pre></div>
-            <div className="mb-2"><b>Submitted:</b> {modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</div>
-            <button onClick={closeModal} className="mt-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Close</button>
+          <div className="p-6 max-w-lg bg-gray-900 text-white rounded-2xl shadow-xl border border-gray-700">
+            <h3 className="text-2xl font-bold mb-4 text-blue-300">{modalRequest.name} - {modalRequest.position}</h3>
+            <div className="mb-2"><b className="text-blue-200">Email:</b> {modalRequest.email}</div>
+            <div className="mb-2"><b className="text-blue-200">Phone:</b> {modalRequest.phone}</div>
+            <div className="mb-2"><b className="text-blue-200">Course:</b> {modalRequest.course}</div>
+            <div className="mb-2"><b className="text-blue-200">Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
+            <div className="mb-2"><b className="text-blue-200">About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.about}</pre></div>
+            <div className="mb-2"><b className="text-blue-200">CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
+            <div className="mb-2"><b className="text-blue-200">Status:</b> {modalRequest.status || 'pending'}</div>
+            <div className="mb-2"><b className="text-blue-200">Notes:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.notes}</pre></div>
+            <div className="mb-2"><b className="text-blue-200">Submitted:</b> {modalRequest.submitted_at ? new Date(modalRequest.submitted_at).toLocaleString() : ''}</div>
+            <button onClick={closeModal} className="mt-4 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded shadow">Close</button>
           </div>
         </Modal>
       )}

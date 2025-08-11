@@ -163,14 +163,18 @@ const AdminNoticeManager = () => {
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-gray-900 rounded-2xl shadow-xl border border-gray-800 text-white">
 =======
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-2xl">
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-blue-300">Notice Management</h1>
+        <h1 className="text-3xl font-bold text-blue-700">Notice Management</h1>
         <button
-          className={`px-5 py-2 rounded-lg font-semibold shadow transition bg-blue-700 text-white hover:bg-blue-600 ${showForm ? 'ring-2 ring-blue-400' : ''}`}
+          className={`px-5 py-2 rounded-lg font-semibold shadow transition bg-blue-600 text-white hover:bg-blue-700 ${showForm ? 'ring-2 ring-blue-400' : ''}`}
           onClick={() => setShowForm(!showForm)}
         >
           {showForm ? 'Cancel' : 'Create New Notice'}
@@ -178,6 +182,7 @@ const AdminNoticeManager = () => {
       </div>
 
       {showForm && (
+<<<<<<< HEAD
 <<<<<<< HEAD
         <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6 mb-8 shadow flex flex-col gap-6 border border-gray-700 text-white">
           <h2 className="text-xl font-semibold text-blue-300 mb-2">{editingNotice ? 'Edit Notice' : 'Create New Notice'}</h2>
@@ -193,63 +198,83 @@ const AdminNoticeManager = () => {
               <div>
                 <label className="block font-medium mb-1">Title</label>
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+        <form onSubmit={handleSubmit} className="bg-gray-50 rounded-xl p-6 mb-8 shadow flex flex-col gap-6 border border-gray-200">
+          <h2 className="text-xl font-semibold text-blue-600 mb-2">{editingNotice ? 'Edit Notice' : 'Create New Notice'}</h2>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 flex flex-col gap-4">
+              <div>
+                <label className="block font-medium mb-1 text-blue-700">Title</label>
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  className="w-full rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white placeholder-gray-400"
+                  className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
                   maxLength={100}
                   placeholder="Notice title"
                 />
               </div>
               <div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <label className="block font-medium mb-1 text-blue-300">Content</label>
 =======
                 <label className="block font-medium mb-1">Content</label>
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+                <label className="block font-medium mb-1 text-blue-700">Content</label>
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
                 <textarea
                   name="content"
                   value={formData.content}
                   onChange={handleInputChange}
                   required
-                  className="w-full rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 min-h-[80px] bg-gray-900 text-white placeholder-gray-400"
+                  className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400 min-h-[80px]"
                   maxLength={1000}
                   placeholder="Notice content"
                 />
               </div>
               <div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <label className="block font-medium mb-1 text-blue-300">Tags</label>
 =======
                 <label className="block font-medium mb-1">Tags</label>
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+                <label className="block font-medium mb-1 text-blue-700">Tags</label>
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     placeholder="Add a custom tag"
-                    className="rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white placeholder-gray-400"
+                    className="rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
                     maxLength={20}
                     onKeyDown={e => (e.key === 'Enter' ? (e.preventDefault(), handleAddTag()) : null)}
                   />
-                  <button type="button" className="px-3 py-2 rounded bg-blue-900 text-blue-300 font-semibold hover:bg-blue-800" onClick={handleAddTag}>
+                  <button type="button" className="px-3 py-2 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200" onClick={handleAddTag}>
                     Add
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
 <<<<<<< HEAD
                   {parseTags(formData.tags).map(tag => (
+<<<<<<< HEAD
                     <span key={tag} className="inline-flex items-center bg-blue-800 text-blue-200 rounded-full px-3 py-1 text-sm font-medium">
 =======
                   {formData.tags.map(tag => (
                     <span key={tag} className="inline-flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-medium">
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+                    <span key={tag} className="inline-flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-medium">
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
                       {tag}
-                      <button type="button" className="ml-2 text-blue-400 hover:text-red-400" onClick={() => handleRemoveTag(tag)}>
+                      <button type="button" className="ml-2 text-blue-500 hover:text-red-500" onClick={() => handleRemoveTag(tag)}>
                         ×
                       </button>
                     </span>
@@ -262,8 +287,9 @@ const AdminNoticeManager = () => {
                   name="isHidden"
                   checked={formData.isHidden}
                   onChange={handleInputChange}
-                  className="h-5 w-5 text-blue-400 border-gray-700 rounded focus:ring-blue-400 bg-gray-900"
+                  className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-400"
                 />
+<<<<<<< HEAD
 <<<<<<< HEAD
                 <label className="font-medium text-blue-300">Hide this notice</label>
               </div>
@@ -277,20 +303,31 @@ const AdminNoticeManager = () => {
             <div className="flex flex-col gap-2 min-w-[180px]">
               <label className="block font-medium mb-1">Attach Image</label>
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+                <label className="font-medium text-blue-700">Hide this notice</label>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 min-w-[180px]">
+              <label className="block font-medium mb-1 text-blue-700">Attach Image</label>
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
+                className="rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-400"
               />
               {imagePreview && (
-                <div className="relative mt-2 w-28 h-28 rounded-lg overflow-hidden shadow border border-gray-700">
+                <div className="relative mt-2 w-28 h-28 rounded-lg overflow-hidden shadow border border-gray-200">
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+<<<<<<< HEAD
 <<<<<<< HEAD
                   <button type="button" className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, images: '' })); setImagePreview(null); }}>
 =======
                   <button type="button" className="absolute top-1 right-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, image: null, images: [] })); setImagePreview(null); }}>
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
+=======
+                  <button type="button" className="absolute top-1 right-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, images: '' })); setImagePreview(null); }}>
+>>>>>>> parent of e807ace (Update AdminNoticesManager.jsx)
                     Remove
                   </button>
                 </div>
@@ -298,54 +335,54 @@ const AdminNoticeManager = () => {
             </div>
           </div>
           <div className="flex gap-4 mt-2">
-            <button type="submit" className="px-6 py-2 rounded-lg bg-blue-700 text-white font-semibold shadow hover:bg-blue-600 transition" disabled={submitting}>
+            <button type="submit" className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" disabled={submitting}>
               {submitting ? 'Saving...' : editingNotice ? 'Update Notice' : 'Create Notice'}
             </button>
-            <button type="button" onClick={resetForm} className="px-6 py-2 rounded-lg bg-gray-700 text-gray-200 font-semibold shadow hover:bg-gray-600 transition">
+            <button type="button" onClick={resetForm} className="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold shadow hover:bg-gray-300 transition">
               Cancel
             </button>
           </div>
-          {error && <div className="text-red-400 font-semibold mt-2">{error}</div>}
+          {error && <div className="text-red-600 font-semibold mt-2">{error}</div>}
         </form>
       )}
 
       <div className="mt-8">
-        <h2 className="text-2xl font-bold text-blue-300 mb-4">Published Notices</h2>
+        <h2 className="text-2xl font-bold text-blue-700 mb-4">Published Notices</h2>
         {loading ? (
-          <div className="text-blue-300 font-semibold">Loading notices...</div>
+          <div className="text-blue-600 font-semibold">Loading notices...</div>
         ) : notices.length === 0 ? (
-          <p className="text-gray-400">No notices found</p>
+          <p className="text-gray-500">No notices found</p>
         ) : (
 <<<<<<< HEAD
           <div className="grid gap-8 md:grid-cols-2">
             {notices.map((notice) => (
-              <div key={notice.id} className={`bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col justify-between border border-gray-700 ${notice.hidden ? 'opacity-50' : ''}`}>
+              <div key={notice.id} className={`bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col justify-between border border-gray-200 ${notice.hidden ? 'opacity-50' : ''}`}>
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${notice.hidden ? 'bg-yellow-900 text-yellow-300' : 'bg-green-900 text-green-300'}`}>{notice.hidden ? 'Hidden' : 'Public'}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${notice.hidden ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{notice.hidden ? 'Hidden' : 'Public'}</span>
                     {notice.images ? (
-                      <img src={notice.images} alt="Notice" className="w-16 h-16 object-cover rounded-lg border border-gray-700" />
+                      <img src={notice.images} alt="Notice" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
                     ) : (
-                      <span className="w-16 h-16 flex items-center justify-center bg-gray-900 text-gray-500 rounded-lg border border-gray-700">No Image</span>
+                      <span className="w-16 h-16 flex items-center justify-center bg-gray-100 text-gray-400 rounded-lg border border-gray-200">No Image</span>
                     )}
                   </div>
-                  <h2 className="text-2xl font-semibold text-blue-200 mb-2">{notice.title}</h2>
+                  <h2 className="text-2xl font-semibold text-blue-700 mb-2">{notice.title}</h2>
                   <p className="text-sm text-gray-400 mb-2">{formatDate(notice.created_at)}</p>
-                  <p className="text-gray-200 mb-4 line-clamp-4">{notice.description}</p>
+                  <p className="text-gray-700 mb-4 line-clamp-4">{notice.description}</p>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {parseTags(notice.tags).length > 0 ? (
                       parseTags(notice.tags).map(tag => (
-                        <span key={tag} className="inline-block bg-blue-900 text-blue-200 rounded-full px-2 py-1 text-xs font-medium mr-1 mb-1">{tag}</span>
+                        <span key={tag} className="inline-block bg-blue-100 text-blue-700 rounded-full px-2 py-1 text-xs font-medium mr-1 mb-1">{tag}</span>
                       ))
                     ) : (
-                      <span className="text-xs text-gray-500">No tags</span>
+                      <span className="text-xs text-gray-400">No tags</span>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-2 mt-2">
-                  <button onClick={() => handleEdit(notice)} className="px-3 py-1 rounded bg-blue-900 text-blue-200 font-semibold hover:bg-blue-800 transition text-xs">Edit</button>
-                  <button onClick={() => handleDelete(notice.id)} className="px-3 py-1 rounded bg-red-900 text-red-200 font-semibold hover:bg-red-800 transition text-xs">Delete</button>
-                  <button onClick={() => handleToggleVisibility(notice.id, notice.hidden)} className="px-3 py-1 rounded bg-yellow-900 text-yellow-200 font-semibold hover:bg-yellow-800 transition text-xs">{notice.hidden ? 'Unhide' : 'Hide'}</button>
+                  <button onClick={() => handleEdit(notice)} className="px-3 py-1 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition text-xs">Edit</button>
+                  <button onClick={() => handleDelete(notice.id)} className="px-3 py-1 rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition text-xs">Delete</button>
+                  <button onClick={() => handleToggleVisibility(notice.id, notice.hidden)} className="px-3 py-1 rounded bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition text-xs">{notice.hidden ? 'Unhide' : 'Hide'}</button>
                 </div>
               </div>
             ))}
@@ -429,7 +466,7 @@ const AdminNoticeManager = () => {
 >>>>>>> parent of 0e22220 (patch: Notice Manger + Display Working)
           </div>
         )}
-        {error && <div className="text-red-400 font-semibold mt-2">{error}</div>}
+        {error && <div className="text-red-600 font-semibold mt-2">{error}</div>}
       </div>
     </div>
   );

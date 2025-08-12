@@ -15,6 +15,8 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [showForm, setShowForm] = useState(false)
     const [editUser, setEditUser] = useState(null)
     const { user: currentUser } = useAuth()
+    const [editingNotes, setEditingNotes] = useState({});
+    const [savingNotesId, setSavingNotesId] = useState(null);
 
     useEffect(() => {
         // Fetch users from backend
@@ -27,11 +29,22 @@ const UserManagement = ({ onUserCountUpdate }) => {
                     id: u.id,
                     fullName: u.full_name || u.username,
                     email: u.email,
-                    role: u.role || 'User', // Adjust if you have roles
+                    role: u.role || 'User',
                     registrationDate: u.created_at,
-                    status: 'active', // Adjust if you have status
+                    status: 'active',
                 }))
                 setUsers(usersData)
+                // Fetch notes for each user (as a single string)
+                const notesMap = {};
+                await Promise.all(usersData.map(async (u) => {
+                    try {
+                        const notesRes = await api.get(`/users/${u.id}/notes`);
+                        notesMap[u.id] = notesRes.data?.notes || '';
+                    } catch {
+                        notesMap[u.id] = '';
+                    }
+                }));
+                setEditingNotes(notesMap);
             } catch (error) {
                 setMessage({ type: 'error', text: 'Failed to load users' })
             } finally {
@@ -176,6 +189,22 @@ const UserManagement = ({ onUserCountUpdate }) => {
         XLSX.writeFile(wb, 'users.xlsx');
     };
 
+    const handleNotesInputChange = (id, value) => {
+        setEditingNotes(prev => ({ ...prev, [id]: value }));
+    };
+    const handleNotesSave = async (id) => {
+        setSavingNotesId(id);
+        try {
+            const noteContent = editingNotes[id] || '';
+            await api.put(`/users/${id}/notes`, { notes: noteContent });
+            setMessage({ type: 'success', text: 'Notes updated successfully' });
+        } catch {
+            setMessage({ type: 'error', text: 'Failed to update notes' });
+        } finally {
+            setSavingNotesId(null);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -267,37 +296,38 @@ const UserManagement = ({ onUserCountUpdate }) => {
                     <table className="w-full bg-gray-900 rounded-lg">
                         <thead>
                             <tr className="border-b border-gray-700">
-                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Full Name</th>
-                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Email</th>
-                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Role</th>
-                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Registration Date</th>
-                                <th className="text-left py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Full Name</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Email</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Role</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Registration Date</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Remarks</th>
+                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredUsers.map((user) => (
-                                <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/70">
-                                    <td className="py-4 px-4">
-                                        <div className="flex items-center">
+                                <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/70 text-center">
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex items-center justify-center">
                                             <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center mr-3">
                                                 <User className="text-white" size={16} />
                                             </div>
                                             <span className="text-gray-100 font-medium">{user.fullName}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4">
-                                        <div className="flex items-center text-primary-200">
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex items-center justify-center text-primary-200">
                                             <Mail className="mr-2" size={16} />
                                             {user.email}
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4">
-                                        <div className="flex items-center">
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex items-center justify-center">
                                             <Shield className="mr-2 text-primary-300" size={16} />
                                             <select
                                                 value={user.role}
                                                 onChange={e => handleRoleChange(user.id, e.target.value)}
-                                                className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200"
+                                                className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200 text-center"
                                             >
                                                 <option value="User">User</option>
                                                 <option value="admin">Admin</option>
@@ -308,27 +338,50 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                             </select>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4">
-                                        <div className="flex items-center text-primary-200">
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex items-center justify-center text-primary-200">
                                             <Calendar className="mr-2" size={16} />
                                             {new Date(user.registrationDate).toLocaleDateString()}
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4">
-                                        <button
-                                            onClick={() => setDeleteConfirm(user.id)}
-                                            className="text-red-400 hover:text-red-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
-                                            title="Delete Account"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleExpirePassword(user.id)}
-                                            className="text-yellow-400 hover:text-yellow-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 mr-2"
-                                            title="Expire Password"
-                                        >
-                                            <KeyRound size={18} />
-                                        </button>
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex flex-col items-center justify-center gap-2">
+                                            <textarea
+                                                value={editingNotes[user.id] !== undefined ? editingNotes[user.id] : ''}
+                                                onChange={e => handleNotesInputChange(user.id, e.target.value)}
+                                                disabled={savingNotesId === user.id}
+                                                placeholder={'Add notes...'}
+                                                className="rounded bg-gray-800 border border-gray-700 text-white px-2 w-full resize-y focus:ring-blue-500 text-center"
+                                                style={{ fontFamily: 'inherit', fontSize: '1rem', minWidth: '120px' }}
+                                                rows={Math.max(2, (editingNotes[user.id] || '').split('\n').length)}
+                                            />
+                                            <button
+                                                onClick={() => handleNotesSave(user.id)}
+                                                disabled={savingNotesId === user.id}
+                                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold disabled:opacity-60 mt-1 mx-auto"
+                                                style={{ minWidth: '70px' }}
+                                            >
+                                                {savingNotesId === user.id ? 'Saving...' : 'Save'}
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className="py-4 px-4 text-center">
+                                        <div className="flex items-center justify-center">
+                                            <button
+                                                onClick={() => setDeleteConfirm(user.id)}
+                                                className="text-red-400 hover:text-red-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
+                                                title="Delete Account"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleExpirePassword(user.id)}
+                                                className="text-yellow-400 hover:text-yellow-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 mr-2"
+                                                title="Expire Password"
+                                            >
+                                                <KeyRound size={18} />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -395,6 +448,10 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                     <option value="Developer">Developer</option>
                                     <option value="Designer">Designer</option>
                                 </select>
+                            </div>
+                            <div className="mb-3">
+                                <label className="block mb-1">Notes</label>
+                                <textarea name="notes" defaultValue={editUser?.notes || ''} className="w-full p-2 rounded bg-gray-900 text-white" rows={3} />
                             </div>
                             {!editUser && (
                                 <div className="mb-3">

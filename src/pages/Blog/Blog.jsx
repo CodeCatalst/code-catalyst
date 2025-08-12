@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Play, Filter, Calendar, Eye, ArrowRight, X } from 'lucide-react'
+import { Play, Filter, Calendar, Eye, ArrowRight, X, Share2, ClipboardCheck } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import { useBlogs } from '../../context/NoticesContext'
 import { getBlogs, getBlogById } from '../../services/blogs'
@@ -14,6 +14,7 @@ const Blogs = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalBlog, setModalBlog] = useState(null)
   const [modalLoading, setModalLoading] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   const categories = ['All', 'Tech Talks', 'Events', 'Tutorials', 'Behind the Scenes', 'Student Stories']
 
@@ -61,17 +62,22 @@ const Blogs = () => {
   }
 
   const formatViews = (views) => {
-    if (!views) return '0'
+    if (!views || views === 0) return '0 views';
+    if (views === 1) return '1 view';
     if (views >= 1000) {
-      return `${(views / 1000).toFixed(1)}K`
+      return `${(views / 1000).toFixed(1)}K views`;
     }
-    return views.toString()
+    return `${views} views`;
   }
 
   const handleReadClick = async (id) => {
     setModalLoading(true)
     setModalOpen(true)
     try {
+      // Increment view count (assumes POST /blogs/:id/view exists)
+      try {
+        await fetch(`/api/blogs/${id}/view`, { method: 'POST' });
+      } catch {}
       const blog = await getBlogById(id)
       setModalBlog(blog)
     } catch {
@@ -184,7 +190,14 @@ const Blogs = () => {
         <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredBlogs.map((blog) => (
-              <div key={blog.id} className="card hover:scale-105 transition-all duration-300 group">
+              <div
+                key={blog.id}
+                className="card hover:scale-105 transition-all duration-300 group cursor-pointer"
+                onClick={() => handleReadClick(blog.id)}
+                tabIndex={0}
+                role="button"
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleReadClick(blog.id); }}
+              >
                 <div className="relative overflow-hidden rounded-lg mb-4">
                   <img
                     src={blog.thumbnail}
@@ -193,12 +206,11 @@ const Blogs = () => {
                   />
                   {/* Read Button Overlay */}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                    <button
-                      onClick={() => handleReadClick(blog.id)}
-                      className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 font-bold text-primary-600 text-lg focus:outline-none"
+                    <div
+                      className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 font-bold text-primary-600 text-lg"
                     >
                       Read
-                    </button>
+                    </div>
                   </div>
                   {/* Duration */}
                   <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-sm font-medium">
@@ -234,7 +246,7 @@ const Blogs = () => {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Eye size={16} />
-                        <span>{formatViews(blog.views)} views</span>
+                        <span>{formatViews(blog.views)}</span>
                       </div>
                     </div>
                   </div>
@@ -300,7 +312,48 @@ const Blogs = () => {
                   <div className="prose prose-invert max-w-none text-base mb-2 overflow-y-auto" style={{ maxHeight: '300px' }}>
                     {modalBlog.content}
                   </div>
+                  {/* Share Options */}
+                  <div className="mt-4 border-t border-gray-700 pt-4 flex gap-3">
+                    <button
+                      className="inline-flex items-center px-4 py-2 bg-primary-700 text-white rounded hover:bg-primary-800 transition-colors text-sm font-semibold"
+                      onClick={async () => {
+                        const url = `${window.location.origin}/blog/${modalBlog.id}`;
+                        await navigator.clipboard.writeText(url);
+                        setCopySuccess(true);
+                        setTimeout(() => setCopySuccess(false), 2000);
+                      }}
+                      title="Copy blog link"
+                    >
+                      <ClipboardCheck className="mr-2" size={18} /> Copy Link
+                    </button>
+                    <button
+                      className="inline-flex items-center px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition-colors text-sm font-semibold"
+                      onClick={async () => {
+                        const url = `${window.location.origin}/blog/${modalBlog.id}`;
+                        if (navigator.share) {
+                          try {
+                            await navigator.share({
+                              title: modalBlog.title,
+                              url,
+                            });
+                          } catch (err) {}
+                        } else {
+                          alert('Web Share API is not supported on this device/browser.');
+                        }
+                      }}
+                      title="Share via Web Share API"
+                    >
+                      <Share2 className="mr-2" size={18} /> Share
+                    </button>
+                  </div>
                 </div>
+                {/* Copy Link Success Toast */}
+                {copySuccess && (
+                  <div className="fixed left-1/2 -translate-x-1/2 bottom-8 z-50 bg-green-700 text-white px-6 py-3 rounded shadow-lg flex items-center gap-2 animate-fade-in">
+                    <ClipboardCheck size={20} />
+                    Link copied to clipboard!
+                  </div>
+                )}
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center min-h-[400px] text-center py-12 text-red-500">Blog not found.</div>

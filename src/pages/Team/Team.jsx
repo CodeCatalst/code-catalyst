@@ -81,26 +81,7 @@ const Team = () => {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Admin Button */}
-      <button
-        className="fixed bottom-8 right-8 z-50 bg-primary-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-700 transition-all"
-        onClick={() => setShowAdmin(true)}
-        title="Manage Team (Admin Only)"
-      >
-        Manage Team
-      </button>
-      {showAdmin && <AdminTeamManager onClose={() => setShowAdmin(false)} onChange={() => {
-        setLoading(true)
-        api.get('/admin/team').then(res => {
-          const data = res.data.map(m => ({
-            ...m,
-            skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
-            social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
-          }))
-          setTeamMembers(data)
-          setFilteredMembers(data)
-        }).finally(() => setLoading(false))
-      }} />}
-
+      
       {/* Hero Section with Animated Background */}
       <section
         ref={heroRef}

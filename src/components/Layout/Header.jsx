@@ -28,7 +28,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Blog', href: '/blog' },
     { name: 'Notices', href: '/notices' },
     { name: 'Contact', href: '/contact' },
-    // { name: 'Hiring', href: '/hiring' },
+    { name: 'Hiring', href: '/hiring' },
   ];
 
   // Add admin link if user is in allowed admin roles

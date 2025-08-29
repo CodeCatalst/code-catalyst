@@ -32,7 +32,7 @@ const HERO_ROUTES = [
   '/about',
   '/gallery',
   '/team',
-  '/hiring'
+  '/hiring',
   '/blog',
   '/notices',
   '/test',
@@ -50,7 +50,7 @@ function App() {
           <Layout transparentOnTop={transparentOnTop}>
             <Suspense fallback={<Loader />}>
               <Routes>
-                {/* <Route path="/hiring" element={<Hiring />} /> */}
+                <Route path="/hiring" element={<Hiring />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/test" element={<Test />} />
                 <Route path="/about" element={<About />} />

@@ -32,6 +32,7 @@ const HERO_ROUTES = [
   '/about',
   '/gallery',
   '/team',
+  '/hiring'
   '/blog',
   '/notices',
   '/test',

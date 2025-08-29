@@ -8,6 +8,7 @@ const AdminBlogsManager = () => {
     const [showForm, setShowForm] = useState(false)
     const [editBlog, setEditBlog] = useState(null)
     const [thumbnail, setThumbnail] = useState('')
+    const [content, setContent] = useState('')
     const [loading, setLoading] = useState(true)
     const [message, setMessage] = useState(null)
 
@@ -30,11 +31,13 @@ const AdminBlogsManager = () => {
     const handleAdd = () => {
         setEditBlog(null)
         setThumbnail('')
+        setContent('')
         setShowForm(true)
     }
     const handleEdit = (blog) => {
         setEditBlog(blog)
         setThumbnail(blog.thumbnail || '')
+        setContent(blog.content || '')
         setShowForm(true)
     }
     const handleDelete = async (id) => {
@@ -63,7 +66,7 @@ const AdminBlogsManager = () => {
             title: form.title.value,
             category: form.category.value,
             author: form.author.value,
-            content: form.content.value,
+            content: content,
             date: form.date.value,
             thumbnail: thumbnail || '',
         }
@@ -83,6 +86,7 @@ const AdminBlogsManager = () => {
         setShowForm(false)
         setEditBlog(null)
         setThumbnail('')
+        setContent('')
     }
 
     return (
@@ -180,7 +184,7 @@ const AdminBlogsManager = () => {
                             </div>
                             <div className="mb-3">
                                 <label className="block mb-1">Content</label>
-                                <textarea name="content" defaultValue={editBlog?.content || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                                <textarea name="content" value={content} onChange={e => setContent(e.target.value)} className="w-full p-2 rounded bg-gray-900 text-white" required />
                             </div>
                             <div className="flex gap-2 justify-end">
                                 <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>

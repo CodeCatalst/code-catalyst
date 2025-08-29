@@ -16,7 +16,7 @@ const Blogs = () => {
   const [modalLoading, setModalLoading] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
 
-  const categories = ['All', 'Tech Talks', 'Events', 'Tutorials', 'Behind the Scenes', 'Student Stories']
+  const categories = ['All']
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -294,22 +294,23 @@ const Blogs = () => {
                   />
                 </div>
                 {/* Text Side */}
-                <div className="md:w-1/2 w-full h-full flex flex-col p-6 overflow-y-auto max-h-[400px]">
+                <div className="md:w-1/2 w-full h-full flex flex-col p-6 max-h-[400px] overflow-y-auto hide-scrollbar">
+                  <style>{`
+                    .hide-scrollbar::-webkit-scrollbar { display: none; }
+                    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                  `}</style>
                   <h2 className="text-2xl font-bold mb-2">{modalBlog.title}</h2>
                   <div className="flex items-center space-x-4 text-gray-400 mb-4">
                     <span className="flex items-center space-x-1">
                       <Calendar size={16} />
                       <span>{formatDate(modalBlog.publishedAt)}</span>
                     </span>
-                    <span className="flex items-center space-x-1">
-                      <Eye size={16} />
-                      <span>{formatViews(modalBlog.views)} views</span>
-                    </span>
+                   
                     <span className="bg-primary-600 text-white px-2 py-1 rounded text-sm font-medium">
                       {modalBlog.category}
                     </span>
                   </div>
-                  <div className="prose prose-invert max-w-none text-base mb-2 overflow-y-auto" style={{ maxHeight: '300px' }}>
+                  <div className="prose prose-invert max-w-none text-base mb-2" style={{ whiteSpace: 'pre-line' }}>
                     {modalBlog.content}
                   </div>
                   {/* Share Options */}

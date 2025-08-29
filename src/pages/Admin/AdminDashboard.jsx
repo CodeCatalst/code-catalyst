@@ -30,6 +30,7 @@ import AdminContactMessages from '../../components/Admin/AdminContactMessages';
 import AdminHiringRequests from '../../components/Admin/AdminHiringRequests';
 import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper';
 import AdminAccessWrapper from '../../components/Admin/AdminAccessWrapper';
+import AdminTeamTab from '../../components/Admin/AdminTeamTab';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -78,6 +79,7 @@ const AdminDashboard = () => {
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
         { id: 'gallery', label: 'Manage Gallery' },
+        { id: 'team', label: 'Manage Team' },
         // { id: 'CoreTeamFeedback', label: 'Feedback Form' },
         // { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
         { id: 'contact', label: 'Contact Messages' },
@@ -138,6 +140,12 @@ const AdminDashboard = () => {
                 return (
                   <AdminAccessWrapper permission="hiring_requests">
                     <AdminHiringRequests />
+                  </AdminAccessWrapper>
+                );
+            case 'team':
+                return (
+                  <AdminAccessWrapper permission="team_management">
+                    <AdminTeamTab />
                   </AdminAccessWrapper>
                 );
             default:

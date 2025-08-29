@@ -3,6 +3,7 @@ import { Github, Linkedin, Twitter, Mail, Filter, Grid, List, Instagram, ArrowRi
 import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import Card from './Card'
+import AdminTeamManager from '../../components/Admin/AdminTeamManager'
 
 const Team = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -11,6 +12,7 @@ const Team = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('All')
   const [viewMode, setViewMode] = useState('grid')
   const [loading, setLoading] = useState(true)
+  const [showAdmin, setShowAdmin] = useState(false)
   const heroRef = useRef(null)
 
   const departments = ['All', 'Executive', 'Technical', 'PR & Marketing', 'HR & Events', 'Design', 'Content', 'E-Sports']
@@ -30,200 +32,25 @@ const Team = () => {
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
+      setLoading(true)
       try {
-        const response = await api.get('/team')
-        setTeamMembers(response.data)
-        setFilteredMembers(response.data)
+        const response = await api.get('/admin/team')
+        // Parse skills and social fields for all members
+        const data = response.data.map(m => ({
+          ...m,
+          skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
+          social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
+        }))
+        setTeamMembers(data)
+        setFilteredMembers(data)
       } catch (error) {
         console.error('Failed to fetch team members:', error)
-        // Set mock data for demo (manually ordered, data intact)
-        const mockData = [
-          {
-            id: 1,
-            name: 'Divy',
-            role: 'President',
-            department: 'Visionary and Executive',
-            image: '/divy.jpg',
-            bio: 'Computer Science senior passionate about Data Analytics and AI/ML. Leading Code Catalyst with a vision to bridge the gap between academic learning and industry requirements.',
-            skills: ['Leadership', 'AI/ML', 'Python', 'Data & Business Analytics' ],
-            social: {
-              email: 'code@jbcollege.in'
-            }
-          },
-          {
-            id: 2,
-            name: 'Gauranshi Bahuguna',
-            role: 'Vice President',
-            department: 'Executive',
-            image: '/Gauranshi_Bahuguna.jpg',
-            bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
-            skills: ['Linux', 'Networking', 'Java', 'Python', 'DSA'],
-            social: {
-            }
-          },
-          {
-            id: 3,
-            name: 'Arjan',
-            role: 'Secretary',
-            department: 'Executive & Technical',
-            image: '/arjan.jpg',
-            bio: 'I’m Arjan Singh Jassal, a passionate Full-Stack Developer. I lead digital innovation, event strategy, and creative tech initiatives for our vibrant tech community.',
-            skills: ['FullStack Development', 'Leadership', 'DSA'],
-            social: {
-              github: 'https://github.com/jassalarjan',
-              Link: 'https://arjansinghjassal.xyz/',
-              mail: 'mailto:jassalarjan.awc@gmail.com'
-            }
-          },
-          {
-            id: 4,
-            name: 'Jeevan',
-            role: 'Community Manager',
-            department: 'Executive & Management',
-            image: './Jeevan.png',
-            bio: ' Creative Developer',
-            skills: ['Content Designing', 'Community Building', 'Public Speaking'],
-            social: {
-              linkedin: 'https://www.linkedin.com/in/jeevanpant/',
-            }
-          },
-          {
-            id: 5,
-            name: 'Prashant Thakur',
-            role: 'Technical Lead',
-            department: 'Technical',
-            image: './Prashant_Thakur.jpg',
-            bio: 'Full Stack Developer with a passion for building scalable and efficient web applications. ',
-            skills: ['React', 'Next.js', 'Node.js', 'MongoDB', 'SQL', 'TypeScript', 'Git & Github'],
-            social: {
-              linkedin: 'https://www.linkedin.com/in/prashanthakurr/',
-              github: 'https://github.com/prashantScripter',
-            }
-          },
-          {
-            id: 6,
-            name: 'Jobin Babu',
-            role: 'Graphic Designer',
-            department: 'Design',
-            image: './Jobin_Babu.jpg',
-            bio: 'Tech enthusiast with a passion for Python, AI/ML, and creative design. Leading visual content creation to support innovative and technical projects.',
-            skills: ['Python', 'UI/UX Design', 'Figma', 'AI/ML'],
-            social: {
-              linkedin: 'https://www.linkedin.com/in/jobin-babu-872462325/',
-            }
-          },
-          {
-            id: 7,
-            name: 'Yogesh Pandey',
-            role: 'PR Team Lead',
-            department: 'PR & Marketing',
-            image: './Yogesh_Pandey.png',
-            bio: 'Turning codes into conversations. From drafting posts to hosting events—I handle the buzz. When not online, I\'m probably learning to code and vibing to DHH.',
-            skills: ['Digital Marketing', 'Social Media', 'Content Strategy', 'Analytics'],
-            social: {
-              linkedin: 'https://www.linkedin.com/in/yogesh-pandey-9a07582b3',
-              github: ' https://github.com/yogeshpandey9908',
-              Instagram: 'https://www.instagram.com/yogeshpandey9908/'
-            }
-          },
-          {
-            id: 8,
-            name: 'Rahul kumar ',
-            role: 'E-Sports Support',
-            department: 'E-Sports',
-            image: './Rahul_Kumar.jpg',
-            bio: 'I have a lot of interest in gaming and I like to learn every development method of gaming and I also like to gain experience of team work, that\'s all',
-            skills: ['E-Sports'],
-            social: {
-            }
-          },
-          {
-            id: 9,
-            name: 'Poorvi Panwar ',
-            role: 'Event management',
-            department: 'HR & Events',
-            image: './Poorvi_Panwar.jpg',
-            bio: ' I am Poorvi newly inducted member of the event management team in the Code catalyst society, eager to contribute to organizing impactful and engaging technical events.',
-            skills: ['Event Management'],
-            social: {
-            }
-          },
-          {
-            id: 10,
-            name: 'Divya',
-            role: 'Content Lead',
-            department: 'Content',
-            image: './Divya.png',
-            bio: '  Driving impactful narratives and strategic communication across tech-driven platforms. Passionate about simplifying complex ideas, leading creative teams, and building content that informs, inspires, and engages the developer community.',
-            skills: ['Content Writing', 'Content Creation', 'SEO', 'Documentation'],
-            social: {
-            }
-          },
-          {
-            id: 11,
-            name: 'Radha Srivastav',
-            role: 'PR lead support',
-            department: 'PR & Marketing',
-            image: './Radha_Srivastav.jpg',
-            bio: 'I am passionate about learning, collaborating, and making a meaningful impact across academic, technical, and public relations environments.',
-            skills: ['PR', 'Marketing', 'Content Creation'],
-            social: {
-            }
-          },
-          {
-            id: 12,
-            name: 'Kumkum ',
-            role: 'Technical team support',
-            department: 'Technical',
-            image: './kumkum.jpg',
-            bio: 'I am a tech enthusiast currently learning AI, machine learning, software development, driven by curiosity and a passion for innovation. ',
-            skills: ['DSA', 'Machine learning', 'AI'],
-            social: {
-              linkedin: 'https://www.linkedin.com/in/kumkum-morewal-b9291a278/'
-            }
-          },
-          {
-            id: 13,
-            name: 'Aditya modi ',
-            role: 'Member of technical team',
-            department: 'Technical',
-            image: './Aditya.jpg',
-            bio: " Hi readers! I'm Aditya modi.I'm a BCA undergrad with a passion for tech, creativity, and clever comebacks—currently decoding life and Codes one semester at a time.",
-            skills: [],
-            social: {
-            }
-          },
-          {
-            id: 14,
-            name: 'Aishwarya',
-            role: 'HR',
-            department: 'HR & Events',
-            image: './Aishwarya.jpg',
-            bio: 'Btech CSE 3rd year student HR in the Code Catalyst society.',
-            skills: [],
-            social: {
-            }
-          },
-          {
-            id: 15,
-            name: 'Saksham Saxena',
-            role: 'E-sports Team Lead',
-            department: 'E-Sports',
-            image: './Saksham_Saxena.jpg',
-            bio: '',
-            skills: [],
-            social: {
-              Link:'https://guns.lol/sevy'
-            }
-          }
-        ]
-        setTeamMembers(mockData)
-        setFilteredMembers(mockData)
+        setTeamMembers([])
+        setFilteredMembers([])
       } finally {
         setLoading(false)
       }
     }
-
     fetchTeamMembers()
   }, [])
 
@@ -253,6 +80,27 @@ const Team = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
+      {/* Admin Button */}
+      <button
+        className="fixed bottom-8 right-8 z-50 bg-primary-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-700 transition-all"
+        onClick={() => setShowAdmin(true)}
+        title="Manage Team (Admin Only)"
+      >
+        Manage Team
+      </button>
+      {showAdmin && <AdminTeamManager onClose={() => setShowAdmin(false)} onChange={() => {
+        setLoading(true)
+        api.get('/admin/team').then(res => {
+          const data = res.data.map(m => ({
+            ...m,
+            skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
+            social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
+          }))
+          setTeamMembers(data)
+          setFilteredMembers(data)
+        }).finally(() => setLoading(false))
+      }} />}
+
       {/* Hero Section with Animated Background */}
       <section
         ref={heroRef}

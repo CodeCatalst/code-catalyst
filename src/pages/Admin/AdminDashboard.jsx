@@ -34,7 +34,19 @@ import AdminTeamTab from '../../components/Admin/AdminTeamTab';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState('notices')
+    // Show tabs based on user role
+    const accessibleTabs = getAccessibleTabs(user?.role || '');
+    // If user is not allowed any tabs, do not render dashboard
+    if (!user || !accessibleTabs.length) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-900">
+                <div className="text-gray-400 text-xl">You do not have access to the admin dashboard.</div>
+            </div>
+        );
+    }
+
+    // Set the default tab to the first accessible tab for the user
+    const [activeTab, setActiveTab] = useState(() => accessibleTabs[0] || 'notices')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [stats, setStats] = useState({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
     const [userCount, setUserCount] = useState(0);
@@ -48,7 +60,7 @@ const AdminDashboard = () => {
                 // Count core team members by role
                 const coreRoles = [
                   'admin', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer'
-                ];
+                ,'staff'];
                 const totalCore = Array.isArray(users) ? users.filter(u => coreRoles.includes(u.role)).length : 0;
 
                 // Fetch hiring requests from backend
@@ -73,7 +85,7 @@ const AdminDashboard = () => {
         })();
     }, []);
 
-    // Show all tabs to every member (no access filtering)
+    // Show tabs based on user role
     const tabs = [
         { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
@@ -84,7 +96,7 @@ const AdminDashboard = () => {
         // { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
         { id: 'contact', label: 'Contact Messages' },
         { id: 'hiring', label: 'Hiring Requests' },
-    ];
+    ].filter(tab => accessibleTabs.includes(tab.id));
 
     const handleUserCountUpdate = (count) => {
         setUserCount(count)

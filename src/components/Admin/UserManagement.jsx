@@ -169,7 +169,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
         return matchesSearch && matchesRole
     })
 
-    const roles = ['all', 'admin', 'user', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
+    const roles = ['all', 'admin', 'staff', 'user', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
 
     // Excel download handler
     const handleDownloadExcel = () => {
@@ -331,6 +331,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                             >
                                                 <option value="User">User</option>
                                                 <option value="admin">Admin</option>
+                                                <option value="staff">Staff</option>
                                                 <option value="team_lead">Team Lead</option>
                                                 <option value="team_member">Team Member</option>
                                                 <option value="community_member">Community Member</option>
@@ -438,6 +439,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                 <label className="block mb-1">Role</label>
                                 <select name="role" defaultValue={editUser?.role || 'user'} className="w-full p-2 rounded bg-gray-900 text-white">
                                     <option value="admin">Admin</option>
+                                    <option value="staff">Staff</option>
                                     <option value="user">User</option>
                                     <option value="team_lead">Team Lead</option>
                                     <option value="team_member">Team Member</option>

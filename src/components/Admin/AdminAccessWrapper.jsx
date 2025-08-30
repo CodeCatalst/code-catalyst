@@ -14,6 +14,7 @@ const rolePermissions = {
   'HR Lead': ['hiring_requests'], // HR Lead can access hiring requests and contact messages
   'team_lead': [], // Team Lead has no access by default
   'team_member': [], // Team Member has no access by default
+  'staff': ['notices_management','blogs_management'], // Use permission keys, not tab ids
   // Add more roles and permissions as needed
 };
 
@@ -24,6 +25,9 @@ const tabPermissions = {
   gallery: 'gallery_management',
   contact: 'contact_messages',
   hiring: 'hiring_requests',
+  team: 'team_management',
+  CoreTeamFeedback: 'core_team_feedback',
+  CoreTeamFeedbackResponses: 'core_team_feedback_responses',
 };
 
 export function getAccessibleTabs(role) {

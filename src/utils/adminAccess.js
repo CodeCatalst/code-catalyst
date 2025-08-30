@@ -5,6 +5,7 @@ export const rolePermissions = {
   'HR Lead': ['hiring_requests'],
   'team_lead': [],
   'team_member': [],
+  'staff': ['notices_management','blogs_management'],
 };
 
 export const tabPermissions = {

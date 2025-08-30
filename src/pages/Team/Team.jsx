@@ -34,7 +34,7 @@ const Team = () => {
     const fetchTeamMembers = async () => {
       setLoading(true)
       try {
-        const response = await api.get('/admin/team')
+        const response = await api.get('/team')
         // Parse skills and social fields for all members
         const data = response.data.map(m => ({
           ...m,

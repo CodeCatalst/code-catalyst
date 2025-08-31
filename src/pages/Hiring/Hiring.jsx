@@ -153,7 +153,7 @@ const Hiring = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-300 mb-1 font-medium">CV/Resume Link (make sure it is accessible to anyone with the link) <span className="text-red-500">*</span></label>
+            <label className="block text-gray-300 mb-1 font-medium">CV/Resume Drive Link (make sure it is accessible to anyone with the link) <span className="text-red-500">*</span></label>
             <input
               type="url"
               name="cv"

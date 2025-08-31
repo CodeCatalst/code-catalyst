@@ -21,8 +21,14 @@ const AdminHiringRequests = () => {
     setError(null);
     try {
       const res = await fetch(`${API_URL}/api/hiring`);
-      if (!res.ok) throw new Error('Failed to fetch hiring requests');
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (jsonErr) {
+        throw new Error(`API error: ${res.status} ${res.statusText}\n${text}`);
+      }
+      if (!res.ok) throw new Error(data?.error || 'Failed to fetch hiring requests');
       setRequests(data.requests || []);
       // Set editingNotes to current notes for all requests
       const notesMap = {};
@@ -208,7 +214,28 @@ const AdminHiringRequests = () => {
             <div className="mb-1"><b className="text-blue-200">Course:</b> {modalRequest.course}</div>
             <div className="mb-1"><b className="text-blue-200">Sem/Year:</b> {modalRequest.sem_year || modalRequest.semYear}</div>
             <div className="mb-1"><b className="text-blue-200">About:</b> <pre className="whitespace-pre-wrap bg-gray-800 p-2 rounded mt-1 text-white">{modalRequest.about}</pre></div>
-            <div className="mb-1"><b className="text-blue-200">CV:</b> <a href={modalRequest.cv_link || modalRequest.cv} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View CV</a></div>
+            <div className="mb-1"><b className="text-blue-200">CV:</b> {modalRequest.cv_link || modalRequest.cv ? (
+              <a
+                href={modalRequest.cv_link || modalRequest.cv}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline break-all"
+                onClick={e => {
+                  // If the link is missing protocol, add https://
+                  let url = modalRequest.cv_link || modalRequest.cv;
+                  if (url && !/^https?:\/\//i.test(url)) {
+                    url = 'https://' + url;
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                    e.preventDefault();
+                  }
+                }}
+              >
+                View CV
+              </a>
+            ) : (
+              <span className="text-gray-400">No CV provided</span>
+            )}
+            </div>
             <div className="mb-1"><b className="text-blue-200">Status:</b> {modalRequest.status || 'pending'}</div>
             <div className="mb-1">
               <b className="text-blue-200">Notes:</b>

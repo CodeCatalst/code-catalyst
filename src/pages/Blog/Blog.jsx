@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef,useRef } from 'react';
 import { Search, TrendingUp, Clock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getBlogs } from '../../services/blogs';
 import BlogCard from '../../components/Admin/BlogCard';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,36 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 6;
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const heroRef = useRef(null)
+  
+    useEffect(() => {
+      const handleMouseMove = (e) => {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth) * 100,
+          y: (e.clientY / window.innerHeight) * 100
+        })
+      }
+  
+      window.addEventListener('mousemove', handleMouseMove)
+      return () => window.removeEventListener('mousemove', handleMouseMove)
+    }, [])
+  
+    useEffect(() => {
+      (async () => {
+        setLoading(true)
+        try {
+          const data = await fetchGalleryFromApi();
+          setEvents(data);
+        } catch (err) {
+          setEvents([]);
+        }
+        setLoading(false);
+      })();
+    }, []);
+  
 
   const categories = ['All', 'Tech', 'Design', 'Backend', 'Frontend', 'Mobile'];
 
@@ -55,8 +86,75 @@ const Blog = () => {
 
   const featuredBlog = blogs[0]; // Use first blog as featured
 
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900">        
+        <section
+        ref={heroRef}
+        className="relative min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
+      >
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            animation: 'grid-move 20s linear infinite'
+          }} />
+        </div>
+        {/* Floating Code Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-400/30 font-mono text-lg animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+                transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`
+              }}
+            >
+              {['{ }', 'Blogs', '( )', '[ ]', '<code catalyst />', '&&', '<body />', '<div>'][Math.floor(Math.random() * 8)]}
+            </div>
+          ))}
+        </div>
+        {/* Particle System */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10 container-max text-center py-20 mt-20">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+            Event <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Blogs</span>
+          </h1>
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up">
+           Explore our collection of articles, tutorials, and insights from industry experts. 
+              Stay updated with the latest trends and best practices.
+          </p>
+          {/* Scroll Indicator removed as requested */}
+        </div>
+
+        
+      </section>
+
       {/* Hero Section */}
       <div className="relative bg-gray-900 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>

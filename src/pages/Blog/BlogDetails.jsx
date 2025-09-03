@@ -75,7 +75,7 @@ const BlogDetails = () => {
   };
 
   const handleRelatedBlogClick = (relatedBlog) => {
-    window.location.href = `/blogs/${relatedBlog.id}`;
+    window.location.href = `/blog/${relatedBlog.id}`;
   };
 
   if (loading) {
@@ -103,7 +103,7 @@ const BlogDetails = () => {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Blog post not found</h2>
           <Link 
-            to="/blogs" 
+            to="/blog" 
             className="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
           >
             <ArrowLeft size={20} className="mr-2" />
@@ -128,7 +128,7 @@ const BlogDetails = () => {
         {/* Back Button */}
         <div className="absolute top-8 left-8">
           <Link 
-            to="/blogs"
+            to="/blog"
             className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all duration-200"
           >
             <ArrowLeft size={20} className="mr-2" />
@@ -251,7 +251,7 @@ const BlogDetails = () => {
             
             <div className="text-center mt-12">
               <Link 
-                to="/blogs"
+                to="/blog"
                 className="inline-flex items-center px-8 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200"
               >
                 View All Articles

@@ -190,7 +190,7 @@ const Blog = () => {
 
           {/* Featured Blog */}
           {featuredBlog && !loading && (
-            <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => handleBlogClick(featuredBlog)}>
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => handleBlogClick(featuredBlog)}>
               <div className="md:flex">
                 <div className="md:w-1/2">
                   <img 
@@ -244,7 +244,7 @@ const Blog = () => {
               <button
                 key={category}
                 onClick={() => handleCategoryClick(category)}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-200 whitespace-nowrap ${
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap ${
                   selectedCategory === category
                     ? 'bg-blue-500 text-white shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'

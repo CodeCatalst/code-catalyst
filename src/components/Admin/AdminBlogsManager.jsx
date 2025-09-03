@@ -1,201 +1,240 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2 } from 'lucide-react'
-import { getBlogs, createBlog, updateBlog, deleteBlog } from '../../services/blogs'
-import AdminAccessWrapper from './AdminAccessWrapper'
+import React, { useState, useEffect } from 'react';
+import { Plus, Search, Filter } from 'lucide-react';
+import { getBlogs, createBlog, updateBlog, deleteBlog } from '../../services/blogs';
+import AdminAccessWrapper from './AdminAccessWrapper';
+import BlogCard from './BlogCard';
+import BlogFormModal from './BlogFormModal';
+import { useToast } from '../hooks/use-toast';
 
-const AdminBlogsManager = () => {
-    const [blogs, setBlogs] = useState([])
-    const [showForm, setShowForm] = useState(false)
-    const [editBlog, setEditBlog] = useState(null)
-    const [thumbnail, setThumbnail] = useState('')
-    const [content, setContent] = useState('')
-    const [loading, setLoading] = useState(true)
-    const [message, setMessage] = useState(null)
+const AdminBlogManager = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editBlog, setEditBlog] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const { toast } = useToast();
 
-    useEffect(() => {
-        fetchBlogs()
-    }, [])
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
-    const fetchBlogs = async () => {
-        setLoading(true)
-        try {
-            const data = await getBlogs()
-            setBlogs(data)
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to load blogs' })
-        } finally {
-            setLoading(false)
-        }
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      const blogsData = await getBlogs();
+      setBlogs(blogsData);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch blogs",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const handleAdd = () => {
-        setEditBlog(null)
-        setThumbnail('')
-        setContent('')
-        setShowForm(true)
-    }
-    const handleEdit = (blog) => {
-        setEditBlog(blog)
-        setThumbnail(blog.thumbnail || '')
-        setContent(blog.content || '')
-        setShowForm(true)
-    }
-    const handleDelete = async (id) => {
-        try {
-            await deleteBlog(id)
-            setBlogs(blogs.filter(b => b.id !== id))
-            setMessage({ type: 'success', text: 'Blog deleted' })
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to delete blog' })
-        }
-    }
-    const handleThumbnailChange = (e) => {
-        const file = e.target.files[0]
-        if (file) {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setThumbnail(reader.result)
-            }
-            reader.readAsDataURL(file)
-        }
-    }
-    const handleFormSubmit = async (e) => {
-        e.preventDefault()
-        const form = e.target
-        const newBlog = {
-            title: form.title.value,
-            category: form.category.value,
-            author: form.author.value,
-            content: content,
-            date: form.date.value,
-            thumbnail: thumbnail || '',
-        }
-        try {
-            if (editBlog) {
-                const updated = await updateBlog(editBlog.id, newBlog)
-                setBlogs(blogs.map(b => b.id === editBlog.id ? updated : b))
-                setMessage({ type: 'success', text: 'Blog updated' })
-            } else {
-                const created = await createBlog(newBlog)
-                setBlogs([...blogs, created])
-                setMessage({ type: 'success', text: 'Blog added' })
-            }
-        } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to save blog' })
-        }
-        setShowForm(false)
-        setEditBlog(null)
-        setThumbnail('')
-        setContent('')
-    }
+  const handleAdd = () => {
+    setEditBlog(null);
+    setShowModal(true);
+  };
 
-    return (
-        <AdminAccessWrapper permission="blogs_management">
-            <div className="text-white">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Manage Blogs</h2>
-                    <button
-                        className="btn-primary flex items-center gap-2 px-3 py-2 rounded-lg"
-                        onClick={handleAdd}
-                        title="Add Blog"
-                    >
-                        <Plus size={18} />
-                        <span className="hidden sm:inline">Add Blog</span>
-                    </button>
+  const handleEdit = (blog) => {
+    setEditBlog(blog);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this blog?')) {
+      try {
+        await deleteBlog(id);
+        setBlogs(blogs.filter(b => b.id !== id));
+        toast({
+          title: "Success",
+          description: "Blog deleted successfully",
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete blog",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleSave = async (blogData) => {
+    try {
+      if (editBlog) {
+        const updated = await updateBlog(editBlog.id, blogData);
+        setBlogs(blogs.map(b => b.id === editBlog.id ? updated : b));
+        toast({
+          title: "Success",
+          description: "Blog updated successfully",
+        });
+      } else {
+        const created = await createBlog(blogData);
+        setBlogs([created, ...blogs]);
+        toast({
+          title: "Success",
+          description: "Blog created successfully",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save blog",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const filteredBlogs = blogs.filter(blog => {
+    const title = blog.title || '';
+    const author = blog.author || '';
+    const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         author.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || blog.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  }).map(blog => ({
+    ...blog,
+    thumbnail: blog.thumbnail || 'default-thumbnail.png',
+    date: blog.date || new Date().toISOString()
+  }));
+
+  const categories = ['All', 'Tech', 'Design', 'Backend', 'Frontend', 'Mobile'];
+
+  return (
+    <AdminAccessWrapper permission="blogs_management">
+      <div className="min-h-screen bg-gray-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-100 mb-2">Blog Management</h1>
+            <p className="text-gray-600">Create, edit, and manage your blog posts</p>
+          </div>
+
+          {/* Search and Filter Bar */}
+          <div className="bg-gray-900 rounded-xl shadow-sm p-6 mb-8">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search blogs by title or author..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 text-gray-900 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="pl-10 pr-8 py-3 border border-gray-200 text-gray-900  rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all duration-200 bg-white"
+                  >
+                    {categories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
                 </div>
-                <table className="w-full bg-gray-900 rounded-lg mb-6">
-                    <thead>
-                        <tr className="border-b border-gray-700">
-                            <th className="py-2 px-4 text-left">Thumbnail</th>
-                            <th className="py-2 px-4 text-left">Title</th>
-                            <th className="py-2 px-4 text-left">Category</th>
-                            <th className="py-2 px-4 text-left">Author</th>
-                            <th className="py-2 px-4 text-left">Date</th>
-                            <th className="py-2 px-4 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {blogs.length === 0 ? (
-                            <tr>
-                                <td colSpan="5" className="text-center py-8 text-gray-400 font-semibold">
-                                    No blogs have been posted yet. Share your knowledge and experiences by adding a new blog!
-                                </td>
-                            </tr>
-                        ) : (
-                            blogs.map(blog => (
-                                <tr key={blog.id} className="border-b border-gray-800">
-                                    <td className="py-2 px-4">
-                                        {blog.thumbnail && (
-                                            <img src={blog.thumbnail} alt="thumb" className="w-16 h-16 object-cover rounded" />
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4">{blog.title}</td>
-                                    <td className="py-2 px-4">{blog.category}</td>
-                                    <td className="py-2 px-4">{blog.author}</td>
-                                    <td className="py-2 px-4">{blog.date}</td>
-                                    <td className="py-2 px-4 flex gap-2">
-                                        <button
-                                            className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900 rounded"
-                                            onClick={() => handleEdit(blog)}
-                                            title="Edit Blog"
-                                        >
-                                            <Edit size={16} />
-                                        </button>
-                                        <button
-                                            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-900 rounded"
-                                            onClick={() => handleDelete(blog.id)}
-                                            title="Delete Blog"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-                {/* Add/Edit Blog Modal */}
-                {showForm && (
-                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-                        <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handleFormSubmit}>
-                            <h3 className="text-xl font-bold mb-4">{editBlog ? 'Edit Blog' : 'Add Blog'}</h3>
-                            <div className="mb-3">
-                                <label className="block mb-1">Title</label>
-                                <input name="title" defaultValue={editBlog?.title || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Category</label>
-                                <input name="category" defaultValue={editBlog?.category || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Author</label>
-                                <input name="author" defaultValue={editBlog?.author || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Date</label>
-                                <input name="date" type="date" defaultValue={editBlog?.date || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Thumbnail</label>
-                                <input type="file" accept="image/*" onChange={handleThumbnailChange} className="w-full p-2 rounded bg-gray-900 text-white" />
-                                {thumbnail && (
-                                    <img src={thumbnail} alt="thumb-preview" className="w-24 h-24 object-cover rounded mt-2" />
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Content</label>
-                                <textarea name="content" value={content} onChange={e => setContent(e.target.value)} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="flex gap-2 justify-end">
-                                <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                )}
+                
+                <div className="text-sm text-gray-900 whitespace-nowrap">
+                  {filteredBlogs.length} of {blogs.length} blogs
+                </div>
+              </div>
             </div>
-        </AdminAccessWrapper>
-    )
-}
+          </div>
 
-export default AdminBlogsManager
+          {/* Blog Grid */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl shadow-sm overflow-hidden animate-pulse">
+                  <div className="h-48 bg-gray-200"></div>
+                  <div className="p-6">
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div className="h-3 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredBlogs.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Search size={32} className="text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {searchTerm || selectedCategory !== 'All' ? 'No blogs found' : 'No blogs yet'}
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  {searchTerm || selectedCategory !== 'All' 
+                    ? 'Try adjusting your search criteria or filters'
+                    : 'Get started by creating your first blog post'
+                  }
+                </p>
+                {(!searchTerm && selectedCategory === 'All') && (
+                  <button
+                    onClick={handleAdd}
+                    className="inline-flex items-center px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                  >
+                    <Plus size={20} className="mr-2" />
+                    Create First Blog
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredBlogs.map((blog, idx) => (
+                <BlogCard
+                  key={blog.id || `blog-${idx}`}
+                  blog={blog}
+                  showActions={true}
+                  onEdit={() => handleEdit(blog)}
+                  onDelete={() => handleDelete(blog.id)}
+                  onClick={() => handleEdit(blog)}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Floating Add Button */}
+          <button
+            onClick={handleAdd}
+            className="fixed bottom-8 right-8 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 hover:shadow-xl transition-all duration-200 flex items-center justify-center z-40"
+            title="Add New Blog"
+          >
+            <Plus size={24} />
+          </button>
+
+          {/* Blog Form Modal */}
+          <BlogFormModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            blog={editBlog}
+            onSave={handleSave}
+          />
+        </div>
+      </div>
+    </AdminAccessWrapper>
+  );
+};
+
+export default AdminBlogManager;
+
+<div className="flex items-center space-x-4">
+  <button
+    onClick={() => fetchBlogs()}
+    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+  >
+    Refresh Blogs
+  </button>
+</div>

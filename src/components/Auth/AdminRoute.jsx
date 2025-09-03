@@ -17,7 +17,8 @@ const AdminRoute = ({ children }) => {
     // Check if user has an allowed admin role
     const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member', 'staff'];
     if (!user?.role || !allowedAdminRoles.includes(user.role)) {
-        return <Navigate to="/" replace />
+      console.error(`Unauthorized role: ${user?.role}`);
+      return <Navigate to="/" replace />;
     }
 
     return children

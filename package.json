@@ -18,6 +18,7 @@
     "antd": "^5.26.7",
     "axios": "^1.6.2",
     "date-fns": "^4.1.0",
+    "dompurify": "^3.0.6",
     "framer-motion": "^10.16.4",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.1",

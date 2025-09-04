@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Menu, X, User, LogOut } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
+import { hasPermission } from '../../utils/adminAccess';
 
 const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const [scrolled, setScrolled] = useState(false)
@@ -31,9 +32,23 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Hiring', href: '/hiring' },
   ];
 
-  // Add admin link if user is in allowed admin roles
-  const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member', 'staff', 'Blogger'];
-  const adminLinks = allowedAdminRoles.includes(user?.role)
+  // Add admin link if user has any admin permission
+  const adminPermissions = [
+    'notices_management',
+    'blogs_management',
+    'user_management',
+    'roles_management',
+    'gallery_management',
+    'contact_messages',
+    'hiring_requests',
+    'team_management',
+    'core_team_feedback',
+    'core_team_feedback_responses',
+    '*'
+  ];
+  const userPermissions = user?.permissions || [];
+  const hasAdminAccess = adminPermissions.some(perm => userPermissions.includes(perm));
+  const adminLinks = hasAdminAccess
     ? [{ name: 'Admin', href: '/admin' }]
     : [];
 

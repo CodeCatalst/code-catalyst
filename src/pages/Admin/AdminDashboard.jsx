@@ -1,3 +1,4 @@
+import { getAccessibleTabs } from '../../utils/adminAccess';
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { getStats } from '../../services/stats'
@@ -28,14 +29,14 @@ import CoreTeamFeedback from "../../components/Admin/CoreTeamFeedback.jsx";
 import CoreTeamFeedbackResponses from "../../components/Admin/CoreTeamFeedbackResponses.jsx";
 import AdminContactMessages from '../../components/Admin/AdminContactMessages';
 import AdminHiringRequests from '../../components/Admin/AdminHiringRequests';
-import { getAccessibleTabs } from '../../components/Admin/AdminAccessWrapper';
 import AdminAccessWrapper from '../../components/Admin/AdminAccessWrapper';
 import AdminTeamTab from '../../components/Admin/AdminTeamTab';
+import RoleManagement from '../../components/Admin/RoleManagement.jsx'
 
 const AdminDashboard = () => {
     const { user } = useAuth();
     // Show tabs based on user role
-    const accessibleTabs = getAccessibleTabs(user?.role || '');
+    const accessibleTabs = getAccessibleTabs(user?.permissions || []);
     // If user is not allowed any tabs, do not render dashboard
     if (!user || !accessibleTabs.length) {
         return (
@@ -90,6 +91,7 @@ const AdminDashboard = () => {
         { id: 'notices', label: 'Manage Notice' },
         { id: 'blogs', label: 'Manage Blogs' },
         { id: 'users', label: 'Manage Users' },
+        { id: 'roles', label: 'Manage Roles' },
         { id: 'gallery', label: 'Manage Gallery' },
         { id: 'team', label: 'Manage Team' },
         // { id: 'CoreTeamFeedback', label: 'Feedback Form' },
@@ -123,6 +125,12 @@ const AdminDashboard = () => {
                   <AdminAccessWrapper permission="user_management">
                     <UserManagement onUserCountUpdate={handleUserCountUpdate} />
                   </AdminAccessWrapper>
+                );
+            case 'roles':
+                return (
+                    <AdminAccessWrapper permission="roles_management">
+                    <RoleManagement />
+                    </AdminAccessWrapper>
                 );
             case 'CoreTeamFeedback':
                 return (

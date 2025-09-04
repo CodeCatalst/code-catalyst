@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, User, Eye } from 'lucide-react';
+import { Calendar, User, Eye,Trash2 } from 'lucide-react';
 
 const BlogCard = ({ blog, onClick, showActions = false, onEdit, onDelete }) => {
   const formatDate = (dateString) => {
@@ -69,7 +69,7 @@ const BlogCard = ({ blog, onClick, showActions = false, onEdit, onDelete }) => {
                 className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
                 title="Delete Blog"
               >
-                <Eye size={16} />
+                <Trash2 size={16} />
               </button>
             </div>
           )}

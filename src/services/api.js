@@ -82,6 +82,24 @@ export async function getRoles() {
   return res.json();
 }
 
+export async function createRole(role) {
+  const res = await fetch(`${API_BASE}/api/roles`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(role),
+  });
+  if (!res.ok) throw new Error('Failed to create role');
+  return res.json();
+}
+
+export async function deleteRole(id) {
+  const res = await fetch(`${API_BASE}/api/roles/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to delete role');
+  return res.json();
+}
+
 // FORMS
 export async function getForms() {
   const res = await fetch(`${API_BASE}/api/forms`);
@@ -146,9 +164,14 @@ export async function createSubmission(submission) {
   return res.json();
 }
 
-export async function updateUserRole(id, role) {
-  const res = await api.put(`/users/${id}/role`, { role });
-  return res.data;
+export async function updateRole(id, role) {
+  const res = await fetch(`${API_BASE}/api/roles/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(role),
+  });
+  if (!res.ok) throw new Error('Failed to update role');
+  return res.json();
 }
 
 export async function expireUserPassword(id) {
@@ -156,4 +179,14 @@ export async function expireUserPassword(id) {
   return res.data;
 }
 
-export default api
+export async function updateUserRole(userId, roleId) {
+  const res = await fetch(`${API_BASE}/api/users/${userId}/role`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ roleId }),
+  });
+  if (!res.ok) throw new Error('Failed to update user role');
+  return res.json();
+}
+
+export default api;

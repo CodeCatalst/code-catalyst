@@ -77,9 +77,12 @@ export async function deleteUser(id) {
 }
 
 export async function getRoles() {
-  const res = await fetch(`${API_BASE}/api/roles`);
-  if (!res.ok) throw new Error('Failed to fetch roles');
-  return res.json();
+  try {
+    const response = await api.get('/roles');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch roles');
+  }
 }
 
 export async function createRole(role) {

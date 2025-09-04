@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckCircle, AlertCircle, Plus, KeyRound } from 'lucide-react'
-import api, { updateUserRole, expireUserPassword, createUser, updateUser } from '../../services/api'
+import api, { updateUserRole, expireUserPassword, createUser, updateUser, getRoles } from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 import AdminAccessWrapper from './AdminAccessWrapper'
 import * as XLSX from 'xlsx'
@@ -17,9 +17,10 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const { user: currentUser } = useAuth()
     const [editingNotes, setEditingNotes] = useState({});
     const [savingNotesId, setSavingNotesId] = useState(null);
+    const [rolesList, setRolesList] = useState([]);
 
     useEffect(() => {
-        // Fetch users from backend
+        // Fetch users and roles from backend
         const fetchUsers = async () => {
             try {
                 setLoading(true)
@@ -51,7 +52,25 @@ const UserManagement = ({ onUserCountUpdate }) => {
                 setLoading(false)
             }
         }
-        fetchUsers()
+        const fetchRoles = async () => {
+            try {
+                const response = await getRoles();
+                // Accept array, { roles: [...] }, or { data: [...] }
+                let rolesArr = [];
+                if (Array.isArray(response)) {
+                    rolesArr = response;
+                } else if (response && Array.isArray(response.roles)) {
+                    rolesArr = response.roles;
+                } else if (response && Array.isArray(response.data)) {
+                    rolesArr = response.data;
+                }
+                setRolesList(rolesArr);
+            } catch {
+                setRolesList([]);
+            }
+        }
+        fetchUsers();
+        fetchRoles();
     }, [])
 
     // Update parent component with user count
@@ -169,7 +188,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
         return matchesSearch && matchesRole
     })
 
-    const roles = ['all', 'admin', 'staff', 'user', 'team_lead', 'team_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer']
+    const roles = ['all', ...rolesList.map(r => r.name)];
 
     // Excel download handler
     const handleDownloadExcel = () => {
@@ -329,13 +348,9 @@ const UserManagement = ({ onUserCountUpdate }) => {
                                                 onChange={e => handleRoleChange(user.id, e.target.value)}
                                                 className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200 text-center"
                                             >
-                                                <option value="User">User</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="staff">Staff</option>
-                                                <option value="team_lead">Team Lead</option>
-                                                <option value="team_member">Team Member</option>
-                                                <option value="Blogger">Blogger</option>
-                                                <option value="HR Lead">HR Lead</option>
+                                                {rolesList.map(role => (
+                                                    <option key={role.id} value={role.name}>{role.name}</option>
+                                                ))}
                                             </select>
                                         </div>
                                     </td>
@@ -438,17 +453,9 @@ const UserManagement = ({ onUserCountUpdate }) => {
                             <div className="mb-3">
                                 <label className="block mb-1">Role</label>
                                 <select name="role" defaultValue={editUser?.role || 'user'} className="w-full p-2 rounded bg-gray-900 text-white">
-                                    <option value="admin">Admin</option>
-                                    <option value="staff">Staff</option>
-                                    <option value="user">User</option>
-                                    <option value="team_lead">Team Lead</option>
-                                    <option value="team_member">Team Member</option>
-                                    <option value="Blogger">Blogger</option>
-                                    <option value="HR Lead">HR Lead</option>
-                                    <option value="Technical Lead">Technical Lead</option>
-                                    <option value="Project Manager">Project Manager</option>
-                                    <option value="Developer">Developer</option>
-                                    <option value="Designer">Designer</option>
+                                    {rolesList.map(role => (
+                                        <option key={role.id} value={role.name}>{role.name}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="mb-3">

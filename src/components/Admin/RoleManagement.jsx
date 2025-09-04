@@ -300,8 +300,8 @@ const RoleManagement = () => {
 
         {/* Delete Modal */}
         {deleteConfirm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto">
+            <div className="bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4 overflow-auto">
               <h3 className="text-xl font-bold text-white mb-4">Confirm Deletion</h3>
               <p className="text-gray-300 mb-6">Are you sure you want to delete this role?</p>
               <div className="flex gap-3">
@@ -324,22 +324,22 @@ const RoleManagement = () => {
 
         {/* Add/Edit Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-            <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handleFormSubmit}>
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 overflow-auto">
+            <form className="bg-gray-800 p-6 rounded-lg w-full max-w-2xl overflow-auto" onSubmit={handleFormSubmit}>
               <h3 className="text-xl font-bold mb-4">{editRole ? 'Edit Role' : 'Add Role'}</h3>
               <div className="mb-3">
                 <label className="block mb-1">Role Name</label>
-                <input name="name" defaultValue={editRole?.name || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                <input name="name" defaultValue={editRole?.name || ''} className="w-full p-2 rounded bg-gray-900 text-white break-words" required />
               </div>
               <div className="mb-3">
                 <label className="block mb-1">Description</label>
-                <textarea name="description" defaultValue={editRole?.description || ''} className="w-full p-2 rounded bg-gray-900 text-white" rows={2} />
+                <textarea name="description" defaultValue={editRole?.description || ''} className="w-full p-2 rounded bg-gray-900 text-white break-words" rows={2} />
               </div>
               <div className="mb-3">
                 <label className="block mb-2">Permissions</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1 max-h-64 w-">
                   {availablePermissions.map(permission => (
-                    <label key={permission.id} className="flex items-center gap-2">
+                    <label key={permission.id} className="flex items-center gap-2 break-words">
                       <input
                         type="checkbox"
                         name="permissions"
@@ -348,7 +348,7 @@ const RoleManagement = () => {
                         defaultChecked={editRole?.permissions?.includes(permission.name)}
                         className="form-checkbox text-blue-500"
                       />
-                      <span className="text-gray-200">{permission.name}</span>
+                      <span className="text-gray-200 break-words">{permission.name}</span>
                     </label>
                   ))}
                 </div>

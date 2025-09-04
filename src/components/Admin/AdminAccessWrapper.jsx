@@ -15,6 +15,7 @@ const rolePermissions = {
   'team_lead': [], // Team Lead has no access by default
   'team_member': [], // Team Member has no access by default
   'staff': ['notices_management','blogs_management'], // Use permission keys, not tab ids
+  'Blogger': ['blogs_management'], // Blogger can access blogs management
   // Add more roles and permissions as needed
 };
 

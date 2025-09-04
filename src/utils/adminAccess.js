@@ -6,6 +6,7 @@ export const rolePermissions = {
   'team_lead': [],
   'team_member': [],
   'staff': ['notices_management','blogs_management'],
+  'Blogger': ['blogs_management'],
 };
 
 export const tabPermissions = {

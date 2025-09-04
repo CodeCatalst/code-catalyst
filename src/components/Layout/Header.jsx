@@ -32,7 +32,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   ];
 
   // Add admin link if user is in allowed admin roles
-  const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member', 'staff'];
+  const allowedAdminRoles = ['admin', 'HR Lead', 'team_lead', 'team_member', 'staff', 'Blogger'];
   const adminLinks = allowedAdminRoles.includes(user?.role)
     ? [{ name: 'Admin', href: '/admin' }]
     : [];

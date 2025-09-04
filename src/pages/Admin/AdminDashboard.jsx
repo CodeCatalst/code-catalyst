@@ -60,7 +60,7 @@ const AdminDashboard = () => {
                 // Count core team members by role
                 const coreRoles = [
                   'admin', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer'
-                ,'staff'];
+                ,'staff', 'Blogger'];
                 const totalCore = Array.isArray(users) ? users.filter(u => coreRoles.includes(u.role)).length : 0;
 
                 // Fetch hiring requests from backend

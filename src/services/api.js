@@ -179,11 +179,11 @@ export async function expireUserPassword(id) {
   return res.data;
 }
 
-export async function updateUserRole(userId, roleId) {
+export async function updateUserRole(userId, role) {
   const res = await fetch(`${API_BASE}/api/users/${userId}/role`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ roleId }),
+    body: JSON.stringify({ role }),
   });
   if (!res.ok) throw new Error('Failed to update user role');
   return res.json();

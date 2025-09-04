@@ -174,13 +174,6 @@ const BlogDetails = () => {
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600 mr-2">Share:</span>
             <button
-              onClick={() => handleShare('twitter')}
-              className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200"
-              title="Share on Twitter"
-            >
-              <Twitter size={18} />
-            </button>
-            <button
               onClick={() => handleShare('linkedin')}
               className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200"
               title="Share on LinkedIn"

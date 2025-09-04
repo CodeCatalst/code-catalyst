@@ -10,6 +10,7 @@ export const tabPermissions = {
   gallery: 'gallery_management',
   contact: 'contact_messages',
   hiring: 'hiring_requests',
+  team: 'team_management', // Added for Manage Team tab
 };
 
 // Check if user has a specific permission

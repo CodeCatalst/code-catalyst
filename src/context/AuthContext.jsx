@@ -91,13 +91,44 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await api.put('/auth/profile', profileData)
-      setUser(response.data.user)
-      return { success: true }
+      let response;
+      
+      // Handle password update separately
+      if (profileData.currentPassword && profileData.newPassword) {
+        response = await api.put('/auth/password', {
+          currentPassword: profileData.currentPassword,
+          newPassword: profileData.newPassword
+        });
+      } else {
+        // Handle profile update
+        const updateData = {};
+        
+        // Only include fields that are actually provided
+        if (profileData.full_name !== undefined) updateData.full_name = profileData.full_name;
+        if (profileData.username !== undefined) updateData.username = profileData.username;
+        if (profileData.email !== undefined) updateData.email = profileData.email;
+        if (profileData.bio !== undefined) updateData.bio = profileData.bio;
+        if (profileData.profile_picture_url !== undefined) updateData.profile_picture_url = profileData.profile_picture_url;
+        
+        console.log('Updating profile with data:', updateData); // Debug log
+        
+        response = await api.put('/auth/profile', updateData);
+        
+        if (response.data.user) {
+          console.log('Received updated user data:', response.data.user); // Debug log
+          setUser(response.data.user);
+        }
+      }
+      
+      return { success: true };
     } catch (error) {
+      console.error('Profile update error:', error.response?.data || error); // Debug log
+      const errorMessage = error.response?.data?.error || 
+                          error.response?.data?.message || 
+                          (error.response?.data?.details ? `Profile update failed: ${error.response.data.details}` : 'Profile update failed');
       return {
         success: false,
-        error: error.response?.data?.message || 'Profile update failed'
+        error: errorMessage
       }
     }
   }

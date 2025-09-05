@@ -1,11 +1,12 @@
-// eslint-disable-next-line no-undef
-const API_URL = import.meta.env.VITE_API_BASE;
 import { useEffect, useState } from 'react';
 // Add xlsx for Excel export
 import * as XLSX from 'xlsx';
-import Modal from '../Common/Modal'; // You may need to create this if not present
+import Modal from '../Common/Modal';
+import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 const AdminHiringRequests = () => {
+  const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,28 +21,28 @@ const AdminHiringRequests = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_URL}/api/hiring`);
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (jsonErr) {
-        throw new Error(`API error: ${res.status} ${res.statusText}\n${text}`);
-      }
-      if (!res.ok) throw new Error(data?.error || 'Failed to fetch hiring requests');
+      const response = await api.get('/hiring');
+      const data = response.data;
       setRequests(data.requests || []);
       // Set editingNotes to current notes for all requests
       const notesMap = {};
       (data.requests || []).forEach(r => { notesMap[r.id] = r.notes || ''; });
       setEditingNotes(notesMap);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.error || err.message || 'Failed to fetch hiring requests');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchRequests(); }, []);
+  useEffect(() => { 
+    if (!user) {
+      setError('Please log in to access this page');
+      setLoading(false);
+      return;
+    }
+    fetchRequests(); 
+  }, [user]);
 
   // Notes editing
   const handleNotesInputChange = (id, value) => {
@@ -50,14 +51,10 @@ const AdminHiringRequests = () => {
   const handleNotesSave = async (id) => {
     setSavingNotesId(id);
     try {
-      await fetch(`${API_URL}/api/hiring/${id}/notes`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes: editingNotes[id] })
-      });
+      await api.patch(`/hiring/${id}/notes`, { notes: editingNotes[id] });
       setRequests(reqs => reqs.map(r => r.id === id ? { ...r, notes: editingNotes[id] } : r));
-    } catch {
-      alert('Failed to update notes.');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Failed to update notes.');
     } finally {
       setSavingNotesId(null);
     }
@@ -67,14 +64,10 @@ const AdminHiringRequests = () => {
   const handleStatusChange = async (id, status) => {
     setUpdatingStatusId(id);
     try {
-      await fetch(`${API_URL}/api/hiring/${id}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-      });
+      await api.patch(`/hiring/${id}/status`, { status });
       setRequests(reqs => reqs.map(r => r.id === id ? { ...r, status } : r));
-    } catch {
-      alert('Failed to update status.');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Failed to update status.');
     } finally {
       setUpdatingStatusId(null);
     }
@@ -85,10 +78,10 @@ const AdminHiringRequests = () => {
     if (!window.confirm('Delete this hiring request?')) return;
     setDeletingId(id);
     try {
-      await fetch(`${API_URL}/api/hiring/${id}`, { method: 'DELETE' });
+      await api.delete(`/hiring/${id}`);
       setRequests(reqs => reqs.filter(r => r.id !== id));
-    } catch {
-      alert('Failed to delete request.');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Failed to delete request.');
     } finally {
       setDeletingId(null);
     }

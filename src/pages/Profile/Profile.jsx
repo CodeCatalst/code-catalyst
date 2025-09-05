@@ -3,11 +3,20 @@ import { User, Mail, Lock, Camera, Save, AlertCircle, CheckCircle, Shield } from
 import { useAuth } from '../../context/AuthContext'
 
 const Profile = () => {
-  const { user, updateProfile } = useAuth()
+  const { user, updateProfile, loading: authLoading } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
   const [errors, setErrors] = useState({})
+
+  // Show loading state while user data is being fetched
+  if (authLoading) {
+    return (
+      <div className="min-h-screen pt-16 bg-gray-900 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
 
   // Profile form state
   const [profileData, setProfileData] = useState({
@@ -20,13 +29,16 @@ const Profile = () => {
 
   // Sync profileData with user context on user change
   useEffect(() => {
-    setProfileData({
-      full_name: user?.full_name || '',
-      username: user?.username || '',
-      email: user?.email || '',
-      bio: user?.bio || '',
-      profile_picture_url: user?.profile_picture_url || ''
-    })
+    if (user) {
+      setProfileData({
+        full_name: user.full_name || '',
+        username: user.username || '',
+        email: user.email || '',
+        bio: user.bio || '',
+        profile_picture_url: user.profile_picture_url || ''
+      });
+      console.log('User data loaded:', user); // For debugging
+    }
   }, [user])
 
   // Password form state
@@ -59,19 +71,24 @@ const Profile = () => {
     setSuccess('')
 
     try {
+      console.log('Submitting profile data:', profileData); // Debug log
       const result = await updateProfile({
-        ...profileData,
-        // Only send profile info fields
-        currentPassword: undefined,
-        newPassword: undefined
-      })
+        full_name: profileData.full_name,
+        username: profileData.username,
+        email: profileData.email,
+        bio: profileData.bio
+      });
+
       if (result.success) {
         setSuccess('Profile updated successfully!')
+        console.log('Profile updated successfully'); // Debug log
         setTimeout(() => setSuccess(''), 3000)
       } else {
+        console.error('Profile update failed:', result.error); // Debug log
         setErrors({ submit: result.error })
       }
     } catch (error) {
+      console.error('Profile update error:', error); // Debug log
       setErrors({ submit: 'Failed to update profile. Please try again.' })
     } finally {
       setLoading(false)

@@ -277,8 +277,8 @@ const Home = () => {
             </span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-300 leading-relaxed mb-8 max-w-3xl mx-auto">
-            Empowering the next generation of developers through cutting-edge technology,
-            innovative projects, and a thriving community of passionate creators.
+            Code. Create. Analyze.
+
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link to="/signup" className="group relative flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">

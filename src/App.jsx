@@ -18,6 +18,7 @@ const Contact = lazy(() => import('./pages/Contact/Contact'))
 const Hiring = lazy(() => import('./pages/Hiring/Hiring'))
 const Gallery = lazy(() => import('./pages/Gallery/Gallery'))
 const Team = lazy(() => import('./pages/Team/Team'))
+const MemberDetail = lazy(() => import('./pages/Team/MemberDetail'))
 const Blog = lazy(() => import('./pages/Blog/Blog'))
 const BlogDetails = lazy(() => import('./pages/Blog/BlogDetails'))
 const Notices = lazy(() => import('./pages/Notices/Notices'))
@@ -61,6 +62,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/team" element={<Team />} />
+                <Route path="/team/:id" element={<MemberDetail />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogDetails />} />
                 <Route path="/notices" element={<Notices />} />

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Github, Linkedin, Twitter, Mail, Instagram,Link } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Github, Linkedin, Twitter, Mail, Instagram, Link as LinkIcon, Code } from 'lucide-react';
 
 const Card = ({ member, layout = 'grid' }) => {
+  const [imageError, setImageError] = useState(false)
+
   const getSocialIcon = (platform) => {
     switch (platform) {
       case 'github': return Github
@@ -10,7 +13,7 @@ const Card = ({ member, layout = 'grid' }) => {
       case 'twitter': return Twitter
       case 'email': return Mail
       case 'Instagram': return Instagram
-      case 'Link': return Link
+      case 'Link': return LinkIcon
       default: return Mail
     }
   }
@@ -18,26 +21,104 @@ const Card = ({ member, layout = 'grid' }) => {
   if (layout === 'list') {
     return (
       <StyledListWrapper>
-        <div className="list-card">
-          <div className="bg" />
-          <div className="blob" />
-          <div className="content">
-            <div className="member-info">
-              <img
-                src={member.image}
-                alt={member.name}
-                className="member-image"
-              />
-              <div className="member-details">
-                <h3 className="member-name">{member.name}</h3>
-                <p className="member-role">{member.role}</p>
-                <p className="member-department">{member.department}</p>
+        <div className="card-link">
+          <Link to={`/team/${member.id}`} className="card-content-link">
+            <div className="list-card">
+              <div className="bg" />
+              <div className="blob" />
+              <div className="content">
+                <div className="member-info">
+                  {imageError ? (
+                    <div className="member-image-fallback">
+                      <div className="fallback-content">
+                        <Code size={32} />
+                        <p className="fallback-text">{member.name.split(' ')[0]}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="member-image"
+                      onError={() => setImageError(true)}
+                      onLoad={() => setImageError(false)}
+                    />
+                  )}
+                  <div className="member-details">
+                    <h3 className="member-name">{member.name}</h3>
+                    <p className="member-role">{member.role}</p>
+                    <p className="member-department">{member.department}</p>
+                  </div>
+                </div>
+
+                <div className="member-bio">{member.bio}</div>
+
+                <div className="bottom-section">
+                  <div className="skills">
+                    {member.skills.map((skill, index) => (
+                      <span key={index} className="skill-tag">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="social-links">
+                    {Object.entries(member.social).map(([platform, url]) => {
+                      const IconComponent = getSocialIcon(platform)
+                      return (
+                        <button
+                          key={platform}
+                          className="social-link"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            window.open(url, '_blank', 'noopener,noreferrer')
+                          }}
+                          aria-label={platform}
+                        >
+                          <IconComponent size={16} />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
+          </Link>
+        </div>
+      </StyledListWrapper>
+    );
+  }
 
-            <div className="member-bio">{member.bio}</div>
+  return (
+    <StyledWrapper>
+      <div className="card-link">
+        <Link to={`/team/${member.id}`} className="card-content-link">
+          <div className="card">
+            <div className="bg" />
+            <div className="blob" />
+            <div className="content">
+              {imageError ? (
+                <div className="member-image-fallback">
+                  <div className="fallback-content">
+                    <Code size={32} />
+                    <p className="fallback-text">{member.name.split(' ')[0]}</p>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="member-image"
+                  onError={() => setImageError(true)}
+                  onLoad={() => setImageError(false)}
+                />
+              )}
+              <h3 className="member-name">{member.name}</h3>
+              <p className="member-role">{member.role}</p>
+              <p className="member-department">{member.department}</p>
+              <p className="member-bio ">{member.bio}</p>
 
-            <div className="bottom-section">
+              {/* Skills */}
               <div className="skills">
                 {member.skills.map((skill, index) => (
                   <span key={index} className="skill-tag">
@@ -46,78 +127,44 @@ const Card = ({ member, layout = 'grid' }) => {
                 ))}
               </div>
 
+              {/* Social Links */}
               <div className="social-links">
                 {Object.entries(member.social).map(([platform, url]) => {
                   const IconComponent = getSocialIcon(platform)
                   return (
-                    <a
+                    <button
                       key={platform}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="social-link"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.open(url, '_blank', 'noopener,noreferrer')
+                      }}
+                      aria-label={platform}
                     >
                       <IconComponent size={16} />
-                    </a>
+                    </button>
                   )
                 })}
               </div>
             </div>
           </div>
-        </div>
-      </StyledListWrapper>
-    );
-  }
-
-  return (
-    <StyledWrapper>
-      <div className="card">
-        <div className="bg" />
-        <div className="blob" />
-        <div className="content">
-          <img
-            src={member.image}
-            alt={member.name}
-            className="member-image"
-          />
-          <h3 className="member-name">{member.name}</h3>
-          <p className="member-role">{member.role}</p>
-          <p className="member-department">{member.department}</p>
-          <p className="member-bio ">{member.bio}</p>
-
-          {/* Skills */}
-          <div className="skills">
-            {member.skills.map((skill, index) => (
-              <span key={index} className="skill-tag">
-                {skill}
-              </span>
-            ))}
-          </div>
-
-          {/* Social Links */}
-          <div className="social-links">
-            {Object.entries(member.social).map(([platform, url]) => {
-              const IconComponent = getSocialIcon(platform)
-              return (
-                <a
-                  key={platform}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                >
-                  <IconComponent size={16} />
-                </a>
-              )
-            })}
-          </div>
-        </div>
+        </Link>
       </div>
     </StyledWrapper>
   );
 }
 
 const StyledWrapper = styled.div`
+  .card-link {
+    text-decoration: none;
+    display: block;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
   .card {
     position: relative;
     width: 300px;
@@ -128,6 +175,7 @@ const StyledWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 
   .bg {
@@ -176,6 +224,30 @@ const StyledWrapper = styled.div`
     margin-bottom: 1rem;
     border: 1px solid #374151;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .member-image-fallback {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 1px solid #374151;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fallback-content {
+    text-align: center;
+    color: white;
+  }
+
+  .fallback-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
   }
 
   .member-name {
@@ -343,6 +415,30 @@ const StyledListWrapper = styled.div`
     border: 3px solid #fff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     flex-shrink: 0;
+  }
+
+  .member-image-fallback {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .fallback-content {
+    text-align: center;
+    color: white;
+  }
+
+  .fallback-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
   }
 
   .member-details {

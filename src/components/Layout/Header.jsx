@@ -30,6 +30,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Notices', href: '/notices' },
     { name: 'Contact', href: '/contact' },
     { name: 'Hiring', href: '/hiring' },
+    { name: 'Innovation', href: '/innovation' },
   ];
 
   // Add admin link if user has any admin permission

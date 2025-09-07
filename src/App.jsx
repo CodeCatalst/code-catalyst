@@ -11,6 +11,7 @@ import { BlogsProvider } from './context/NoticesContext'
 import { lazy, Suspense } from 'react'
 import Loader from './components/Common/LoadingSpinner'
 
+
 const Home = lazy(() => import('./pages/Home/Home'))
 const About = lazy(() => import('./pages/About/About'))
 const Contact = lazy(() => import('./pages/Contact/Contact'))
@@ -21,12 +22,14 @@ const Blog = lazy(() => import('./pages/Blog/Blog'))
 const BlogDetails = lazy(() => import('./pages/Blog/BlogDetails'))
 const Notices = lazy(() => import('./pages/Notices/Notices'))
 const Login = lazy(() => import('./pages/Auth/Login'))
+const Socials = lazy(() => import('./pages/Socials/Socials'))
 const Signup = lazy(() => import('./pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'))
 const Profile = lazy(() => import('./pages/Profile/Profile'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 const Test = lazy(() => import('./Test'))
+const Innovation = lazy(() => import('./pages/Innovation/Innovation'))
 
 const HERO_ROUTES = [
   '/',
@@ -61,6 +64,8 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogDetails />} />
                 <Route path="/notices" element={<Notices />} />
+                <Route path="/innovation" element={<Innovation />} />
+                <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

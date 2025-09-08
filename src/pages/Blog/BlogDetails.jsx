@@ -126,7 +126,7 @@ const BlogDetails = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
         
         {/* Back Button */}
-        <div className="absolute top-8 left-8">
+        <div className="absolute top-16 left-8">
           <Link 
             to="/blog"
             className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all duration-200"

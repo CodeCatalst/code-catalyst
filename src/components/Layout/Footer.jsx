@@ -9,7 +9,7 @@ const Footer = () => {
     { icon: Github, href: 'https://github.com/codecatalyst', label: 'GitHub' },
     { icon: DiscordIcon, href: 'https://discord.gg/uW3BthhwDU', label: 'Discord' },
     { icon: Instagram, href: 'https://www.instagram.com/codecatalyst.jb', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/company/codecatalystt/', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/code-catalyst-s/', label: 'LinkedIn' },
   ]
 
   const quickLinks = [

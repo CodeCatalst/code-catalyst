@@ -26,6 +26,7 @@ const Login = lazy(() => import('./pages/Auth/Login'))
 const Socials = lazy(() => import('./pages/Socials/Socials'))
 const Signup = lazy(() => import('./pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 const Profile = lazy(() => import('./pages/Profile/Profile'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
 const Privacy = lazy(() => import('./pages/Privacy'))
@@ -71,6 +72,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route
                   path="/profile"
                   element={

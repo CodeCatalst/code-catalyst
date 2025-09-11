@@ -14,7 +14,7 @@ const Card = ({ member, layout = 'grid' }) => {
       case 'email': return Mail
       case 'Instagram': return Instagram
       case 'Link': return LinkIcon
-      default: return Mail
+      default: return LinkIcon
     }
   }
 
@@ -61,7 +61,7 @@ const Card = ({ member, layout = 'grid' }) => {
                       </span>
                     ))}
                   </div>
-
+{/* 
                   <div className="social-links">
                     {Object.entries(member.social).map(([platform, url]) => {
                       const IconComponent = getSocialIcon(platform)
@@ -79,7 +79,7 @@ const Card = ({ member, layout = 'grid' }) => {
                         </button>
                       )
                     })}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -128,24 +128,42 @@ const Card = ({ member, layout = 'grid' }) => {
               </div>
 
               {/* Social Links */}
-              <div className="social-links">
-                {Object.entries(member.social).map(([platform, url]) => {
-                  const IconComponent = getSocialIcon(platform)
-                  return (
-                    <button
-                      key={platform}
-                      className="social-link"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        window.open(url, '_blank', 'noopener,noreferrer')
-                      }}
-                      aria-label={platform}
-                    >
-                      <IconComponent size={16} />
-                    </button>
-                  )
-                })}
-              </div>
+             <div className="social-links">
+  {Object.entries(member.social).map(([platform, url]) => {
+    const IconComponent = getSocialIcon(platform)
+
+    if (platform.toLowerCase() === "email") {
+      // ✅ email case
+      return (
+        <a
+          key={platform}
+          href={`mailto:${url}`}
+          className="social-link"
+          aria-label={platform}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <IconComponent size={16} />
+        </a>
+      )
+    } else {
+      // ✅ all other platforms
+      return (
+        <a
+          key={platform}
+          href={url}
+          className="social-link"
+          aria-label={platform}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <IconComponent size={16} />
+        </a>
+      )
+    }
+  })}
+</div>
+
             </div>
           </div>
         </Link>

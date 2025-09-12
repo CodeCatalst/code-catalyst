@@ -190,7 +190,7 @@ const MemberDetail = () => {
                     return (
                       <a
                         key={platform}
-                        href={url}
+                        href={platform.toLowerCase() === 'email' ? (url?.startsWith('mailto:') ? url : `mailto:${url}`) : url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -272,7 +272,7 @@ const MemberDetail = () => {
                   return (
                     <a
                       key={platform}
-                      href={url}
+                      href={platform.toLowerCase() === 'email' ? (url?.startsWith('mailto:') ? url : `mailto:${url}`) : url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center space-x-3 bg-gray-50 hover:bg-gray-100 px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 group"
@@ -296,4 +296,3 @@ const MemberDetail = () => {
 }
 
 export default MemberDetail
-

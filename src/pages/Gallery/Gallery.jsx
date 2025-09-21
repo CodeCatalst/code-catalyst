@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { Calendar, Users, ExternalLink, X, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Calendar, Users, ExternalLink, X, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 
 
@@ -8,7 +9,6 @@ import { getGallery as fetchGalleryFromApi } from '../../services/gallery'
 const Gallery = () => {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedEvent, setSelectedEvent] = useState(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const heroRef = useRef(null)
 
@@ -45,15 +45,6 @@ const Gallery = () => {
     })
   }
 
-  const openLightbox = (event) => {
-    setSelectedEvent(event)
-    document.body.style.overflow = 'hidden'
-  }
-
-  const closeLightbox = () => {
-    setSelectedEvent(null)
-    document.body.style.overflow = 'unset'
-  }
 
   if (loading) {
     return <LoadingSpinner />
@@ -129,8 +120,11 @@ const Gallery = () => {
         <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
-              <div key={event.id} className="card group cursor-pointer hover:scale-105 transition-all duration-300"
-                onClick={() => openLightbox(event)}>
+              <Link
+                key={event.id}
+                to={`/gallery/${event.id}`}
+                className="card group cursor-pointer hover:scale-105 transition-all duration-300"
+              >
                 <div className="relative overflow-hidden rounded-lg mb-4">
                   <img
                     src={event.image_url}
@@ -145,6 +139,13 @@ const Gallery = () => {
                       {event.category}
                     </span>
                   </div>
+                  {event.images && event.images.length > 1 && (
+                    <div className="absolute top-3 right-3">
+                      <span className="bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
+                        {event.images.length} photos
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -161,81 +162,15 @@ const Gallery = () => {
                       <Calendar size={16} />
                       <span>{formatDate(event.date)}</span>
                     </div>
-                    
+
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Lightbox Modal */}
-      {selectedEvent && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-gray-900 shadow-2xl flex flex-col">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-2">{selectedEvent.name}</h2>
-                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-400">
-                  <div className="flex items-center space-x-1">
-                    <Calendar size={16} />
-                    <span>{formatDate(selectedEvent.date)}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Users size={16} />
-                    <span>{selectedEvent.attendees} attendees</span>
-                  </div>
-                  <span className="bg-primary-100 text-primary-800 px-2 py-1 rounded text-xs font-medium">
-                    {selectedEvent.category}
-                  </span>
-                </div>
-              </div>
-              <button
-                onClick={closeLightbox}
-                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center transition-colors border border-gray-700"
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="flex flex-col md:flex-row gap-8 p-6 items-center justify-center">
-              {/* Full Image Showcase */}
-              <div className="flex-1 flex items-center justify-center">
-                {Array.isArray(selectedEvent.images) && selectedEvent.images.length > 0 ? (
-                  selectedEvent.images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${selectedEvent.name} - Image ${index + 1}`}
-                      className="max-h-[70vh] w-auto rounded-lg shadow-lg border border-gray-800"
-                      style={{ objectFit: 'contain', marginBottom: '1rem' }}
-                    />
-                  ))
-                ) : (
-                  selectedEvent.image_url && (
-                    <img
-                      src={selectedEvent.image_url}
-                      alt={selectedEvent.name}
-                      className="max-h-[70vh] w-auto rounded-lg shadow-lg border border-gray-800"
-                      style={{ objectFit: 'contain' }}
-                    />
-                  )
-                )}
-              </div>
-              {/* Description */}
-              <div className="flex-1">
-                <p className="text-gray-300 mb-6 leading-relaxed text-lg">
-                  {selectedEvent.description}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {events.length === 0 && (
         <div className="bg-gray-900 text-center py-12 text-gray-400 text-lg font-semibold">

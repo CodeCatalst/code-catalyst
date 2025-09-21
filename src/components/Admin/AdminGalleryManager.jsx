@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Calendar, Users, Trash2, Plus, Edit2, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Calendar, Users, Trash2, Plus, Edit2, X, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { getGallery, createGalleryEvent, updateGalleryEvent, deleteGalleryEvent } from '../../services/gallery'
 import AdminAccessWrapper from './AdminAccessWrapper';
+import RichTextEditor from './RichTextEditor';
 
 const AdminGalleryManager = () => {
     const [events, setEvents] = useState([])
@@ -10,8 +12,8 @@ const AdminGalleryManager = () => {
         date: '',
         description: '',
         category: '',
-        imageFile: null,
-        imageUrl: '', // always base64 or preview url
+        imageFiles: [], // array of files
+        images: [], // array of base64 strings
     })
     const [message, setMessage] = useState(null)
     const [editId, setEditId] = useState(null)
@@ -32,20 +34,31 @@ const AdminGalleryManager = () => {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        if (name === 'imageFile') {
-            const file = files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
+        if (name === 'imageFiles') {
+            const selectedFiles = Array.from(files);
+            if (selectedFiles.length > 0) {
+                // Convert all files to base64
+                const base64Promises = selectedFiles.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                Promise.all(base64Promises).then(base64Strings => {
                     setForm({
                         ...form,
-                        imageFile: file,
-                        imageUrl: reader.result // base64 string for backend
+                        imageFiles: selectedFiles,
+                        images: base64Strings
                     });
-                };
-                reader.readAsDataURL(file);
+                }).catch(error => {
+                    console.error('Error converting files to base64:', error);
+                    setMessage({ type: 'error', text: 'Failed to process images' });
+                });
             } else {
-                setForm({ ...form, imageFile: null, imageUrl: '' });
+                setForm({ ...form, imageFiles: [], images: [] });
             }
         } else {
             setForm({ ...form, [name]: value });
@@ -54,20 +67,20 @@ const AdminGalleryManager = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form.name || !form.date || !form.description || !form.category || !form.imageUrl) {
-            setMessage({ type: 'error', text: 'All fields are required.' });
+        if (!form.name || !form.date || !form.description || !form.category || form.images.length === 0) {
+            setMessage({ type: 'error', text: 'All fields are required, including at least one image.' });
             return;
         }
-        await submitGalleryEvent(form.imageUrl);
+        await submitGalleryEvent(form.images);
     }
 
-    const submitGalleryEvent = async (imageBase64) => {
+    const submitGalleryEvent = async (imagesArray) => {
         try {
-            const newEvent = { ...form, image_url: imageBase64 };
-            delete newEvent.thumbnail;
+            const newEvent = { ...form, images: imagesArray };
+            delete newEvent.imageFiles; // Remove file objects before sending
             const created = await createGalleryEvent(newEvent);
             setEvents([...events, created]);
-            setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' });
+            setForm({ name: '', date: '', description: '', category: '', imageFiles: [], images: [] });
             setMessage({ type: 'success', text: 'Event added!' });
             setTimeout(() => setMessage(null), 2000);
         } catch (err) {
@@ -93,22 +106,22 @@ const AdminGalleryManager = () => {
             date: event.date,
             description: event.description,
             category: event.category,
-            imageFile: null,
-            imageUrl: event.image_url || '',
+            imageFiles: [],
+            images: event.images || (event.image_url ? [event.image_url] : []),
         });
         setShowEditModal(true);
     }
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        if (!form.name || !form.date || !form.description || !form.category || !form.imageUrl) {
-            setMessage({ type: 'error', text: 'All fields are required.' });
+        if (!form.name || !form.date || !form.description || !form.category || form.images.length === 0) {
+            setMessage({ type: 'error', text: 'All fields are required, including at least one image.' });
             return;
         }
-        await updateGalleryEvent(editId, { ...form, image_url: form.imageUrl });
+        await updateGalleryEvent(editId, { ...form, images: form.images });
         setEvents(await getGallery());
         setEditId(null);
-        setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' });
+        setForm({ name: '', date: '', description: '', category: '', imageFiles: [], images: [] });
         setShowEditModal(false);
         setMessage({ type: 'success', text: 'Event updated!' });
         setTimeout(() => setMessage(null), 2000);
@@ -116,7 +129,7 @@ const AdminGalleryManager = () => {
 
     const handleCancelEdit = () => {
         setEditId(null)
-        setForm({ name: '', date: '', description: '', category: '', imageFile: null, imageUrl: '' })
+        setForm({ name: '', date: '', description: '', category: '', imageFiles: [], images: [] })
         setShowEditModal(false)
     }
 
@@ -139,16 +152,23 @@ const AdminGalleryManager = () => {
                             <input name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required disabled={showEditModal} />
                         </div>
                         <div>
-                            <label className="block mb-1 font-semibold">Event Image</label>
-                            <input name="imageFile" type="file" accept="image/*" onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required={!showEditModal} disabled={showEditModal} />
-                            {form.imageUrl && (
-                                <img src={form.imageUrl} alt="Preview" className="mt-2 h-24 rounded object-cover" />
+                            <label className="block mb-1 font-semibold">Event Images (Multiple)</label>
+                            <input name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required={!showEditModal} disabled={showEditModal} />
+                            {form.images.length > 0 && (
+                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                    {form.images.map((image, index) => (
+                                        <img key={index} src={image} alt={`Preview ${index + 1}`} className="h-20 rounded object-cover" />
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
                     <div className="mt-4">
                         <label className="block mb-1 font-semibold">Description</label>
-                        <textarea name="description" value={form.description} onChange={handleChange} rows={3} className="w-full p-2 rounded bg-gray-800 text-white" required disabled={showEditModal} />
+                        <RichTextEditor
+                            value={form.description}
+                            onChange={(content) => setForm({ ...form, description: content })}
+                        />
                     </div>
                     <div className="flex justify-end mt-4">
                         <button type="submit" className="btn-primary flex items-center gap-2" disabled={showEditModal}>
@@ -163,8 +183,19 @@ const AdminGalleryManager = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {events.map(event => (
                         <div key={event.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative">
-                            {event.image_url && (
-                                <img src={event.image_url} alt={event.name} className="w-full h-48 object-cover" />
+                            {/* Image Gallery */}
+                            {event.images && event.images.length > 0 && (
+                                <Link to={`/gallery/${event.id}`} className="relative group cursor-pointer block">
+                                    <img src={event.images[0]} alt={event.name} className="w-full h-48 object-cover" />
+                                    {event.images.length > 1 && (
+                                        <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                                            +{event.images.length - 1} more
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                                        <Eye className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" size={24} />
+                                    </div>
+                                </Link>
                             )}
                             <div className="p-4">
                                 <div className="flex items-center justify-between mb-2">
@@ -212,15 +243,22 @@ const AdminGalleryManager = () => {
                                 <input name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" required />
                             </div>
                             <div className="mb-3">
-                                <label className="block mb-1">Event Image</label>
-                                <input name="imageFile" type="file" accept="image/*" onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" />
-                                {form.imageUrl && (
-                                    <img src={form.imageUrl} alt="Preview" className="mt-2 h-24 rounded object-cover" />
+                                <label className="block mb-1">Event Images (Multiple)</label>
+                                <input name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" />
+                                {form.images.length > 0 && (
+                                    <div className="mt-2 grid grid-cols-3 gap-2">
+                                        {form.images.map((image, index) => (
+                                            <img key={index} src={image} alt={`Preview ${index + 1}`} className="h-16 rounded object-cover" />
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                             <div className="mb-3">
                                 <label className="block mb-1">Description</label>
-                                <textarea name="description" value={form.description} onChange={handleChange} rows={3} className="w-full p-2 rounded bg-gray-900 text-white" required />
+                                <RichTextEditor
+                                    value={form.description}
+                                    onChange={(content) => setForm({ ...form, description: content })}
+                                />
                             </div>
                             <div className="flex gap-2 justify-end">
                                 <button type="button" className="btn-secondary" onClick={handleCancelEdit}>Cancel</button>

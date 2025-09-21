@@ -1,4 +1,4 @@
-import { getAccessibleTabs } from '../../utils/adminAccess';
+import { getAccessibleTabs, hasPermission } from '../../utils/adminAccess';
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { getStats } from '../../services/stats'
@@ -52,8 +52,12 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
     const [userCount, setUserCount] = useState(0);
     useEffect(() => {
+        // Only fetch stats if user is authenticated and has user_management permission or is admin
+        if (!user || (!hasPermission(user.permissions || [], 'user_management') && user.role !== 'admin' && user.role !== 'super_admin')) return;
+
         (async () => {
             try {
+                console.log('Fetching users for admin stats...');
                 // Fetch users
                 const users = await getUsers();
                 const totalUsers = Array.isArray(users) ? users.length : 0;
@@ -80,11 +84,21 @@ const AdminDashboard = () => {
                     totalCore,
                     totalHiringRequests
                 });
-            } catch {
+                console.log('Admin stats updated:', { totalUsers, totalCore, totalHiringRequests });
+            } catch (error) {
+                console.error('Failed to fetch admin stats:', error);
+                // If unauthorized, force logout and redirect
+                if (error.response?.status === 401) {
+                    console.log('Token expired, logging out...');
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                    return;
+                }
+                // If unauthorized, stats will remain at default values
                 setStats({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
             }
         })();
-    }, []);
+    }, [user]);
 
     // Show tabs based on user role
     const tabs = [

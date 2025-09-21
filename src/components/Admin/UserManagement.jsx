@@ -3,6 +3,7 @@ import { Trash2, Search, Filter, User, Mail, Calendar, Shield, RefreshCw, CheckC
 import api, { updateUserRole, expireUserPassword, createUser, updateUser, getRoles } from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 import AdminAccessWrapper from './AdminAccessWrapper'
+import { hasPermission } from '../../utils/adminAccess'
 import * as XLSX from 'xlsx'
 
 const UserManagement = ({ onUserCountUpdate }) => {
@@ -20,6 +21,12 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [rolesList, setRolesList] = useState([]);
 
     useEffect(() => {
+        // Only fetch if user has permission or is admin
+        if (!currentUser || (!hasPermission(currentUser.permissions || [], 'user_management') && currentUser.role !== 'admin' && currentUser.role !== 'super_admin')) {
+            setLoading(false);
+            return;
+        }
+
         // Fetch users and roles from backend
         const fetchUsers = async () => {
             try {
@@ -35,18 +42,21 @@ const UserManagement = ({ onUserCountUpdate }) => {
                     status: 'active',
                 }))
                 setUsers(usersData)
-                // Fetch notes for each user (as a single string)
+                // Temporarily skip notes fetching due to database schema issues
                 const notesMap = {};
-                await Promise.all(usersData.map(async (u) => {
-                    try {
-                        const notesRes = await api.get(`/users/${u.id}/notes`);
-                        notesMap[u.id] = notesRes.data?.notes || '';
-                    } catch {
-                        notesMap[u.id] = '';
-                    }
-                }));
+                usersData.forEach(u => {
+                    notesMap[u.id] = '';
+                });
                 setEditingNotes(notesMap);
             } catch (error) {
+                console.error('Failed to load users:', error);
+                // If unauthorized, force logout and redirect
+                if (error.response?.status === 401) {
+                    console.log('Token expired, logging out...');
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                    return;
+                }
                 setMessage({ type: 'error', text: 'Failed to load users' })
             } finally {
                 setLoading(false)
@@ -118,7 +128,8 @@ const UserManagement = ({ onUserCountUpdate }) => {
             setDeleteConfirm(null)
             setMessage({ type: 'success', text: 'User deleted successfully' })
         } catch (error) {
-            setMessage({ type: 'error', text: 'Failed to delete user' })
+            const errorMessage = error.response?.data?.error || 'Failed to delete user'
+            setMessage({ type: 'error', text: errorMessage })
         }
     }
 
@@ -214,9 +225,8 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const handleNotesSave = async (id) => {
         setSavingNotesId(id);
         try {
-            const noteContent = editingNotes[id] || '';
-            await api.put(`/users/${id}/notes`, { notes: noteContent });
-            setMessage({ type: 'success', text: 'Notes updated successfully' });
+            // Temporarily disabled due to database schema issues
+            setMessage({ type: 'info', text: 'Notes saving temporarily disabled' });
         } catch {
             setMessage({ type: 'error', text: 'Failed to update notes' });
         } finally {

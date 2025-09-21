@@ -96,7 +96,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center space-x-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   {user?.profile_picture_url ? (
                     <img

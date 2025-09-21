@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { Calendar, ArrowRight, X, ClipboardCheck } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import { getNotices } from '../../services/notices'
@@ -6,10 +7,6 @@ import { getNotices } from '../../services/notices'
 const Notices = () => {
   const [notices, setNotices] = useState([])
   const [loading, setLoading] = useState(true)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modalNotice, setModalNotice] = useState(null)
-  const [modalLoading, setModalLoading] = useState(false)
-  const [copySuccess, setCopySuccess] = useState(false)
   const heroRef = useRef(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
@@ -51,19 +48,6 @@ const Notices = () => {
     })
   }
 
-  const handleReadClick = async (id) => {
-    setModalLoading(true)
-    setModalOpen(true)
-    try {
-      const api = (await import('../../services/api')).default;
-      const res = await api.get(`/notices/${id}`);
-      setModalNotice(res.data && res.data.success ? res.data.data : null);
-    } catch {
-      setModalNotice(null)
-    } finally {
-      setModalLoading(false)
-    }
-  }
 
   if (loading) {
     return <LoadingSpinner message="Loading notices..." />
@@ -140,108 +124,71 @@ const Notices = () => {
         </div>
       </section>
       {/* Notices Grid */}
-      <section className="section-padding bg-slate-900" id="notices-section">
-        <div className="container-max">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {notices.filter(notice => !notice.hidden).map((notice) => (
-              <div
-                key={notice.id}
-                className="card hover:scale-105 transition-all duration-300 group cursor-pointer"
-                onClick={() => handleReadClick(notice.id)}
-                tabIndex={0}
-                role="button"
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleReadClick(notice.id); }}
-              >
-                <div className="relative overflow-hidden rounded-lg mb-4 bg-gray-800 p-6 min-h-[120px] flex flex-col justify-center">
-                  <h3 className="text-xl font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-2 mb-2">
-                    {notice.title}
-                  </h3>
-                  <div className="flex items-center text-sm text-gray-400">
-                    <Calendar size={16} className="mr-2" />
-                    <span>{formatDate(notice.date || notice.created_at)}</span>
-                  </div>
-                </div>
-                <div className="text-gray-400 text-sm line-clamp-3 px-2 pb-2">
-                  {notice.summary || notice.content?.slice(0, 120) || ''}
-                </div>
-              </div>
-            ))}
+      <section className="py-20 bg-slate-900" id="notices-section">
+        <div className="container-max px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Latest Notices</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Stay informed with important announcements, updates, and community news
+            </p>
           </div>
-          {notices.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No notices found.</p>
+
+          {notices.filter(notice => !notice.hidden).length === 0 ? (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Calendar size={32} className="text-gray-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-300 mb-2">No notices yet</h3>
+              <p className="text-gray-500">Check back later for updates and announcements.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {notices.filter(notice => !notice.hidden).map((notice) => (
+                <Link
+                  key={notice.id}
+                  to={`/notices/${notice.id}`}
+                  className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1"
+                >
+                  <div className="p-6 h-full flex flex-col">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center text-sm text-gray-400">
+                        <Calendar size={16} className="mr-2" />
+                        <span>{formatDate(notice.date || notice.created_at)}</span>
+                      </div>
+                      {Array.isArray(notice.tags) && notice.tags.length > 0 && (
+                        <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-xs rounded-full font-medium">
+                          {notice.tags[0]}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-4 leading-tight flex-grow">
+                      {notice.title}
+                    </h3>
+
+                    <div className="text-gray-300 text-sm line-clamp-3 leading-relaxed mb-4 flex-grow">
+                      {notice.summary || notice.description?.replace(/<[^>]*>/g, '').slice(0, 150) || 'Click to read the full notice...'}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                      <div className="flex items-center text-sm text-blue-400 group-hover:text-blue-300 font-medium">
+                        <span>Read full notice</span>
+                        <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                      {notice.images && (
+                        <div className="flex items-center text-xs text-gray-500">
+                          <span className="mr-1">📎</span>
+                          <span>Attachment</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
         </div>
       </section>
-      {/* Notice Details Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-slate-900 rounded-lg shadow-2xl max-w-2xl w-full mx-4 relative p-0 text-white animate-fade-in flex flex-col overflow-hidden">
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-white focus:outline-none"
-              onClick={() => { setModalOpen(false); setModalNotice(null); }}
-              aria-label="Close"
-            >
-              <X size={28} />
-            </button>
-            {modalLoading ? (
-              <div className="flex-1 flex items-center justify-center min-h-[300px]">
-                <LoadingSpinner message="Loading notice..." />
-              </div>
-            ) : modalNotice ? (
-              <>
-                <div className="w-full h-full flex flex-col p-6 overflow-y-auto max-h-[400px]">
-                  <h2 className="text-2xl font-bold mb-2">{modalNotice.title}</h2>
-                  <div className="flex items-center space-x-4 text-gray-400 mb-4">
-                    <span className="flex items-center space-x-1">
-                      <Calendar size={16} />
-                      <span>{formatDate(modalNotice.date || modalNotice.created_at)}</span>
-                    </span>
-                  </div>
-                  {modalNotice.images && (
-                    <div className="mb-4 flex justify-center">
-                      <img src={modalNotice.images} alt="Notice" className="rounded-lg max-h-48 object-contain" />
-                    </div>
-                  )}
-                  <div className="mb-2 flex flex-wrap gap-2">
-                    {Array.isArray(modalNotice.tags) && modalNotice.tags.length > 0 && modalNotice.tags.map(tag => (
-                      <span key={tag} className="inline-block bg-blue-900 text-blue-200 rounded-full px-2 py-1 text-xs font-medium mr-1 mb-1">{tag}</span>
-                    ))}
-                  </div>
-                  <p className="text-gray-200 mb-4 whitespace-pre-line" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                    {modalNotice.description}
-                  </p>
-                  {/* Share Button */}
-                  <div className="mt-4 border-t border-gray-700 pt-4 flex gap-3">
-                    <button
-                      className="inline-flex items-center px-4 py-2 bg-primary-700 text-white rounded hover:bg-primary-800 transition-colors text-sm font-semibold"
-                      onClick={async () => {
-                        const url = `${window.location.origin}/notices/${modalNotice.id}`;
-                        await navigator.clipboard.writeText(url);
-                        setCopySuccess(true);
-                        setTimeout(() => setCopySuccess(false), 2000);
-                      }}
-                      title="Copy notice link"
-                    >
-                      <ClipboardCheck className="mr-2" size={18} /> Copy Link
-                    </button>
-                  </div>
-                </div>
-                {/* Copy Link Success Toast */}
-                {copySuccess && (
-                  <div className="fixed left-1/2 -translate-x-1/2 bottom-8 z-50 bg-green-700 text-white px-6 py-3 rounded shadow-lg flex items-center gap-2 animate-fade-in">
-                    <ClipboardCheck size={20} />
-                    Link copied to clipboard!
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex-1 flex items-center justify-center min-h-[300px] text-center py-12 text-red-500">Notice not found.</div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

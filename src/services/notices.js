@@ -5,6 +5,11 @@ export async function getNotices() {
   return res.data
 }
 
+export async function getNotice(id) {
+  const res = await api.get(`/notices/${id}`)
+  return res.data
+}
+
 export async function createNotice(notice) {
   const res = await api.post('/notices', notice)
   return res.data

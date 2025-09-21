@@ -23,6 +23,7 @@ const MemberDetail = lazy(() => import('./pages/Team/MemberDetail'))
 const Blog = lazy(() => import('./pages/Blog/Blog'))
 const BlogDetails = lazy(() => import('./pages/Blog/BlogDetails'))
 const Notices = lazy(() => import('./pages/Notices/Notices'))
+const NoticeDetails = lazy(() => import('./pages/Notices/NoticeDetails'))
 const Login = lazy(() => import('./pages/Auth/Login'))
 const Socials = lazy(() => import('./pages/Socials/Socials'))
 const Signup = lazy(() => import('./pages/Auth/Signup'))
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/gallery/:id" element={<GalleryDetails />} />
                 <Route path="/notices" element={<Notices />} />
+                <Route path="/notices/:id" element={<NoticeDetails />} />
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path='/socials' element={<Socials />}/>

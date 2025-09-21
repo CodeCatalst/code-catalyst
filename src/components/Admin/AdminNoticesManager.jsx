@@ -5,6 +5,7 @@ import {
   updateNotice,
   deleteNotice
 } from '../../services/notices';
+import RichTextEditor from './RichTextEditor';
 
 const AdminNoticeManager = () => {
   const [notices, setNotices] = useState([]);
@@ -186,14 +187,9 @@ const AdminNoticeManager = () => {
               </div>
               <div>
                 <label className="block font-medium mb-1 text-blue-300">Content</label>
-                <textarea
-                  name="description"
+                <RichTextEditor
                   value={formData.description}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 min-h-[80px] bg-gray-900 text-white placeholder-gray-400"
-                  maxLength={1000}
-                  placeholder="Notice content"
+                  onChange={(content) => setFormData({ ...formData, description: content })}
                 />
               </div>
               <div>
@@ -284,7 +280,10 @@ const AdminNoticeManager = () => {
                   </div>
                   <h2 className="text-2xl font-semibold text-blue-200 mb-2">{notice.title}</h2>
                   <p className="text-sm text-gray-400 mb-2">{formatDate(notice.created_at)}</p>
-                  <p className="text-gray-200 mb-4 line-clamp-4">{notice.description}</p>
+                  <div
+                    className="text-gray-200 mb-4 line-clamp-4 prose prose-sm prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: notice.description }}
+                  />
                   <div className="flex flex-wrap gap-2 mb-2">
                     {Array.isArray(notice.tags) && notice.tags.length > 0 ? (
                       notice.tags.map(tag => (

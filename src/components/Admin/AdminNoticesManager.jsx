@@ -162,7 +162,19 @@ const AdminNoticeManager = () => {
         <h1 className="text-3xl font-bold text-blue-300">Notice Management</h1>
         <button
           className={`px-5 py-2 rounded-lg font-semibold shadow transition bg-blue-700 text-white hover:bg-blue-600 ${showForm ? 'ring-2 ring-blue-400' : ''}`}
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            if (showForm) {
+              // If form is currently open, close it and reset
+              resetForm();
+            } else {
+              // If form is closed, open it for creation and reset any previous edit state
+              setEditingNotice(null);
+              setFormData({ title: '', description: '', images: '', tags: [], hidden: false });
+              setImagePreview(null);
+              setNewTag('');
+              setShowForm(true);
+            }
+          }}
         >
           {showForm ? 'Cancel' : 'Create New Notice'}
         </button>

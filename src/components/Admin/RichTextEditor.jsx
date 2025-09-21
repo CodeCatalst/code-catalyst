@@ -59,7 +59,7 @@ const RichTextEditor = ({ value, onChange }) => {
     <button
       type="button"
       onClick={() => execCommand(command, value)}
-      className="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+      className="p-2 text-gray-700 hover:bg-gray-200 rounded transition-colors"
       title={title}
     >
       <Icon size={18} />
@@ -69,7 +69,7 @@ const RichTextEditor = ({ value, onChange }) => {
   const FontSizeSelect = () => (
     <select
       onChange={(e) => execCommand('fontSize', e.target.value)}
-      className="px-2 py-1 text-sm border border-gray-300 rounded bg-white text-gray-600"
+      className="px-2 py-1 text-sm border border-gray-300 rounded bg-white text-gray-700"
       title="Font Size"
     >
       <option value="">Size</option>
@@ -101,6 +101,33 @@ const RichTextEditor = ({ value, onChange }) => {
 
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .rich-text-editor-content {
+            color: #111827 !important;
+          }
+          .rich-text-editor-content * {
+            color: #111827 !important;
+          }
+          .rich-text-editor-content p,
+          .rich-text-editor-content h1,
+          .rich-text-editor-content h2,
+          .rich-text-editor-content h3,
+          .rich-text-editor-content h4,
+          .rich-text-editor-content h5,
+          .rich-text-editor-content h6,
+          .rich-text-editor-content span,
+          .rich-text-editor-content div,
+          .rich-text-editor-content strong,
+          .rich-text-editor-content b,
+          .rich-text-editor-content em,
+          .rich-text-editor-content i,
+          .rich-text-editor-content u,
+          .rich-text-editor-content blockquote {
+            color: #111827 !important;
+          }
+        `
+      }} />
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 p-3 border-b border-gray-300 bg-gradient-to-r from-gray-50 to-gray-100">
         {/* Text Formatting */}
@@ -158,8 +185,16 @@ const RichTextEditor = ({ value, onChange }) => {
         onInput={handleInput}
         onBlur={handleInput}
         onKeyUp={handleInput}
-        className="min-h-[350px] p-4 prose prose-sm max-w-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset bg-white"
-        style={{ fontFamily: 'inherit', lineHeight: '1.6' }}
+        className="rich-text-editor-content min-h-[350px] p-4 prose prose-sm max-w-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset bg-white text-gray-900"
+        style={{
+          fontFamily: 'inherit',
+          lineHeight: '1.6',
+          color: '#111827' // Explicit dark text color
+        }}
+        onFocus={(e) => {
+          // Ensure text color on focus
+          e.target.style.color = '#111827';
+        }}
         suppressContentEditableWarning={true}
         tabIndex={0}
         data-placeholder="Start writing your content here..."

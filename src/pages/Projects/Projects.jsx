@@ -92,7 +92,7 @@ const Projects = () => {
       name: 'Eve Chatbot',
       description: 'An intelligent chatbot designed to provide community information, college details, and career guidance to students.',
       status: 'ongoing',
-      category: 'AI/ML',
+      category: 'AI/ML & Web Dev',
       link: 'https://eve-higv.onrender.com/?next=/cc-chatbot/', // Placeholder link for ongoing project
       image: '/eve.jpg',
       techStack: {
@@ -110,7 +110,7 @@ const Projects = () => {
         'Multi-language support (planned)'
       ],
       progress: 75,
-      expectedCompletion: 'Q2 2024',
+      expectedCompletion: 'Q2 2025',
       color: 'from-blue-500 to-cyan-500'
     }
   ]
@@ -620,6 +620,18 @@ const Projects = () => {
                               ))}
                             </div>
                           </div>
+
+                          {project.link && project.link !== '#' && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+                            >
+                              <ExternalLink size={18} className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                              View Project
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>

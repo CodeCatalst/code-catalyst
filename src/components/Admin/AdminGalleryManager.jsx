@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Users, Trash2, Plus, Edit2, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
+import { Calendar, Users, Trash2, Plus, Edit2, X, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { getGallery, createGalleryEvent, updateGalleryEvent, deleteGalleryEvent } from '../../services/gallery'
 import AdminAccessWrapper from './AdminAccessWrapper';
 import RichTextEditor from './RichTextEditor';
@@ -137,6 +137,13 @@ const AdminGalleryManager = () => {
         }
     }
 
+    const handleRemoveImage = (index) => {
+        setForm({
+            ...form,
+            images: form.images.filter((_, i) => i !== index)
+        });
+    }
+
     return (
         <AdminAccessWrapper permission="gallery_management">
             <div className="max-w-4xl mx-auto py-8 text-white">
@@ -161,7 +168,17 @@ const AdminGalleryManager = () => {
                             {form.images.length > 0 && (
                                 <div className="mt-2 grid grid-cols-3 gap-2">
                                     {form.images.map((image, index) => (
-                                        <img key={index} src={image} alt={`Preview ${index + 1}`} className="h-20 rounded object-cover" />
+                                        <div key={index} className="relative">
+                                            <img src={image} alt={`Preview ${index + 1}`} className="h-20 w-full rounded object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveImage(index)}
+                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                                                title="Remove image"
+                                            >
+                                                <X size={12} />
+                                            </button>
+                                        </div>
                                     ))}
                                 </div>
                             )}

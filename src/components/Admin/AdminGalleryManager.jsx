@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Users, Trash2, Plus, Edit2, X, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
+import { Calendar, Users, Trash2, Plus, Edit2, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { getGallery, createGalleryEvent, updateGalleryEvent, deleteGalleryEvent } from '../../services/gallery'
 import AdminAccessWrapper from './AdminAccessWrapper';
 import RichTextEditor from './RichTextEditor';
@@ -17,7 +17,6 @@ const AdminGalleryManager = () => {
     })
     const [message, setMessage] = useState(null)
     const [editId, setEditId] = useState(null)
-    const [showEditModal, setShowEditModal] = useState(false)
 
     useEffect(() => {
         fetchGallery()
@@ -51,14 +50,14 @@ const AdminGalleryManager = () => {
                     setForm({
                         ...form,
                         imageFiles: selectedFiles,
-                        images: base64Strings
+                        images: editId ? [...form.images, ...base64Strings] : base64Strings
                     });
                 }).catch(error => {
                     console.error('Error converting files to base64:', error);
                     setMessage({ type: 'error', text: 'Failed to process images' });
                 });
             } else {
-                setForm({ ...form, imageFiles: [], images: [] });
+                setForm({ ...form, imageFiles: [], images: editId ? form.images : [] });
             }
         } else {
             setForm({ ...form, [name]: value });
@@ -109,7 +108,6 @@ const AdminGalleryManager = () => {
             imageFiles: [],
             images: event.images || (event.image_url ? [event.image_url] : []),
         });
-        setShowEditModal(true);
     }
 
     const handleUpdate = async (e) => {
@@ -122,7 +120,6 @@ const AdminGalleryManager = () => {
         setEvents(await getGallery());
         setEditId(null);
         setForm({ name: '', date: '', description: '', category: '', imageFiles: [], images: [] });
-        setShowEditModal(false);
         setMessage({ type: 'success', text: 'Event updated!' });
         setTimeout(() => setMessage(null), 2000);
     }
@@ -130,30 +127,37 @@ const AdminGalleryManager = () => {
     const handleCancelEdit = () => {
         setEditId(null)
         setForm({ name: '', date: '', description: '', category: '', imageFiles: [], images: [] })
-        setShowEditModal(false)
+    }
+
+    const handleFormSubmit = async (e) => {
+        if (editId) {
+            await handleUpdate(e);
+        } else {
+            await handleSubmit(e);
+        }
     }
 
     return (
         <AdminAccessWrapper permission="gallery_management">
             <div className="max-w-4xl mx-auto py-8 text-white">
                 <h2 className="text-3xl font-bold mb-6">Gallery Manager</h2>
-                <form onSubmit={handleSubmit} className="bg-gray-900 p-6 rounded-lg mb-8">
+                <form onSubmit={handleFormSubmit} className="bg-gray-900 p-6 rounded-lg mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block mb-1 font-semibold">Event Title</label>
-                            <input name="name" value={form.name} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required disabled={showEditModal} />
+                            <input name="name" value={form.name} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required />
                         </div>
                         <div>
                             <label className="block mb-1 font-semibold">Date</label>
-                            <input name="date" type="date" value={form.date} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required disabled={showEditModal} />
+                            <input name="date" type="date" value={form.date} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required />
                         </div>
                         <div>
                             <label className="block mb-1 font-semibold">Category</label>
-                            <input name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required disabled={showEditModal} />
+                            <input name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required />
                         </div>
                         <div>
                             <label className="block mb-1 font-semibold">Event Images (Multiple)</label>
-                            <input name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" required={!showEditModal} disabled={showEditModal} />
+                            <input name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} className="w-full p-2 rounded bg-gray-800 text-white" />
                             {form.images.length > 0 && (
                                 <div className="mt-2 grid grid-cols-3 gap-2">
                                     {form.images.map((image, index) => (
@@ -170,10 +174,15 @@ const AdminGalleryManager = () => {
                             onChange={(content) => setForm({ ...form, description: content })}
                         />
                     </div>
-                    <div className="flex justify-end mt-4">
-                        <button type="submit" className="btn-primary flex items-center gap-2" disabled={showEditModal}>
-                            <Plus size={18} />
-                            <span>Add Event</span>
+                    <div className="flex justify-end mt-4 gap-2">
+                        {editId && (
+                            <button type="button" onClick={handleCancelEdit} className="btn-secondary">
+                                Cancel
+                            </button>
+                        )}
+                        <button type="submit" className="btn-primary flex items-center gap-2">
+                            {editId ? <Edit2 size={18} /> : <Plus size={18} />}
+                            <span>{editId ? 'Update Event' : 'Add Event'}</span>
                         </button>
                     </div>
                     {message && (
@@ -222,51 +231,6 @@ const AdminGalleryManager = () => {
                         </div>
                     )}
                 </div>
-                {/* Edit Modal */}
-                {showEditModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-                        <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handleUpdate}>
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-xl font-bold">Edit Event</h3>
-                                <button type="button" onClick={handleCancelEdit} className="text-gray-400 hover:text-white"><X size={22} /></button>
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Event Title</label>
-                                <input name="name" value={form.name} onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Date</label>
-                                <input name="date" type="date" value={form.date} onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Category</label>
-                                <input name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" required />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Event Images (Multiple)</label>
-                                <input name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} className="w-full p-2 rounded bg-gray-900 text-white" />
-                                {form.images.length > 0 && (
-                                    <div className="mt-2 grid grid-cols-3 gap-2">
-                                        {form.images.map((image, index) => (
-                                            <img key={index} src={image} alt={`Preview ${index + 1}`} className="h-16 rounded object-cover" />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="block mb-1">Description</label>
-                                <RichTextEditor
-                                    value={form.description}
-                                    onChange={(content) => setForm({ ...form, description: content })}
-                                />
-                            </div>
-                            <div className="flex gap-2 justify-end">
-                                <button type="button" className="btn-secondary" onClick={handleCancelEdit}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                )}
             </div>
         </AdminAccessWrapper>
     )

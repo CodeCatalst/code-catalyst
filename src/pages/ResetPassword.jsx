@@ -22,6 +22,12 @@ export default function ResetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (!token) {
+      setStatus('Invalid reset link. Please request a new password reset.');
+      return;
+    }
+
     // Validation
     if (!formData.name.trim()) {
       setStatus('Name is required.');
@@ -52,7 +58,7 @@ export default function ResetPassword() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: new URLSearchParams(window.location.search).get('token'),
+        token,
         name: formData.name.trim(),
         email: formData.email.trim(),
         newPassword: formData.password

@@ -187,6 +187,37 @@ export async function expireUserPassword(id) {
   return res.data;
 }
 
+// ESPORTS REGISTRATIONS
+export async function getEsportsRegistrations() {
+  const res = await fetch(`${API_BASE}/api/esports`);
+  if (!res.ok) throw new Error('Failed to fetch esports registrations');
+  return res.json();
+}
+
+export async function getEsportsRegistration(id) {
+  const res = await fetch(`${API_BASE}/api/esports/${id}`);
+  if (!res.ok) throw new Error('Failed to fetch esports registration');
+  return res.json();
+}
+
+export async function createEsportsRegistration(registration) {
+  const res = await fetch(`${API_BASE}/api/esports`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(registration),
+  });
+  if (!res.ok) throw new Error('Failed to create esports registration');
+  return res.json();
+}
+
+export async function deleteEsportsRegistration(id) {
+  const res = await fetch(`${API_BASE}/api/esports/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to delete esports registration');
+  return res.json();
+}
+
 export async function updateUserRole(userId, role) {
   try {
     const response = await api.put(`/users/${userId}/role`, { role });

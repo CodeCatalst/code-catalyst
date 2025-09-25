@@ -32,6 +32,7 @@ import AdminHiringRequests from '../../components/Admin/AdminHiringRequests';
 import AdminAccessWrapper from '../../components/Admin/AdminAccessWrapper';
 import AdminTeamTab from '../../components/Admin/AdminTeamTab';
 import RoleManagement from '../../components/Admin/RoleManagement.jsx'
+import AdminEsportsManager from '../../components/Admin/AdminEsportsManager';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -112,6 +113,7 @@ const AdminDashboard = () => {
         // { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
         { id: 'contact', label: 'Contact Messages' },
         { id: 'hiring', label: 'Hiring Requests' },
+        { id: 'esports', label: 'Esports Registrations' },
     ].filter(tab => accessibleTabs.includes(tab.id));
 
     const handleUserCountUpdate = (count) => {
@@ -182,6 +184,12 @@ const AdminDashboard = () => {
                     <AdminTeamTab />
                   </AdminAccessWrapper>
                 );
+            case 'esports':
+                return (
+                  <AdminAccessWrapper permission="esports_management">
+                    <AdminEsportsManager />
+                  </AdminAccessWrapper>
+                );
             default:
                 return null;
         }
@@ -189,6 +197,17 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen  bg-gray-900 p-2 pt-24 sm:p-5 sm:pt-24">
+            <style>
+                {`
+                    .hide-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .hide-scrollbar {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                    }
+                `}
+            </style>
             <div className="container-max">
                 {/* Header */}
                 <div className="mb-8">
@@ -236,12 +255,12 @@ const AdminDashboard = () => {
                 {/* Tabs */}
                 <div className="card">
                     <div className="border-b border-gray-700 mb-6">
-                        <nav className="flex space-x-8 overflow-x-auto">
+                        <nav className="flex space-x-8 overflow-x-auto hide-scrollbar">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
+                                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === tab.id
                                         ? 'border-primary-500 text-primary-500'
                                         : 'border-transparent text-gray-400 hover:text-gray-300'
                                         }`}

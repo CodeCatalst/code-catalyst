@@ -136,8 +136,8 @@ const UserManagement = ({ onUserCountUpdate }) => {
     // Add handler for role change
     const handleRoleChange = async (userId, newRole) => {
         try {
-            await updateUserRole(userId, newRole)
-            setUsers(users => users.map(u => u.id === userId ? { ...u, role: newRole } : u))
+            const updatedUser = await updateUserRole(userId, newRole)
+            setUsers(users => users.map(u => u.id === userId ? { ...u, role: newRole, permissions: updatedUser.permissions } : u))
             setMessage({ type: 'success', text: 'Role updated successfully' })
         } catch (error) {
             setMessage({ type: 'error', text: 'Failed to update role' })

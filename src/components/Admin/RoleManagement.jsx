@@ -24,6 +24,8 @@ const RoleManagement = () => {
   const [showForm, setShowForm] = useState(false)
   const [editRole, setEditRole] = useState(null)
   const [availablePermissions, setAvailablePermissions] = useState([])
+  const [showPermissionForm, setShowPermissionForm] = useState(false)
+  const [editPermission, setEditPermission] = useState(null)
 
   const fetchPermissions = async () => {
     try {
@@ -86,6 +88,41 @@ const RoleManagement = () => {
       setMessage({ type: 'error', text: 'Failed to load roles' })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handlePermissionSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const permissionData = {
+      name: form.name.value,
+      description: form.description.value
+    }
+
+    try {
+      if (editPermission) {
+        // Note: Assuming updatePermission exists, but backend may not have it
+        setMessage({ type: 'info', text: 'Permission update not implemented' })
+      } else {
+        await createPermission(permissionData)
+        setMessage({ type: 'success', text: 'Permission created successfully' })
+      }
+      await fetchPermissions()
+      setShowPermissionForm(false)
+      setEditPermission(null)
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to save permission' })
+    }
+  }
+
+  const handleDeletePermission = async (id) => {
+    if (!confirm('Are you sure you want to delete this permission?')) return
+    try {
+      await deletePermission(id)
+      setMessage({ type: 'success', text: 'Permission deleted successfully' })
+      await fetchPermissions()
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to delete permission' })
     }
   }
 
@@ -253,6 +290,40 @@ const RoleManagement = () => {
           </div>
         </div>
 
+        {/* Permissions Management */}
+        <div className="bg-gray-800 p-4 rounded-lg mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-white">Manage Permissions</h3>
+            <button
+              onClick={() => { setEditPermission(null); setShowPermissionForm(true) }}
+              className="btn-primary flex items-center gap-2 px-3 py-2 rounded-lg"
+            >
+              <Plus size={18} />
+              Add Permission
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {availablePermissions.map(permission => (
+              <div key={permission.id} className="bg-gray-700 p-3 rounded flex justify-between items-center">
+                <div>
+                  <div className="font-medium text-gray-100">{permission.name}</div>
+                  <div className="text-sm text-gray-400">{permission.description || 'No description'}</div>
+                </div>
+                <button
+                  onClick={() => handleDeletePermission(permission.id)}
+                  className="text-red-400 hover:text-red-300 transition-colors p-1"
+                  title="Delete Permission"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+          {availablePermissions.length === 0 && (
+            <div className="text-center py-4 text-gray-400">No permissions available.</div>
+          )}
+        </div>
+
         {/* Roles Table */}
         <div className="overflow-x-auto">
           <table className="w-full bg-gray-900 rounded-lg">
@@ -319,6 +390,27 @@ const RoleManagement = () => {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Permission Modal */}
+        {showPermissionForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <form className="bg-gray-800 p-6 rounded-lg w-full max-w-md" onSubmit={handlePermissionSubmit}>
+              <h3 className="text-xl font-bold mb-4">{editPermission ? 'Edit Permission' : 'Add Permission'}</h3>
+              <div className="mb-3">
+                <label className="block mb-1">Permission Name</label>
+                <input name="name" defaultValue={editPermission?.name || ''} className="w-full p-2 rounded bg-gray-900 text-white" required />
+              </div>
+              <div className="mb-3">
+                <label className="block mb-1">Description</label>
+                <textarea name="description" defaultValue={editPermission?.description || ''} className="w-full p-2 rounded bg-gray-900 text-white" rows={2} />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button type="button" className="btn-secondary" onClick={() => setShowPermissionForm(false)}>Cancel</button>
+                <button type="submit" className="btn-primary">Save</button>
+              </div>
+            </form>
           </div>
         )}
 

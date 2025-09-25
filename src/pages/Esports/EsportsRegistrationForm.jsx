@@ -326,7 +326,7 @@ const EsportsRegistrationForm = () => {
               </div>
             </div>
             <a
-              href="https://code-catalyst.pages.dev/esports_rulebook.pdf"
+              href="https://code-catalyst.pages.dev/esports_rulebook.pdf.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 flex items-center gap-2 shadow-lg"

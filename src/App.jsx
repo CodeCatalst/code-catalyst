@@ -8,7 +8,7 @@ import { NoticesProvider } from './context/NoticesContext'
 import { BlogsProvider } from './context/NoticesContext'
 
 // Lazy load pages for better performance
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import Loader from './components/Common/LoadingSpinner'
 
 
@@ -47,11 +47,20 @@ const HERO_ROUTES = [
   '/notices',
   '/test',
 '/projects',
+'/esports',
 ]
 
 function App() {
   const location = useLocation()
   const transparentOnTop = HERO_ROUTES.includes(location.pathname)
+
+  useEffect(() => {
+    console.log('Testing WebSocket connection...');
+    const ws = new WebSocket('ws://localhost:5174');
+    ws.onopen = () => console.log('Manual WebSocket opened successfully');
+    ws.onerror = (e) => console.log('Manual WebSocket error:', e);
+    ws.onclose = () => console.log('Manual WebSocket closed');
+  }, []);
 
   return (
     <NoticesProvider>
@@ -71,13 +80,12 @@ function App() {
                 <Route path="/team/:id" element={<MemberDetail />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogDetails />} />
-                <Route path="/gallery" element={<Gallery />} />
                 <Route path="/gallery/:id" element={<GalleryDetails />} />
                 <Route path="/notices" element={<Notices />} />
                 <Route path="/notices/:id" element={<NoticeDetails />} />
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/projects" element={<Projects />} />
-                <Route path="/esports-registration" element={<EsportsRegistration />} />
+                <Route path="/esports" element={<EsportsRegistration />} />
                 <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

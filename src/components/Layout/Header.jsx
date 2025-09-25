@@ -79,7 +79,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           <div className="hidden lg:flex items-center space-x-8">
             {[...navigationLinks, ...adminLinks].map((link) => (
               <Link
-                key={link.name}
+                key={link.href}
                 to={link.href}
                 className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
                   ? 'text-primary-600'
@@ -171,7 +171,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             <div className="px-4 py-6 space-y-4">
               {[...navigationLinks, ...adminLinks].map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   to={link.href}
                   className={`block font-medium py-2 hover:text-primary-600 transition-colors ${location.pathname === link.href ? 'text-primary-600' : 'text-white'
                     }`}

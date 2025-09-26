@@ -318,7 +318,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.events?.map((event) => (
-                  <Link key={event.id} to={`/gallery/${event.id}`} className="card hover:scale-105 transition-transform block">
+                  <Link key={event.id} to={`/gallery/${event.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
                     {event.image && (
                       <img
                         src={event.image}
@@ -349,7 +349,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.notices?.map((notice) => (
-                  <Link key={notice.id} to={`/notices/${notice.id}`} className="card hover:scale-105 transition-transform block">
+                  <Link key={notice.id} to={`/notices/${notice.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
                     <h4 className="font-semibold text-white mb-1">{notice.title}</h4>
                     <p className="text-gray-300 text-sm mb-1">{notice.description?.replace(/<[^>]*>/g, '')}</p>
                     <p className="text-gray-400 text-xs">{new Date(notice.created_at).toLocaleDateString()}</p>
@@ -373,7 +373,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.blogs?.map((blog) => (
-                  <Link key={blog.id} to={`/blog/${blog.id}`} className="card hover:scale-105 transition-transform block">
+                  <Link key={blog.id} to={`/blog/${blog.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
                     {blog.thumbnail && (
                       <img
                         src={blog.thumbnail}

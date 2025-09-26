@@ -105,12 +105,20 @@ const Home = () => {
           api.get('/blogs'),
         ]);
         console.log('Gallery Events API response:', galleryEvents);
+        console.log('Notices API response:', noticesRes);
+        console.log('Blogs API response:', blogsRes);
         setLatestContent({
           events: galleryEvents.slice(0, 3),
           notices: noticesRes.data.data.slice(0, 3),
           blogs: blogsRes.data.slice(0, 3),
         });
+        console.log('Latest content set:', {
+          events: galleryEvents.slice(0, 3),
+          notices: noticesRes.data.data.slice(0, 3),
+          blogs: blogsRes.data.slice(0, 3),
+        });
       } catch (err) {
+        console.log('Error fetching latest content:', err);
         setLatestContent({ events: [], notices: [], blogs: [] });
       }
       setLoading(false);

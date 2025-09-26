@@ -15,7 +15,7 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [message, setMessage] = useState(null)
     const [showForm, setShowForm] = useState(false)
     const [editUser, setEditUser] = useState(null)
-    const { user: currentUser } = useAuth()
+    const { user: currentUser, refreshUser } = useAuth()
     const [editingNotes, setEditingNotes] = useState({});
     const [savingNotesId, setSavingNotesId] = useState(null);
     const [rolesList, setRolesList] = useState([]);
@@ -136,8 +136,13 @@ const UserManagement = ({ onUserCountUpdate }) => {
     // Add handler for role change
     const handleRoleChange = async (userId, newRole) => {
         try {
-            const updatedUser = await updateUserRole(userId, newRole)
-            setUsers(users => users.map(u => u.id === userId ? { ...u, role: newRole, permissions: updatedUser.permissions } : u))
+             await updateUserRole(userId, newRole)
+            setUsers(users => users.map(u => u.id === userId ? { ...u, role: newRole } : u))
+            // If the current user updated their own role, refresh the auth context
+            if (userId === currentUser?.id) {
+                await refreshUser()
+            }
+
             setMessage({ type: 'success', text: 'Role updated successfully' })
         } catch (error) {
             setMessage({ type: 'error', text: 'Failed to update role' })

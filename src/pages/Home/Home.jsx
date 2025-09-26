@@ -318,7 +318,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.events?.map((event) => (
-                  <div key={event.id} className="card hover:scale-105 transition-transform">
+                  <Link key={event.id} to={`/gallery/${event.id}`} className="card hover:scale-105 transition-transform block">
                     {event.image && (
                       <img
                         src={event.image}
@@ -329,7 +329,7 @@ const Home = () => {
                     <h4 className="font-semibold text-white mb-2">{event.title || event.name}</h4>
                     <p className="text-gray-300 text-sm mb-2">{event.description}</p>
                     <p className="text-gray-400 text-xs">{event.date ? new Date(event.date).toLocaleDateString() : ''}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
 
@@ -349,11 +349,11 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.notices?.map((notice) => (
-                  <div key={notice.id} className="card hover:scale-105 transition-transform">
+                  <Link key={notice.id} to={`/notices/${notice.id}`} className="card hover:scale-105 transition-transform block">
                     <h4 className="font-semibold text-white mb-1">{notice.title}</h4>
                     <p className="text-gray-300 text-sm mb-1">{notice.description?.replace(/<[^>]*>/g, '')}</p>
                     <p className="text-gray-400 text-xs">{new Date(notice.created_at).toLocaleDateString()}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
 
@@ -373,7 +373,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.blogs?.map((blog) => (
-                  <div key={blog.id} className="card hover:scale-105 transition-transform">
+                  <Link key={blog.id} to={`/blog/${blog.id}`} className="card hover:scale-105 transition-transform block">
                     {blog.thumbnail && (
                       <img
                         src={blog.thumbnail}
@@ -384,7 +384,7 @@ const Home = () => {
                     <h4 className="font-semibold text-white mb-1">{blog.title}</h4>
                     <p className="text-gray-300 text-sm mb-1">{blog.author}</p>
                     <p className="text-gray-400 text-xs">{new Date(blog.date || blog.created_at).toLocaleDateString()}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
 

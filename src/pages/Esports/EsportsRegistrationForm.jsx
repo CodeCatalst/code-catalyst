@@ -9,6 +9,7 @@ const EsportsRegistrationForm = () => {
     email: '',
     phone: '',
     gameId: '',
+    erp: '',
     sport: '',
     teamSize: 1,
     teamMembers: []
@@ -24,7 +25,8 @@ const EsportsRegistrationForm = () => {
       const newMembers = Array.from({ length: newSize - currentSize }, () => ({
         name: '',
         gameUserId: '',
-        inGameName: ''
+        inGameName: '',
+        erp: ''
       }));
       setFormData(prev => ({
         ...prev,
@@ -85,6 +87,7 @@ const EsportsRegistrationForm = () => {
     try {
       const submissionData = {
         ...formData,
+        erp: formData.erp,
         teamMembers: formData.teamSize > 1 ? formData.teamMembers : null
       };
 
@@ -100,6 +103,7 @@ const EsportsRegistrationForm = () => {
         email: '',
         phone: '',
         gameId: '',
+        erp: '',
         sport: '',
         teamSize: 1,
         teamMembers: []
@@ -186,6 +190,24 @@ const EsportsRegistrationForm = () => {
           </div>
         </div>
 
+        {/* ERP Row */}
+        <div>
+          <label htmlFor="erp" className="block text-sm font-medium text-gray-300 mb-2">
+            ERP
+          </label>
+          <input
+            type="number"
+            id="erp"
+            name="erp"
+            value={formData.erp}
+            onChange={handleChange}
+            min="0"
+            max="999999"
+            className="w-full px-4 py-3 bg-gray-800/50 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:bg-gray-800"
+            placeholder="Enter your ERP number (6 digits max)"
+          />
+        </div>
+
         {/* Sport Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-4">
@@ -269,7 +291,7 @@ const EsportsRegistrationForm = () => {
                   </span>
                   Member {index + 1}
                 </h4>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Name *
@@ -307,6 +329,20 @@ const EsportsRegistrationForm = () => {
                       required
                       className="w-full px-4 py-3 bg-gray-900/50 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:bg-gray-800"
                       placeholder="Enter in-game name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      ERP
+                    </label>
+                    <input
+                      type="number"
+                      value={member.erp}
+                      onChange={(e) => handleMemberChange(index, 'erp', e.target.value)}
+                      min="0"
+                      max="999999"
+                      className="w-full px-4 py-3 bg-gray-900/50 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:bg-gray-800"
+                      placeholder="Enter ERP number (6 digits max)"
                     />
                   </div>
                 </div>

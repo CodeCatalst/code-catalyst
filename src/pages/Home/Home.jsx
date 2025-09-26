@@ -107,7 +107,7 @@ const Home = () => {
         console.log('Gallery Events API response:', galleryEvents);
         setLatestContent({
           events: galleryEvents.slice(0, 3),
-          notices: noticesRes.data.slice(0, 3),
+          notices: noticesRes.data.data.slice(0, 3),
           blogs: blogsRes.data.slice(0, 3),
         });
       } catch (err) {
@@ -351,7 +351,7 @@ const Home = () => {
                 {latestContent?.notices?.map((notice) => (
                   <div key={notice.id} className="card hover:scale-105 transition-transform">
                     <h4 className="font-semibold text-white mb-1">{notice.title}</h4>
-                    <p className="text-gray-300 text-sm mb-1">{notice.description}</p>
+                    <p className="text-gray-300 text-sm mb-1">{notice.description?.replace(/<[^>]*>/g, '')}</p>
                     <p className="text-gray-400 text-xs">{new Date(notice.created_at).toLocaleDateString()}</p>
                   </div>
                 ))}

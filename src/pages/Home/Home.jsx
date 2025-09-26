@@ -355,14 +355,14 @@ const Home = () => {
                 <h3 className="text-2xl font-bold text-gray-300">Recent Notices</h3>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 ">
                 {latestContent?.notices?.map((notice) => (
                   <Link
                     key={notice.id}
                     to={`/notices/${notice.id}`}
-                    className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/20 hover:border-blue-500/50 hover:-translate-y-1"
+                    className=""
                   >
-                    <div className="p-6 h-full flex flex-col">
+                    <div className="p-6 group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 h-full flex flex-col">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center text-sm text-gray-400">
                           <Calendar size={16} className="mr-2" />

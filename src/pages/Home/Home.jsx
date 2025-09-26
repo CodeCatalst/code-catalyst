@@ -349,10 +349,49 @@ const Home = () => {
 
               <div className="space-y-4">
                 {latestContent?.notices?.map((notice) => (
-                  <Link key={notice.id} to={`/notices/${notice.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
-                    <h4 className="font-semibold text-white mb-1">{notice.title}</h4>
-                    <p className="text-gray-300 text-sm mb-1">{notice.description?.replace(/<[^>]*>/g, '')}</p>
-                    <p className="text-gray-400 text-xs">{new Date(notice.created_at).toLocaleDateString()}</p>
+                  <Link
+                    key={notice.id}
+                    to={`/notices/${notice.id}`}
+                    className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/20 hover:border-blue-500/50 hover:-translate-y-1"
+                  >
+                    <div className="p-6 h-full flex flex-col">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Calendar size={16} className="mr-2" />
+                          <span>{new Date(notice.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}</span>
+                        </div>
+                        {Array.isArray(notice.tags) && notice.tags.length > 0 && (
+                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-xs rounded-full font-medium">
+                            {notice.tags[0]}
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-4 leading-tight flex-grow">
+                        {notice.title}
+                      </h4>
+
+                      <div className="text-gray-300 text-sm line-clamp-3 leading-relaxed mb-4 flex-grow">
+                        {notice.description?.replace(/<[^>]*>/g, '').slice(0, 150) || 'Click to read the full notice...'}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                        <div className="flex items-center text-sm text-blue-400 group-hover:text-blue-300 font-medium">
+                          <span>Read full notice</span>
+                          <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                        {notice.images && (
+                          <div className="flex items-center text-xs text-gray-500">
+                            <span className="mr-1">📎</span>
+                            <span>Attachment</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </Link>
                 ))}
               </div>

@@ -229,7 +229,7 @@ const EsportsRegistrationForm = () => {
                 className="sr-only"
               />
               <div className="text-center">
-                <div className="text-2xl mb-2"><img src="/freefire.png" alt="" srcset="" /></div>
+                <div className="text-2xl mb-2"><img src="/freefire.png" alt="" srcSet="" /></div>
                 <div className="font-semibold text-gray-100">Freefire</div>
                 <div className="text-sm text-gray-400">Battle Royale</div>
               </div>
@@ -249,7 +249,7 @@ const EsportsRegistrationForm = () => {
                 className="sr-only"
               />
               <div className="text-center">
-                <div className="text-2xl mb-2"><img src="/bgmi.png" alt="" srcset="" /></div>
+                <div className="text-2xl mb-2"><img src="/bgmi.png" alt="" srcSet="" /></div>
                 <div className="font-semibold text-gray-100">BGMI</div>
                 <div className="text-sm text-gray-400">Mobile Gaming</div>
               </div>

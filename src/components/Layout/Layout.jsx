@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from './Header'
 import Footer from './Footer'
+import { Toaster } from '../Common/Toaster'
 
 const Layout = ({ children, transparentOnTop = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -16,6 +17,7 @@ const Layout = ({ children, transparentOnTop = false }) => {
         {children}
       </main>
       <Footer />
+      <Toaster />
     </div>
   )
 }

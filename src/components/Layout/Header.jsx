@@ -47,6 +47,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     'team_management',
     'core_team_feedback',
     'core_team_feedback_responses',
+    'esports',
     '*'
   ];
   const userPermissions = user?.permissions || [];

@@ -19,11 +19,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       // Verify token and get user data
+      console.log('AuthContext: Fetching user data with token:', token.substring(0, 20) + '...');
       api.get('/auth/me')
         .then(response => {
+          console.log('AuthContext: User data received:', response.data.user);
           setUser(response.data.user)
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('AuthContext: Failed to fetch user data:', error.response?.data || error);
           localStorage.removeItem('token')
           setToken(null)
         })
@@ -31,6 +34,7 @@ export const AuthProvider = ({ children }) => {
           setLoading(false)
         })
     } else {
+      console.log('AuthContext: No token found');
       setLoading(false)
     }
   }, [token])
@@ -141,7 +145,49 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     forgotPassword,
-    updateProfile
+    updateProfile,
+    // Debug function to check user permissions
+    debugUser: () => {
+      console.log('=== AUTH DEBUG INFO ===');
+      console.log('Token:', token ? token.substring(0, 20) + '...' : 'No token');
+      console.log('User:', user);
+      console.log('User Role:', user?.role);
+      console.log('User Permissions:', user?.permissions);
+      console.log('Is Authenticated:', !!user);
+      console.log('======================');
+      return user;
+    },
+    // Force refresh user data
+    refreshUser: async () => {
+      if (token) {
+        try {
+          console.log('Forcing user data refresh...');
+          const response = await api.get('/auth/me');
+          console.log('Refreshed user data:', response.data.user);
+          setUser(response.data.user);
+          return response.data.user;
+        } catch (error) {
+          console.error('Failed to refresh user data:', error);
+          throw error;
+        }
+      }
+    },
+    // Check current token
+    checkToken: () => {
+      const currentToken = localStorage.getItem('token');
+      console.log('=== TOKEN DEBUG INFO ===');
+      console.log('Token present:', !!currentToken);
+      console.log('Token length:', currentToken ? currentToken.length : 0);
+      console.log('Token preview:', currentToken ? currentToken.substring(0, 50) + '...' : 'No token');
+      console.log('Token structure valid:', currentToken ? currentToken.split('.').length === 3 : false);
+      console.log('======================');
+      return {
+        present: !!currentToken,
+        length: currentToken ? currentToken.length : 0,
+        preview: currentToken ? currentToken.substring(0, 20) + '...' : 'No token',
+        isValidFormat: currentToken ? currentToken.split('.').length === 3 : false
+      };
+    }
   }
 
   return (

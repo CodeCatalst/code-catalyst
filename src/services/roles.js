@@ -42,7 +42,7 @@ export const deleteRole = async (id) => {
 
 export const getPermissions = async () => {
   try {
-    const response = await api.get('/permissions');
+    const response = await api.get('/roles/permissions');
     return response.data.permissions;
   } catch (error) {
     console.error('Error fetching permissions:', error);
@@ -62,7 +62,7 @@ export const getRolePermissions = async (roleId) => {
 
 export const createPermission = async (data) => {
   try {
-    const response = await api.post('/permissions', data);
+    const response = await api.post('/roles/permissions', data);
     return response.data.permission;
   } catch (error) {
     console.error('Error creating permission:', error);
@@ -72,7 +72,7 @@ export const createPermission = async (data) => {
 
 export const deletePermission = async (id) => {
   try {
-    const response = await api.delete(`/permissions/${id}`);
+    const response = await api.delete(`/roles/permissions/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting permission:', error);

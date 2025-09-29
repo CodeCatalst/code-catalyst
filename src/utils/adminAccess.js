@@ -11,7 +11,7 @@ export const tabPermissions = {
   contact: 'contact_messages',
   hiring: 'hiring_requests',
   team: 'team_management', // Added for Manage Team tab
-  esports: 'esports_management',
+  esports: 'esports',
 };
 
 // Check if user has a specific permission

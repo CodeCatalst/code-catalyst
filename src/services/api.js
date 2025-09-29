@@ -189,33 +189,39 @@ export async function expireUserPassword(id) {
 
 // ESPORTS REGISTRATIONS
 export async function getEsportsRegistrations() {
-  const res = await fetch(`${API_BASE}/api/esports`);
-  if (!res.ok) throw new Error('Failed to fetch esports registrations');
-  return res.json();
+  try {
+    const response = await api.get('/esports');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch esports registrations');
+  }
 }
 
 export async function getEsportsRegistration(id) {
-  const res = await fetch(`${API_BASE}/api/esports/${id}`);
-  if (!res.ok) throw new Error('Failed to fetch esports registration');
-  return res.json();
+  try {
+    const response = await api.get(`/esports/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch esports registration');
+  }
 }
 
 export async function createEsportsRegistration(registration) {
-  const res = await fetch(`${API_BASE}/api/esports`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(registration),
-  });
-  if (!res.ok) throw new Error('Failed to create esports registration');
-  return res.json();
+  try {
+    const response = await api.post('/esports', registration);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to create esports registration');
+  }
 }
 
 export async function deleteEsportsRegistration(id) {
-  const res = await fetch(`${API_BASE}/api/esports/${id}`, {
-    method: 'DELETE',
-  });
-  if (!res.ok) throw new Error('Failed to delete esports registration');
-  return res.json();
+  try {
+    const response = await api.delete(`/esports/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to delete esports registration');
+  }
 }
 
 export async function updateUserRole(userId, role) {

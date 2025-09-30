@@ -35,7 +35,7 @@ const Privacy = lazy(() => import('./pages/Privacy'))
 const Test = lazy(() => import('./Test'))
 const Innovation = lazy(() => import('./pages/Innovation/Innovation'))
 const Projects = lazy(() => import('./pages/Projects/Projects'))
-const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
+// const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
 
 const HERO_ROUTES = [
   '/',
@@ -47,7 +47,7 @@ const HERO_ROUTES = [
   '/notices',
   '/test',
 '/projects',
-'/esports',
+// '/esports',
 ]
 
 function App() {
@@ -85,7 +85,7 @@ function App() {
                 <Route path="/notices/:id" element={<NoticeDetails />} />
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/projects" element={<Projects />} />
-                <Route path="/esports" element={<EsportsRegistration />} />
+                {/* <Route path="/esports" element={<EsportsRegistration />} /> */}
                 <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

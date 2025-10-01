@@ -47,6 +47,33 @@ const AdminGalleryManager = () => {
                 });
 
                 Promise.all(base64Promises).then(base64Strings => {
+                    // Validate image sizes before adding to form
+                    const MAX_IMAGE_SIZE = 500 * 1024; // 500KB
+                    const oversizedImages = [];
+
+                    base64Strings.forEach((base64String, index) => {
+                        if (base64String.startsWith('data:image/')) {
+                            const base64Data = base64String.split(',')[1];
+                            const sizeInBytes = Math.ceil(base64Data.length * 3 / 4);
+
+                            if (sizeInBytes > MAX_IMAGE_SIZE) {
+                                oversizedImages.push({
+                                    index: index + 1,
+                                    size: Math.round(sizeInBytes / 1024),
+                                    maxSize: Math.round(MAX_IMAGE_SIZE / 1024)
+                                });
+                            }
+                        }
+                    });
+
+                    if (oversizedImages.length > 0) {
+                        const errorMsg = oversizedImages.map(img =>
+                            `Image ${img.index} (${img.size}KB) exceeds limit (${img.maxSize}KB)`
+                        ).join(', ');
+                        setMessage({ type: 'error', text: `Image size error: ${errorMsg}. Please use smaller images.` });
+                        return;
+                    }
+
                     setForm({
                         ...form,
                         imageFiles: selectedFiles,
@@ -83,7 +110,33 @@ const AdminGalleryManager = () => {
             setMessage({ type: 'success', text: 'Event added!' });
             setTimeout(() => setMessage(null), 2000);
         } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to add event.' });
+            console.error('Error creating gallery event:', err);
+            console.error('Full error response:', err.response?.data);
+            console.error('Error status:', err.response?.status);
+
+            let errorMessage = 'Failed to add event.';
+
+            if (err.response?.data) {
+                if (err.response.data.error) {
+                    errorMessage = `Backend Error: ${err.response.data.error}`;
+                } else if (err.response.data.message) {
+                    errorMessage = `Error: ${err.response.data.message}`;
+                }
+
+                // Add details if available
+                if (err.response.data.details) {
+                    errorMessage += ` (Details: ${err.response.data.details})`;
+                }
+
+                // Add data info if available for debugging
+                if (err.response.data.data) {
+                    console.error('Data that caused error:', err.response.data.data);
+                }
+            } else {
+                errorMessage = `Network Error: ${err.message}`;
+            }
+
+            setMessage({ type: 'error', text: errorMessage });
         }
     }
 

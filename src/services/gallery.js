@@ -1,4 +1,4 @@
-import api from './api'
+import api from './apiBase'
 
 export async function getGallery() {
   const res = await api.get('/gallery')

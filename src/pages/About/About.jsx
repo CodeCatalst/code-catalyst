@@ -79,25 +79,18 @@ const About = () => {
       specialty: 'Data Analytics & AI'
     },
     {
-      name: 'Gauranshi Bahuguna',
+      name: 'Jeevan Pant',
       role: 'Vice President',
-      image: '/Gauranshi_Bahuguna.jpg',
-      bio: 'As a seasoned technology leader and Vice President, I bring expertise in Linux, networking, Java, Python, and Data Structures & Algorithms (DSA). Currently expanding my skill set in ethical hacking, I remain dedicated to driving innovation and excellence',
-      specialty: 'Ethical Hacking'
+      image: '/Jeevan.png',
+      bio: 'As a seasoned technology leader and Vice President, I bring expertise in designing and content generation, driving innovation and strategic growth in our tech community.',
+      specialty: 'Design & Innovation'
     },
     {
       name: 'Arjan',
       role: 'Secretary',
       image: '/arjan.jpg',
       bio: 'A passionate Full-Stack Developer, lead digital innovation, event strategy, and creative tech initiatives for our vibrant tech community.',
-      specialty: 'Executive & Technical'
-    },
-    {
-      name: 'Jeevan',
-      role: 'Community Manager',
-      image: './Jeevan.png',
-      bio: 'Event coordinator with a passion for bringing people together',
-      specialty: 'Community Management'
+      specialty: 'Execuive & Technical'
     }
   ]
 
@@ -243,7 +236,7 @@ const About = () => {
 
       {/* 3D Team Cards */}
       <section className="py-20 bg-gray-900">
-        <div className="container-max px-4 sm:px-6 lg:px-8">
+        <div className="container-max px-10 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
               Meet Our <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Leadership</span>
@@ -253,7 +246,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {teamMembers.map((member, index) => (
               <div
                 key={index}

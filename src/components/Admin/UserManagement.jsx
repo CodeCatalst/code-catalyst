@@ -52,7 +52,6 @@ const UserManagement = ({ onUserCountUpdate }) => {
                 console.error('Failed to load users:', error);
                 // If unauthorized, force logout and redirect
                 if (error.response?.status === 401) {
-                    console.log('Token expired, logging out...');
                     localStorage.removeItem('token');
                     window.location.href = '/login';
                     return;

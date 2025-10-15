@@ -58,7 +58,6 @@ const AdminDashboard = () => {
 
         (async () => {
             try {
-                console.log('Fetching users for admin stats...');
                 // Fetch users
                 const users = await getUsers();
                 const totalUsers = Array.isArray(users) ? users.length : 0;
@@ -85,12 +84,10 @@ const AdminDashboard = () => {
                     totalCore,
                     totalHiringRequests
                 });
-                console.log('Admin stats updated:', { totalUsers, totalCore, totalHiringRequests });
             } catch (error) {
                 console.error('Failed to fetch admin stats:', error);
                 // If unauthorized, force logout and redirect
                 if (error.response?.status === 401) {
-                    console.log('Token expired, logging out...');
                     localStorage.removeItem('token');
                     window.location.href = '/login';
                     return;

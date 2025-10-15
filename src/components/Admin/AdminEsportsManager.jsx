@@ -24,9 +24,7 @@ const AdminEsportsManager = () => {
 
   const fetchRegistrations = async () => {
     try {
-      console.log('AdminEsportsManager: Fetching esports registrations...');
       const data = await getEsportsRegistrations();
-      console.log('AdminEsportsManager: Successfully fetched', data.length, 'registrations');
       setRegistrations(data);
     } catch (error) {
       console.error('AdminEsportsManager: Failed to fetch registrations:', error);

@@ -30,7 +30,6 @@ const RoleManagement = () => {
   const fetchPermissions = async () => {
     try {
       const response = await getPermissions();
-      console.log('Raw permissions response:', response);
       
       let permissions;
       if (Array.isArray(response)) {
@@ -61,7 +60,6 @@ const RoleManagement = () => {
         };
       }).filter(Boolean);
 
-      console.log('Processed permissions:', validPermissions);
       setAvailablePermissions(validPermissions);
       
     } catch (error) {

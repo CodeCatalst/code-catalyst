@@ -37,7 +37,6 @@ const Profile = () => {
         bio: user.bio || '',
         profile_picture_url: user.profile_picture_url || ''
       });
-      console.log('User data loaded:', user); // For debugging
     }
   }, [user])
 
@@ -71,7 +70,6 @@ const Profile = () => {
     setSuccess('')
 
     try {
-      console.log('Submitting profile data:', profileData); // Debug log
       const result = await updateProfile({
         full_name: profileData.full_name,
         username: profileData.username,
@@ -81,7 +79,6 @@ const Profile = () => {
 
       if (result.success) {
         setSuccess('Profile updated successfully!')
-        console.log('Profile updated successfully'); // Debug log
         setTimeout(() => setSuccess(''), 3000)
       } else {
         console.error('Profile update failed:', result.error); // Debug log

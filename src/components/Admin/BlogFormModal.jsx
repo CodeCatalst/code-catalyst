@@ -112,13 +112,11 @@ const BlogFormModal = ({ isOpen, onClose, blog, onSave }) => {
     }
     
     if (!isStepValid()) {
-      console.log('Step validation failed:', currentStep);
       return;
     }
     
     if (currentStep < TOTAL_STEPS) {
       const nextStepNumber = currentStep + 1;
-      console.log('Moving to next step:', nextStepNumber);
       setValidationError('');
       sessionStorage.setItem('blogFormStep', nextStepNumber.toString());
       setCurrentStep(nextStepNumber);

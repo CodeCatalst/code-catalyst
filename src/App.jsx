@@ -35,7 +35,7 @@ const Privacy = lazy(() => import('./pages/Privacy'))
 const Test = lazy(() => import('./Test'))
 const Innovation = lazy(() => import('./pages/Innovation/Innovation'))
 const Projects = lazy(() => import('./pages/Projects/Projects'))
-// const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
+const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
 
 const HERO_ROUTES = [
   '/',
@@ -55,7 +55,6 @@ function App() {
   const transparentOnTop = HERO_ROUTES.includes(location.pathname)
 
   useEffect(() => {
-    console.log('Testing WebSocket connection...');
     const ws = new WebSocket('ws://localhost:5174');
     ws.onopen = () => console.log('Manual WebSocket opened successfully');
     ws.onerror = (e) => console.log('Manual WebSocket error:', e);
@@ -85,7 +84,7 @@ function App() {
                 <Route path="/notices/:id" element={<NoticeDetails />} />
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/projects" element={<Projects />} />
-                {/* <Route path="/esports" element={<EsportsRegistration />} /> */}
+                <Route path="/esports" element={<EsportsRegistration />} />
                 <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

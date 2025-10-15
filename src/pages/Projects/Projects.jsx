@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLink, Github, Calendar, Users, Code, Database, Cloud, Zap, Bot, Globe, CheckCircle, Clock, ArrowRight, Sparkles, Star, Rocket } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 
-
 const Projects = () => {
   const [activeProject, setActiveProject] = useState(0)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -306,42 +305,42 @@ const Projects = () => {
                           className="w-full h-80 lg:h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                        <div className="absolute top-6 left-6">
-                          <span className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-                            <CheckCircle size={16} className="mr-2" />
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-green-500 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center">
+                            <CheckCircle size={14} className="mr-2" />
                             Completed
                           </span>
                         </div>
-                        <div className="absolute bottom-6 left-6 right-6">
+                        <div className="absolute bottom-4 left-4 right-4">
                           <div className="flex items-center justify-between text-white">
                             <div>
-                              <div className="text-sm opacity-80">Category</div>
-                              <div className="font-semibold">{project.category}</div>
+                              <div className="text-xs opacity-80">Category</div>
+                              <div className="font-semibold text-sm">{project.category}</div>
                             </div>
                           </div>
                         </div>
                       </div>
 
                       {/* Project Details */}
-                      <div className="p-8 lg:p-12">
-                        <div className="space-y-6">
+                      <div className="p-4 lg:p-6">
+                        <div className="space-y-4">
                           <div>
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                               {project.name}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed text-lg">
+                            <p className="text-gray-600 leading-relaxed text-base">
                               {project.description}
                             </p>
                           </div>
 
                           {/* Tech Stack */}
                           <div className="space-y-4">
-                            <h4 className="font-semibold text-gray-900 text-lg">Tech Stack</h4>
+                            <h4 className="font-semibold text-gray-900 text-base">Tech Stack</h4>
                             
                             {/* Frontend */}
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Frontend</div>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 {project.techStack.frontend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
@@ -360,7 +359,7 @@ const Projects = () => {
                             {/* Backend */}
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Backend</div>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 {project.techStack.backend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
@@ -417,12 +416,12 @@ const Projects = () => {
 
                           {/* Key Features */}
                           <div>
-                            <h4 className="font-semibold text-gray-900 text-lg mb-3">Key Features</h4>
+                            <h4 className="font-semibold text-gray-900 text-base mb-2">Key Features</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                               {project.features.map((feature, featureIndex) => (
-                                <div key={featureIndex} className="flex items-center space-x-2">
-                                  <CheckCircle size={16} className="text-green-500 flex-shrink-0" />
-                                  <span className="text-gray-600 text-sm">{feature}</span>
+                                <div key={featureIndex} className="flex items-center space-x-1.5">
+                                  <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+                                  <span className="text-gray-600 text-xs">{feature}</span>
                                 </div>
                               ))}
                             </div>
@@ -430,19 +429,19 @@ const Projects = () => {
 
                           {/* Impact Metrics */}
                           <div className="bg-gray-50 rounded-2xl p-6">
-                            <h4 className="font-semibold text-gray-900 text-lg mb-4">Project Impact</h4>
-                            <div className="grid grid-cols-3 gap-4">
+                            <h4 className="font-semibold text-gray-900 text-base mb-2">Project Impact</h4>
+                            <div className="grid grid-cols-3 gap-2">
                               <div className="text-center">
-                                <div className="text-2xl font-bold text-blue-600">{project.impact.users}</div>
-                                <div className="text-sm text-gray-600">Users</div>
+                                <div className="text-lg font-bold text-blue-600">{project.impact.users}</div>
+                                <div className="text-xs text-gray-600">Users</div>
                               </div>
                               <div className="text-center">
-                                <div className="text-2xl font-bold text-green-600">{project.impact.performance}</div>
-                                <div className="text-sm text-gray-600">Performance</div>
+                                <div className="text-lg font-bold text-green-600">{project.impact.performance}</div>
+                                <div className="text-xs text-gray-600">Performance</div>
                               </div>
                               <div className="text-center">
-                                <div className="text-2xl font-bold text-purple-600">{project.impact.uptime}</div>
-                                <div className="text-sm text-gray-600">Uptime</div>
+                                <div className="text-lg font-bold text-purple-600">{project.impact.uptime}</div>
+                                <div className="text-xs text-gray-600">Uptime</div>
                               </div>
                             </div>
                           </div>
@@ -452,9 +451,9 @@ const Projects = () => {
                               href={project.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+                              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg group text-sm"
                             >
-                              <ExternalLink size={18} className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                              <ExternalLink size={16} className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
                               View Project
                             </a>
                           )}
@@ -484,57 +483,57 @@ const Projects = () => {
                           className="w-full h-80 lg:h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                        <div className="absolute top-6 left-6">
-                          <span className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-                            <Clock size={16} className="mr-2" />
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-blue-500 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center">
+                            <Clock size={14} className="mr-2" />
                             In Progress
                           </span>
                         </div>
-                        <div className="absolute bottom-6 left-6 right-6">
+                        <div className="absolute bottom-4 left-4 right-4">
                           <div className="text-white">
-                            <div className="text-sm opacity-80 mb-2">Progress</div>
-                            <div className="w-full bg-white/20 rounded-full h-2">
+                            <div className="text-xs opacity-80 mb-1">Progress</div>
+                            <div className="w-full bg-white/20 rounded-full h-1.5">
                               <div 
-                                className="bg-white h-2 rounded-full transition-all duration-1000"
+                                className="bg-white h-1.5 rounded-full transition-all duration-1000"
                                 style={{ width: `${project.progress}%` }}
                               />
                             </div>
-                            <div className="text-sm mt-2">{project.progress}% Complete</div>
+                            <div className="text-xs mt-1">{project.progress}% Complete</div>
                           </div>
                         </div>
                       </div>
 
                       {/* Project Details */}
-                      <div className="p-8 lg:p-12">
-                        <div className="space-y-6">
+                      <div className="p-4 lg:p-6">
+                        <div className="space-y-4">
                           <div>
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                               {project.name}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed text-lg">
+                            <p className="text-gray-600 leading-relaxed text-base">
                               {project.description}
                             </p>
                           </div>
 
                           {/* Expected Completion */}
                           <div className="bg-blue-50 rounded-2xl p-4">
-                            <div className="flex items-center space-x-2">
-                              <Calendar className="text-blue-600" size={20} />
+                            <div className="flex items-center space-x-1.5">
+                              <Calendar className="text-blue-600" size={16} />
                               <div>
-                                <div className="font-semibold text-blue-900">Expected Completion</div>
-                                <div className="text-blue-700">{project.expectedCompletion}</div>
+                                <div className="font-semibold text-blue-900 text-sm">Expected Completion</div>
+                                <div className="text-blue-700 text-xs">{project.expectedCompletion}</div>
                               </div>
                             </div>
                           </div>
 
                           {/* Tech Stack - Similar to completed projects */}
                           <div className="space-y-4">
-                            <h4 className="font-semibold text-gray-900 text-lg">Tech Stack</h4>
+                            <h4 className="font-semibold text-gray-900 text-base">Tech Stack</h4>
                             
                             {/* Frontend */}
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Frontend</div>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 {project.techStack.frontend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
@@ -553,7 +552,7 @@ const Projects = () => {
                             {/* Backend */}
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Backend</div>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 {project.techStack.backend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
@@ -610,12 +609,12 @@ const Projects = () => {
 
                           {/* Planned Features */}
                           <div>
-                            <h4 className="font-semibold text-gray-900 text-lg mb-3">Planned Features</h4>
+                            <h4 className="font-semibold text-gray-900 text-base mb-2">Planned Features</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                               {project.features.map((feature, featureIndex) => (
-                                <div key={featureIndex} className="flex items-center space-x-2">
-                                  <Clock size={16} className="text-blue-500 flex-shrink-0" />
-                                  <span className="text-gray-600 text-sm">{feature}</span>
+                                <div key={featureIndex} className="flex items-center space-x-1.5">
+                                  <Clock size={14} className="text-blue-500 flex-shrink-0" />
+                                  <span className="text-gray-600 text-xs">{feature}</span>
                                 </div>
                               ))}
                             </div>
@@ -626,9 +625,9 @@ const Projects = () => {
                               href={project.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+                              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg group text-sm"
                             >
-                              <ExternalLink size={18} className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                              <ExternalLink size={16} className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
                               View Project
                             </a>
                           )}

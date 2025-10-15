@@ -1,6 +1,27 @@
+// Small Projects Preview Section
+const completedProjectsPreview = [
+  {
+    id: 1,
+    name: 'Mukhota Website',
+    description: 'A drama society website to showcase performances and establish an online presence.',
+    link: 'https://mukhauta.vercel.app/',
+    image: '/mukhauta.png',
+    color: 'from-purple-500 to-pink-500'
+  }
+];
+const ongoingProjectsPreview = [
+  {
+    id: 2,
+    name: 'Eve Chatbot',
+    description: 'An intelligent chatbot for community info, college details, and career guidance.',
+    link: 'https://eve-higv.onrender.com/?next=/cc-chatbot/',
+    image: '/eve.jpg',
+    color: 'from-blue-500 to-cyan-500'
+  }
+];
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Star } from 'lucide-react';
+import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Star, Target, Eye, Heart, Lightbulb, Rocket, Award, BookOpen, Brain, Sparkles, Globe } from 'lucide-react';
 import api from '../../services/api';
 import { getGallery } from '../../services/gallery';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
@@ -13,6 +34,31 @@ const Home = () => {
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
   const [particles, setParticles] = useState([]);
+
+  // Core Values section data (from About)
+  const values = [
+    {
+      icon: Eye,
+      title: 'Our Vision',
+      description: 'To be the leading student tech society that bridges the gap between academic learning and industry demands, fostering innovation and technical excellence.',
+      color: 'from-purple-500 to-pink-600',
+      delay: '0ms'
+    },
+    {
+      icon: Target,
+      title: 'Our Purpose',
+      description: 'To create a thriving community where students can explore, learn, and excel in technology while building lasting connections and practical skills for their future careers.',
+      color: 'from-blue-500 to-purple-600',
+      delay: '200ms'
+    },
+    {
+      icon: Heart,
+      title: 'Our Mission',
+      description: 'Empowering students through hands-on workshops, collaborative projects, industry mentorship, and a supportive community that encourages continuous learning and growth.',
+      color: 'from-pink-500 to-red-600',
+      delay: '400ms'
+    }
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -295,143 +341,166 @@ const Home = () => {
       </section>
       {/* Banner/Hero Section End */}
 
-      {/* Highlights Section */}
-      <section className="section-padding bg-slate-900 relative">
-        <div className="container-max">
+      {/* Core Values Section */}
+      <section className="py-20 bg-gray-900 relative overflow-hidden text-white">
+        <div className="container-max px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              What's Happening at <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_2px_16px_rgba(168,85,247,0.5)]">Code Catalyst</span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Core Values</span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Stay updated with our latest events, announcements, and community highlights
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              The principles that guide everything we do
             </p>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Events */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center">
-                  <Calendar className="text-blue-400" size={20} />
-                </div>
-                <h3 className="text-2xl font-bold text-white">Latest Events</h3>
-              </div>
-
-              <div className="space-y-4">
-                {latestContent?.events?.map((event) => (
-                  <Link key={event.id} to={`/gallery/${event.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
-                    {event.image && (
-                      <img
-                        src={event.image}
-                        alt={event.title || event.name}
-                        className="w-full h-40 object-cover rounded-lg mb-4"
-                      />
-                    )}
-                    <h4 className="font-semibold text-white mb-2">{event.title || event.name}</h4>
-                    <p className="text-gray-300 text-sm mb-2">{event.description}</p>
-                    <p className="text-gray-400 text-xs">{event.date ? new Date(event.date).toLocaleDateString() : ''}</p>
-                  </Link>
-                ))}
-              </div>
-
-              <Link to="/gallery" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
-                View All Events <ArrowRight size={16} className="ml-1 text-white" />
-              </Link>
-            </div>
-
-            {/* Notices */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center">
-                  <Bell className="text-accent-600" size={20} />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-300">Recent Notices</h3>
-              </div>
-
-              <div className="space-y-4 ">
-                {latestContent?.notices?.map((notice) => (
-                  <Link
-                    key={notice.id}
-                    to={`/notices/${notice.id}`}
-                    className=""
-                  >
-                    <div className="p-6 group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 h-full flex flex-col">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center text-sm text-gray-400">
-                          <Calendar size={16} className="mr-2" />
-                          <span>{new Date(notice.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}</span>
-                        </div>
-                        {Array.isArray(notice.tags) && notice.tags.length > 0 && (
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-xs rounded-full font-medium">
-                            {notice.tags[0]}
-                          </span>
-                        )}
-                      </div>
-
-                      <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-4 leading-tight flex-grow">
-                        {notice.title}
-                      </h4>
-
-                      <div className="text-gray-300 text-sm line-clamp-3 leading-relaxed mb-4 flex-grow">
-                        {notice.description?.replace(/<[^>]*>/g, '').slice(0, 150) || 'Click to read the full notice...'}
-                      </div>
-
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                        <div className="flex items-center text-sm text-blue-400 group-hover:text-blue-300 font-medium">
-                          <span>Read full notice</span>
-                          <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                        {notice.images && (
-                          <div className="flex items-center text-xs text-gray-500">
-                            <span className="mr-1">📎</span>
-                            <span>Attachment</span>
-                          </div>
-                        )}
-                      </div>
+            {values.map((value, index) => (
+              <div
+                key={index}
+                className="group relative"
+                style={{ animationDelay: value.delay }}
+              >
+                <div className="relative bg-gray-900 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:rotate-1 border border-gray-700">
+                  {/* 3D Icon Container */}
+                  <div className="relative mb-6">
+                    <div className={`w-16 h-16 bg-gradient-to-r ${value.color} rounded-xl flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
+                      <value.icon className="text-white" size={32} />
                     </div>
-                  </Link>
-                ))}
-              </div>
-
-              <Link to="/notices" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
-                View All Notices <ArrowRight size={16} className="ml-1 text-white" />
-              </Link>
-            </div>
-
-            {/* Blogs */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
-                  <Video className="text-secondary-600" size={20} />
+                    <div className={`absolute inset-0 w-16 h-16 bg-gradient-to-r ${value.color} rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 blur-xl transform translate-y-2`} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                    {value.title}
+                  </h3>
+                  <p className="text-white leading-relaxed group-hover:text-gray-100 transition-colors duration-300">
+                    {value.description}
+                  </p>
+                  {/* Hover Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-300">Latest Blogs</h3>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-4">
-                {latestContent?.blogs?.map((blog) => (
-                  <Link key={blog.id} to={`/blog/${blog.id}`} className="group bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-700 hover:border-blue-500/50 hover:-translate-y-1 p-4 block">
-                    {blog.thumbnail && (
-                      <img
-                        src={blog.thumbnail}
-                        alt={blog.title}
-                        className="w-full h-40 object-cover rounded-lg mb-2"
-                      />
-                    )}
-                    <h4 className="font-semibold text-white mb-1">{blog.title}</h4>
-                    <p className="text-gray-300 text-sm mb-1">{blog.author}</p>
-                    <p className="text-gray-400 text-xs">{new Date(blog.date || blog.created_at).toLocaleDateString()}</p>
-                  </Link>
-                ))}
+      {/* Innovation Cell Section (copied from Innovation page) */}
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+        <div className="container-max px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              Innovation <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Cell</span>
+            </h2>
+            <p className="text-xl max-w-2xl mx-auto text-gray-300">
+              Where Ideas Come to Life - Your creative space from the Code Catalyst community at JB Knowledge Park.
+            </p>
+          </div>
+          {/* Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {/* (Empty for now) */}
+          </div>
+          {/* About Innovation Cell Sections as Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-16">
+            {[{
+              icon: Lightbulb,
+              title: 'Introduction',
+              content: `The Innovation Cell is a dedicated space where creativity meets learning. It is built to inspire students to think differently and go beyond classroom knowledge. Here, ideas are not just discussed but also shaped into practical solutions. In short, it's a place where imagination turns into reality.`,
+              color: 'from-blue-500 to-cyan-500'
+            }, {
+              icon: Target,
+              title: 'Our Purpose',
+              content: `The purpose of the Innovation Cell is to give students the right platform to explore their ideas and talents. Through the Cell, students get an environment where they can discuss problems, think of solutions, and try new approaches. It's about developing confidence to create something new and useful. It helps students to grow their skills for both academics and real-world needs.`,
+              color: 'from-purple-500 to-pink-500'
+            }, {
+              icon: Users,
+              title: 'Who Can Join?',
+              content: `The Innovation Cell is open to everyone who is curious and willing to learn. Whether you are from Electrical, IT, Mechanical, or any other stream, you can be a part of this community. If you bring an idea, the Cell will support you in making it more impactful. It's about giving every student a chance to explore innovation in their own way.`,
+              color: 'from-green-500 to-emerald-500'
+            }, {
+              icon: Rocket,
+              title: 'What We Provide',
+              content: `The Innovation Cell provides students with the tools, resources, and support they need to succeed. We offer guidance from mentors, and hands-on opportunities to work on projects. For students with ideas, we help in refining and developing them into practical innovations. With Code Catalyst also being a part of this journey, students gain even more exposure and community support.`,
+              color: 'from-orange-500 to-red-500'
+            }].map((section, idx) => (
+              <div key={idx} className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
+                <div className={`w-14 h-14 bg-gradient-to-r ${section.color} rounded-xl flex items-center justify-center mb-4`}>
+                  <section.icon className="text-white" size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">{section.title}</h3>
+                <p className="text-gray-300 text-base leading-relaxed">{section.content}</p>
               </div>
-
-              <Link to="/blog" className="inline-flex items-center font-medium text-white bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x px-4 py-2 rounded-lg shadow transition-transform hover:scale-105">
-                Read All Blogs <ArrowRight size={16} className="ml-1 text-white" />
-              </Link>
+            ))}
+          </div>
+            {/* Unique Features as Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {[{
+                icon: Users,
+                title: 'Open for All Streams',
+                description: 'Students from Electrical, IT, Mechanical, or any branch can join and contribute.',
+                color: 'bg-blue-500'
+              }, {
+                icon: Rocket,
+                title: 'Idea to Reality',
+                description: `It's not just about discussing ideas, but actually building and testing them.`,
+                color: 'bg-purple-500'
+              }, {
+                icon: Award,
+                title: 'Strong Support System',
+                description: 'Guidance, resources, and mentorship are always provided.',
+                color: 'bg-green-500'
+              }, {
+                icon: Star,
+                title: 'Part of a Community',
+                description: 'With Code Catalyst connected, students get more exposure and opportunities.',
+                color: 'bg-orange-500'
+              }, {
+                icon: Target,
+                title: 'Focus on Real-World Skills',
+                description: 'Helps in improving teamwork, problem-solving, and leadership skills along with academics.',
+                color: 'bg-pink-500'
+              }].map((feature, idx) => (
+                <div key={idx} className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
+                  <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center mb-4`}>
+                    <feature.icon className="text-white" size={28} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
+                  <p className="text-gray-300 text-base leading-relaxed">{feature.description}</p>
+                </div>
+              ))}
             </div>
+          </div>
+        </section>
+
+      {/* Projects Preview Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900">
+        <div className="container-max px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              Featured <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              A glimpse of what we build. See more on our projects page.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[...completedProjectsPreview, ...ongoingProjectsPreview].map((project) => (
+              <div key={project.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row overflow-hidden">
+                <img src={project.image} alt={project.name} className="w-full md:w-32 h-48 object-cover" />
+                <div className="flex-1 p-6 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 text-gray-900">{project.name}</h3>
+                    <p className="text-gray-700 mb-4">{project.description}</p>
+                  </div>
+                  <div>
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:scale-105 transition-transform">
+                      View Project
+                      <ArrowRight size={16} className="ml-2" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/projects" className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:scale-105 transition-transform">See All Projects</Link>
           </div>
         </div>
       </section>

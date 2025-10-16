@@ -80,21 +80,74 @@ const AdminEsportsManager = () => {
   };
 
   const exportToExcel = () => {
-    const data = filteredRegistrations.map(reg => ({
-      ID: reg.id,
-      Name: reg.name,
-      Email: reg.email,
-      Phone: reg.phone,
-      Game_ID: reg.game_id,
-      Sport: reg.sport,
-      Team_Size: reg.team_members ? JSON.parse(reg.team_members).length + 1 : 1,
-      Team_Members: reg.team_members ? JSON.parse(reg.team_members).map(m => `${m.name} (${m.gameUserId})`).join('; ') : 'N/A',
-      Submitted_At: new Date(reg.submitted_at).toLocaleString()
-    }));
+    const data = filteredRegistrations.map(reg => {
+      const baseData = {
+        'Registration ID': reg.id,
+        'Team Captain': reg.name,
+        'Email': reg.email,
+        'Phone': reg.phone || 'N/A',
+        'Captain Game ID': reg.game_id || 'N/A',
+        'Game': reg.sport,
+        'Submitted At': new Date(reg.submitted_at).toLocaleString()
+      };
+
+      // Add team member columns
+      const teamMembers = reg.team_members ? JSON.parse(reg.team_members) : [];
+      const maxMembers = 4; // Maximum team members based on filter options
+
+      for (let i = 0; i < maxMembers; i++) {
+        const member = teamMembers[i];
+        if (member) {
+          baseData[`Member ${i + 1} Name`] = member.name;
+          baseData[`Member ${i + 1} Game User ID`] = member.gameUserId;
+          baseData[`Member ${i + 1} In-Game Name`] = member.inGameName;
+          baseData[`Member ${i + 1} ERP`] = member.erp || 'N/A';
+        } else {
+          baseData[`Member ${i + 1} Name`] = 'N/A';
+          baseData[`Member ${i + 1} Game User ID`] = 'N/A';
+          baseData[`Member ${i + 1} In-Game Name`] = 'N/A';
+          baseData[`Member ${i + 1} ERP`] = 'N/A';
+        }
+      }
+
+      baseData['Total Team Size'] = teamMembers.length + 1;
+
+      return baseData;
+    });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Esports Registrations');
+
+    // Auto-size columns for better readability
+    const colWidths = [
+      { wch: 12 }, // Registration ID
+      { wch: 20 }, // Team Captain
+      { wch: 25 }, // Email
+      { wch: 15 }, // Phone
+      { wch: 15 }, // Captain Game ID
+      { wch: 10 }, // Game
+      { wch: 20 }, // Submitted At
+      { wch: 20 }, // Member 1 Name
+      { wch: 18 }, // Member 1 Game User ID
+      { wch: 20 }, // Member 1 In-Game Name
+      { wch: 12 }, // Member 1 ERP
+      { wch: 20 }, // Member 2 Name
+      { wch: 18 }, // Member 2 Game User ID
+      { wch: 20 }, // Member 2 In-Game Name
+      { wch: 12 }, // Member 2 ERP
+      { wch: 20 }, // Member 3 Name
+      { wch: 18 }, // Member 3 Game User ID
+      { wch: 20 }, // Member 3 In-Game Name
+      { wch: 12 }, // Member 3 ERP
+      { wch: 20 }, // Member 4 Name
+      { wch: 18 }, // Member 4 Game User ID
+      { wch: 20 }, // Member 4 In-Game Name
+      { wch: 12 }, // Member 4 ERP
+      { wch: 15 }  // Total Team Size
+    ];
+    ws['!cols'] = colWidths;
+
     XLSX.writeFile(wb, `esports_registrations_${filterSport || 'all'}_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 

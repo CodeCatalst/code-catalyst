@@ -25,7 +25,7 @@ const Modal = ({ children, onClose }) => {
           {children}
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }

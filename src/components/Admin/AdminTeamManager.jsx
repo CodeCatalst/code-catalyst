@@ -26,16 +26,25 @@ const AdminTeamManager = ({ onClose, onChange }) => {
 
   const fetchMembers = async () => {
     setLoading(true)
+    setError(null)
     try {
+      console.log('Fetching team members...')
       const res = await getTeamMembers()
+      console.log('Raw team members response:', res.data)
+
       // Parse skills and social fields for all members
-      setMembers(res.data.map(m => ({
+      const parsedMembers = res.data.map(m => ({
         ...m,
         skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
         social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
-      })))
+      }))
+
+      console.log('Parsed team members:', parsedMembers)
+      setMembers(parsedMembers)
     } catch (e) {
-      setError('Failed to load team members')
+      console.error('Failed to load team members:', e)
+      console.error('Error response:', e.response?.data)
+      setError(`Failed to load team members: ${e.response?.data?.error || e.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -64,26 +73,41 @@ const AdminTeamManager = ({ onClose, onChange }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Validate required fields
+    if (!form.name || !form.role) {
+      setToast({ message: 'Name and role are required fields.', type: 'error' })
+      return
+    }
+
     // Convert skills array to comma-separated string for backend
     const submitForm = {
       ...form,
       skills: Array.isArray(form.skills) ? form.skills.join(',') : '',
       social: typeof form.social === 'object' ? form.social : {}
     }
+
+    console.log('Submitting team member data:', submitForm)
+
     try {
       if (editing) {
+        console.log('Updating team member with ID:', editing)
         await updateTeamMember(editing, submitForm)
-        setToast({ message: 'Team member updated.', type: 'success' })
+        setToast({ message: 'Team member updated successfully.', type: 'success' })
       } else {
+        console.log('Adding new team member')
         await addTeamMember(submitForm)
-        setToast({ message: 'Team member added.', type: 'success' })
+        setToast({ message: 'Team member added successfully.', type: 'success' })
       }
       setEditing(null)
       setForm(emptyMember)
       fetchMembers()
       onChange && onChange()
-    } catch {
-      setToast({ message: 'Failed to save team member.', type: 'error' })
+    } catch (error) {
+      console.error('Team member save error:', error)
+      console.error('Error response:', error.response?.data)
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to save team member.'
+      setToast({ message: errorMessage, type: 'error' })
     }
   }
 

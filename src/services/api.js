@@ -14,21 +14,48 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
+    console.log('API Request Debug:', {
+      url: config.url,
+      method: config.method,
+      tokenPresent: !!token,
+      tokenLength: token ? token.length : 0,
+      tokenPreview: token ? token.substring(0, 20) + '...' : 'No token'
+    })
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+      console.log('API Request: Added Authorization header')
+    } else {
+      console.log('API Request: No token found, sending without auth')
     }
     return config
   },
   (error) => {
+    console.error('Request interceptor error:', error)
     return Promise.reject(error)
   }
 )
 
 // Response interceptor to handle auth errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('API Response:', {
+      url: response.config.url,
+      status: response.status,
+      data: response.data
+    })
+    return response
+  },
   (error) => {
+    console.error('API Error Response:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message
+    })
+
     if (error.response?.status === 401) {
+      console.log('Unauthorized access - redirecting to login')
       localStorage.removeItem('token')
       window.location.href = '/login'
     }
@@ -208,10 +235,67 @@ export async function getEsportsRegistration(id) {
 
 export async function createEsportsRegistration(registration) {
   try {
+    console.log('=== FRONTEND SENDING ===');
+    console.log('API Base URL:', API_BASE);
+    console.log('Full URL:', API_BASE + '/api/esports');
+    console.log('Sending esports registration:', registration);
+    console.log('Team members:', registration.teamMembers);
+    console.log('=======================');
+
+    // Test backend connectivity first
+    try {
+      console.log('=== TESTING BACKEND CONNECTIVITY ===');
+      const healthResponse = await fetch(`${API_BASE}/api/health`);
+      console.log('Backend health check:', healthResponse.ok ? 'REACHABLE' : 'NOT REACHABLE');
+      console.log('Health response status:', healthResponse.status);
+      console.log('=============================');
+    } catch (healthError) {
+      console.error('Backend connectivity test failed:', healthError.message);
+    }
+
     const response = await api.post('/esports', registration);
+
+    console.log('=== FRONTEND RECEIVED ===');
+    console.log('Response status:', response.status);
+    console.log('Response data:', response.data);
+    console.log('Response success:', response.data?.success);
+    console.log('========================');
+
     return response.data;
   } catch (error) {
-    throw new Error('Failed to create esports registration');
+    console.error('=== FRONTEND ERROR ===');
+    console.error('Error status:', error.response?.status);
+    console.error('Error data:', error.response?.data);
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    console.error('Error response keys:', error.response?.data ? Object.keys(error.response.data) : 'No response data');
+    console.error('===================');
+
+    // Check if it's a network error
+    if (error.code === 'NETWORK_ERROR' || error.message?.includes('Network Error')) {
+      console.error('Network error detected - backend may not be accessible');
+      const networkError = new Error('Network error: Unable to connect to the server. Please check your internet connection and try again.');
+      networkError.originalError = error;
+      networkError.isNetworkError = true;
+      throw networkError;
+    }
+
+    // Check if it's a CORS error
+    if (error.message?.includes('CORS') || error.response?.status === 0) {
+      console.error('CORS error detected');
+      const corsError = new Error('CORS error: Unable to connect to the server due to cross-origin restrictions.');
+      corsError.originalError = error;
+      corsError.isCorsError = true;
+      throw corsError;
+    }
+
+    // Enhanced error with more context
+    const enhancedError = new Error(error.response?.data?.message || error.message || 'Failed to create esports registration');
+    enhancedError.originalError = error;
+    enhancedError.responseData = error.response?.data;
+    enhancedError.status = error.response?.status;
+
+    throw enhancedError;
   }
 }
 

@@ -40,6 +40,27 @@ api.interceptors.response.use(
   }
 )
 
+// Simple in-memory GET cache for this axios instance to reduce perceived load time
+const getCache = new Map()
+const DEFAULT_TTL = 30 * 1000 // 30 seconds
+const originalGet = api.get.bind(api)
+api.get = async function (url, config) {
+  try {
+    const paramsKey = config && config.params ? JSON.stringify(config.params) : ''
+    const key = `${url}|${paramsKey}`
+    const entry = getCache.get(key)
+    if (entry && Date.now() - entry.t < (config && config.ttl ? config.ttl : DEFAULT_TTL)) {
+      return entry.res
+    }
+
+    const res = await originalGet(url, config)
+    getCache.set(key, { res, t: Date.now() })
+    return res
+  } catch (err) {
+    throw err
+  }
+}
+
 export async function getUsers() {
   try {
     const response = await api.get('/users');

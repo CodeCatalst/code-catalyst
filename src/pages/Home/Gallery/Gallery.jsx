@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, Users, ExternalLink, X, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import LoadingSpinner from '../../components/Common/LoadingSpinner'
+import LoadingSpinner from '../../../components/Common/LoadingSpinner'
+// NOTE: import paths adjusted for nested Gallery folder
 
 
-import { getGallery as fetchGalleryFromApi } from '../../services/gallery'
+import { getGallery as fetchGalleryFromApi } from '../../../services/gallery'
 
 const Gallery = () => {
   const [events, setEvents] = useState([])

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Share2, Copy, ChevronLeft, ChevronRight, Users } from 'lucide-react';
-import { getGallery } from '../../services/gallery';
-import { useToast } from '../../components/hooks/use-toast';
+import { getGallery } from '../../../services/gallery';
+import { useToast } from '../../../components/hooks/use-toast';
 
 const GalleryDetails = () => {
   const { id } = useParams();

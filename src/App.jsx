@@ -10,14 +10,15 @@ import { BlogsProvider } from './context/NoticesContext'
 // Lazy load pages for better performance
 import { lazy, Suspense, useEffect } from 'react'
 import Loader from './components/Common/LoadingSpinner'
+import apiBase from './services/apiBase'
 
 
 const Home = lazy(() => import('./pages/Home/Home'))
 const About = lazy(() => import('./pages/About/About'))
 const Contact = lazy(() => import('./pages/Contact/Contact'))
 // const Hiring = lazy(() => import('./pages/Hiring/Hiring'))
-const Gallery = lazy(() => import('./pages/Gallery/Gallery'))
-const GalleryDetails = lazy(() => import('./pages/Gallery/GalleryDetails'))
+const Gallery = lazy(() => import('./pages/Home/Gallery/Gallery'))
+const GalleryDetails = lazy(() => import('./pages/Home/Gallery/GalleryDetails'))
 const Team = lazy(() => import('./pages/Team/Team'))
 const MemberDetail = lazy(() => import('./pages/Team/MemberDetail'))
 const Blog = lazy(() => import('./pages/Blog/Blog'))
@@ -60,6 +61,14 @@ function App() {
     ws.onerror = (e) => console.log('Manual WebSocket error:', e);
     ws.onclose = () => console.log('Manual WebSocket closed');
   }, []);
+
+  // Prefetch common GET endpoints on app mount to reduce spinner times
+  useEffect(() => {
+    const urls = ['/gallery', '/blogs', '/notices']
+    apiBase.prefetch(urls).catch(() => {
+      /* ignore prefetch errors */
+    })
+  }, [])
 
   return (
     <NoticesProvider>

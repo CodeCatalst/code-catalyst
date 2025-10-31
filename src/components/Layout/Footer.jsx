@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Github, Instagram, Linkedin } from 'lucide-react'
 import DiscordIcon from './DiscordIcon'
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear()  
 
   const socialLinks = [
     { icon: Github, href: 'https://github.com/codeCatalyst-Jb', label: 'GitHub' },

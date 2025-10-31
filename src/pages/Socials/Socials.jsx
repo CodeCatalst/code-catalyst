@@ -40,7 +40,7 @@ const Socials = () => {
     {
       name: 'GitHub',
       icon: Github,
-      href: 'https://github.com/codecatalyst',
+      href: 'https://github.com/codeCatalyst-Jb',
       description: 'Explore our open-source projects and contribute to the community',
       color: 'from-gray-800 to-gray-900',
       hoverColor: 'hover:from-gray-700 hover:to-gray-800',

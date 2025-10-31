@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/codecatalyst', label: 'GitHub' },
+    { icon: Github, href: 'https://github.com/codeCatalyst-Jb', label: 'GitHub' },
     { icon: DiscordIcon, href: 'https://discord.gg/uW3BthhwDU', label: 'Discord' },
     { icon: Instagram, href: 'https://www.instagram.com/codecatalyst.jb', label: 'Instagram' },
     { icon: Linkedin, href: 'https://www.linkedin.com/company/code-catalyst-s/', label: 'LinkedIn' },

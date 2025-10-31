@@ -634,7 +634,7 @@ const Home = () => {
               <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                 2
               </div>
-              <div className="text-gray-300 font-medium">GitHub Repositories</div>
+              <div className="text-gray-300 font-medium">GitHub followers</div>
             </div>
             <div className="text-center">
               <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2">

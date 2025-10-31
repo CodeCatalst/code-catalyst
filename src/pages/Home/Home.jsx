@@ -21,10 +21,11 @@ const ongoingProjectsPreview = [
 ];
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Star, Target, Eye, Heart, Lightbulb, Rocket, Award, BookOpen, Brain, Sparkles, Globe } from 'lucide-react';
+import { ArrowRight, Calendar, Users, Video, Bell, Code, Zap, Star, Target, Eye, Heart, Lightbulb, Rocket, Award, BookOpen, Brain, Sparkles, Globe, Github, Instagram, Linkedin, MessageCircle } from 'lucide-react';
 import api from '../../services/api';
 import { getGallery } from '../../services/gallery';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import DiscordIcon from '../../components/Layout/DiscordIcon';
 
 const Home = () => {
   const [latestContent, setLatestContent] = useState(null);
@@ -468,6 +469,182 @@ const Home = () => {
             </div>
           </div>
         </section>
+
+      {/* Social Platforms Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden relative">
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.2) 1px, transparent 1px),
+              radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.2) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+        
+        <div className="container-max px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              Connect With <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient-x">Us</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Join our vibrant community across multiple platforms. Stay updated with the latest tech trends, events, and opportunities.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+            {/* GitHub */}
+            <a
+              href="https://github.com/codeCatalyst-Jb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-gray-500 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-gray-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                  <Github className="text-white" size={40} />
+                </div>
+                <h3 className="text-2xl font-bold text-white">GitHub</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  Explore our open-source projects, contribute to code, and collaborate with fellow developers.
+                </p>
+                <div className="flex items-center text-blue-400 font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <span>Follow Us</span>
+                  <ArrowRight size={16} className="ml-2" />
+                </div>
+              </div>
+            </a>
+
+            {/* Discord */}
+            <a
+              href="https://discord.gg/uW3BthhwDU"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 border border-indigo-500 hover:border-indigo-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                  <DiscordIcon size={40} className="text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">Discord</h3>
+                <p className="text-indigo-100 text-sm leading-relaxed">
+                  Join our active community, get real-time help, participate in discussions, and network with peers.
+                </p>
+                <div className="flex items-center text-white font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <span>Join Server</span>
+                  <ArrowRight size={16} className="ml-2" />
+                </div>
+              </div>
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/codecatalyst.jb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-gradient-to-br from-pink-600 via-purple-600 to-orange-500 rounded-2xl p-8 border border-pink-500 hover:border-pink-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-pink-500 via-purple-500 to-orange-400 rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                  <Instagram className="text-white" size={40} />
+                </div>
+                <h3 className="text-2xl font-bold text-white">Instagram</h3>
+                <p className="text-pink-100 text-sm leading-relaxed">
+                  See our event highlights, behind-the-scenes moments, and stay connected with our journey.
+                </p>
+                <div className="flex items-center text-white font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <span>Follow Us</span>
+                  <ArrowRight size={16} className="ml-2" />
+                </div>
+              </div>
+            </a>
+
+            {/* LinkedIn */}
+            <a
+              href="https://www.linkedin.com/company/code-catalyst-s/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-8 border border-blue-600 hover:border-blue-500 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                  <Linkedin className="text-white" size={40} />
+                </div>
+                <h3 className="text-2xl font-bold text-white">LinkedIn</h3>
+                <p className="text-blue-100 text-sm leading-relaxed">
+                  Connect professionally, discover opportunities, and build your network with industry experts.
+                </p>
+                <div className="flex items-center text-white font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <span>Connect</span>
+                  <ArrowRight size={16} className="ml-2" />
+                </div>
+              </div>
+            </a>
+
+            {/* WhatsApp Community */}
+            <a
+              href="https://chat.whatsapp.com/EQvCUtrg0FDD8WfY7KlGih"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative bg-gradient-to-br from-green-600 to-green-800 rounded-2xl p-8 border border-green-500 hover:border-green-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
+                  <MessageCircle className="text-white" size={40} />
+                </div>
+                <h3 className="text-2xl font-bold text-white">WhatsApp</h3>
+                <p className="text-green-100 text-sm leading-relaxed">
+                  Join our WhatsApp community for instant updates, quick discussions, and direct communication.
+                </p>
+                <div className="flex items-center text-white font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <span>Join Community</span>
+                  <ArrowRight size={16} className="ml-2" />
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* Community Stats */}
+          <div className="mt-16 grid grid-cols-2 lg:grid-cols-5 gap-8">
+            <div className="text-center">
+              <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                100+
+              </div>
+              <div className="text-gray-300 font-medium">Discord Members</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent mb-2">
+                450+
+              </div>
+              <div className="text-gray-300 font-medium">Instagram Followers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                60+  
+              </div>
+              <div className="text-gray-300 font-medium">LinkedIn Connections</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                2
+              </div>
+              <div className="text-gray-300 font-medium">GitHub Repositories</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2">
+                400+
+              </div>
+              <div className="text-gray-300 font-medium">WhatsApp Members</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Projects Preview Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900">

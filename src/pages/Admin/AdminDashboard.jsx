@@ -1,5 +1,5 @@
 import { getAccessibleTabs, hasPermission } from '../../utils/adminAccess';
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { getStats } from '../../services/stats'
 import api, { getUsers } from '../../services/api'
@@ -16,7 +16,22 @@ import {
     Eye,
     Download,
     Filter,
-    Search
+    Search,
+    Bell,
+    BookOpen,
+    Image,
+    UserCog,
+    Shield,
+    Mail,
+    Briefcase,
+    Trophy,
+    LayoutDashboard,
+    TrendingUp,
+    Sparkles,
+    Zap,
+    Activity,
+    Menu,
+    X
 } from 'lucide-react'
 import FormBuilder from '../../components/Admin/FormBuilder';
 import FormManager from '../../components/Admin/FormManager';
@@ -36,19 +51,25 @@ import AdminEsportsManager from '../../components/Admin/AdminEsportsManager';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    
     // Show tabs based on user role
     const accessibleTabs = getAccessibleTabs(user?.permissions || []);
     // If user is not allowed any tabs, do not render dashboard
     if (!user || !accessibleTabs.length) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-900">
-                <div className="text-gray-400 text-xl">You do not have access to the admin dashboard.</div>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+                <div className="text-center max-w-md p-8 bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl">
+                    <Shield className="w-16 h-16 mx-auto text-red-500 mb-4" />
+                    <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
+                    <p className="text-gray-400">You do not have permission to access the admin dashboard.</p>
+                </div>
             </div>
         );
     }
 
-    // Set the default tab to the first accessible tab for the user
-    const [activeTab, setActiveTab] = useState(() => accessibleTabs[0] || 'notices')
+    // Set the default tab to overview
+    const [activeTab, setActiveTab] = useState('overview')
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [stats, setStats] = useState({ totalUsers: 0, totalCore: 0, totalHiringRequests: 0 });
     const [userCount, setUserCount] = useState(0);
@@ -100,18 +121,17 @@ const AdminDashboard = () => {
 
     // Show tabs based on user role
     const tabs = [
-        { id: 'notices', label: 'Manage Notice' },
-        { id: 'blogs', label: 'Manage Blogs' },
-        { id: 'users', label: 'Manage Users' },
-        { id: 'roles', label: 'Manage Roles' },
-        { id: 'gallery', label: 'Manage Gallery' },
-        { id: 'team', label: 'Manage Team' },
-        // { id: 'CoreTeamFeedback', label: 'Feedback Form' },
-        // { id: 'CoreTeamFeedbackResponses', label: 'Feedback Form Responses' },
-        { id: 'contact', label: 'Contact Messages' },
-        { id: 'hiring', label: 'Hiring Requests' },
-        { id: 'esports', label: 'Esports Registrations' },
-    ].filter(tab => accessibleTabs.includes(tab.id));
+        { id: 'overview', label: 'Overview', icon: LayoutDashboard, gradient: 'from-purple-500 to-pink-500', accessible: true },
+        { id: 'notices', label: 'Notices', icon: Bell, gradient: 'from-blue-500 to-cyan-500' },
+        { id: 'blogs', label: 'Blogs', icon: BookOpen, gradient: 'from-green-500 to-emerald-500' },
+        { id: 'users', label: 'Users', icon: Users, gradient: 'from-purple-500 to-pink-500' },
+        { id: 'roles', label: 'Roles', icon: Shield, gradient: 'from-yellow-500 to-orange-500' },
+        { id: 'gallery', label: 'Gallery', icon: Image, gradient: 'from-pink-500 to-rose-500' },
+        { id: 'team', label: 'Team', icon: UserCog, gradient: 'from-indigo-500 to-purple-500' },
+        { id: 'contact', label: 'Messages', icon: Mail, gradient: 'from-orange-500 to-red-500' },
+        { id: 'hiring', label: 'Hiring', icon: Briefcase, gradient: 'from-teal-500 to-cyan-500' },
+        { id: 'esports', label: 'Esports', icon: Trophy, gradient: 'from-red-500 to-pink-500' },
+    ].filter(tab => tab.accessible || accessibleTabs.includes(tab.id));
 
     const handleUserCountUpdate = (count) => {
         setUserCount(count)
@@ -119,8 +139,143 @@ const AdminDashboard = () => {
 
 
 
+    // Overview Dashboard Component
+    const OverviewDashboard = () => {
+        return (
+            <div className="space-y-6">
+                {/* Welcome Banner */}
+                <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-3xl p-8 shadow-2xl">
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-3">
+                            <Sparkles className="w-8 h-8 text-yellow-300 animate-pulse" />
+                            <h2 className="text-3xl font-bold text-white">Welcome back, {user?.name || 'Admin'}!</h2>
+                        </div>
+                        <p className="text-purple-100 text-lg mb-4">Here's what's happening with Code Catalyst today</p>
+                        <div className="flex flex-wrap gap-4">
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <Activity className="w-5 h-5 text-green-300" />
+                                <span className="text-white font-medium">All Systems Operational</span>
+                            </div>
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <TrendingUp className="w-5 h-5 text-blue-300" />
+                                <span className="text-white font-medium">High Activity</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1">
+                        <div className="flex items-center mb-4">
+                            <div className="p-3 bg-blue-500/10 rounded-xl">
+                                <Users className="w-6 h-6 text-blue-400" />
+                            </div>
+                        </div>
+                        <h3 className="text-gray-400 text-sm font-medium mb-1">Total Users</h3>
+                        <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
+                    </div>
+
+                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1">
+                        <div className="flex items-center mb-4">
+                            <div className="p-3 bg-purple-500/10 rounded-xl">
+                                <UserCog className="w-6 h-6 text-purple-400" />
+                            </div>
+                        </div>
+                        <h3 className="text-gray-400 text-sm font-medium mb-1">Core Team</h3>
+                        <p className="text-3xl font-bold text-white">{stats.totalCore}</p>
+                    </div>
+
+                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                        <div className="flex items-center mb-4">
+                            <div className="p-3 bg-teal-500/10 rounded-xl">
+                                <Briefcase className="w-6 h-6 text-teal-400" />
+                            </div>
+                        </div>
+                        <h3 className="text-gray-400 text-sm font-medium mb-1">Hiring Requests</h3>
+                        <p className="text-3xl font-bold text-white">{stats.totalHiringRequests}</p>
+                    </div>
+                </div>
+
+                {/* All Admin Sections Overview */}
+                <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6">
+                    <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <LayoutDashboard className="w-7 h-7 text-purple-400" />
+                        All Admin Sections
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {tabs.filter(tab => tab.id === 'overview' || accessibleTabs.includes(tab.id)).map((section) => {
+                            const Icon = section.icon;
+                            const isActive = activeTab === section.id;
+                            const gradient = section.gradient || 'from-gray-500 to-gray-600';
+                            
+                            // Helper function to get color from gradient
+                            const getColorClass = (type) => {
+                                if (!gradient) return type === 'bg' ? 'bg-gray-500/10' : 'text-gray-400';
+                                
+                                if (gradient.includes('blue')) return type === 'bg' ? 'bg-blue-500/10' : 'text-blue-400';
+                                if (gradient.includes('green')) return type === 'bg' ? 'bg-green-500/10' : 'text-green-400';
+                                if (gradient.includes('purple')) return type === 'bg' ? 'bg-purple-500/10' : 'text-purple-400';
+                                if (gradient.includes('orange')) return type === 'bg' ? 'bg-orange-500/10' : 'text-orange-400';
+                                if (gradient.includes('pink')) return type === 'bg' ? 'bg-pink-500/10' : 'text-pink-400';
+                                if (gradient.includes('teal')) return type === 'bg' ? 'bg-teal-500/10' : 'text-teal-400';
+                                if (gradient.includes('indigo')) return type === 'bg' ? 'bg-indigo-500/10' : 'text-indigo-400';
+                                if (gradient.includes('yellow')) return type === 'bg' ? 'bg-yellow-500/10' : 'text-yellow-400';
+                                if (gradient.includes('red')) return type === 'bg' ? 'bg-red-500/10' : 'text-red-400';
+                                return type === 'bg' ? 'bg-gray-500/10' : 'text-gray-400';
+                            };
+                            
+                            return (
+                                <button
+                                    key={section.id}
+                                    onClick={() => setActiveTab(section.id)}
+                                    className={`group relative overflow-hidden rounded-xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+                                        isActive 
+                                            ? 'ring-2 ring-purple-500 shadow-lg shadow-purple-500/20' 
+                                            : 'bg-slate-800/50 hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+                                    <div className="relative z-10">
+                                        <div className={`p-3 ${getColorClass('bg')} rounded-xl w-fit mb-4`}>
+                                            <Icon className={`w-6 h-6 ${getColorClass('text')}`} />
+                                        </div>
+                                        <h4 className="text-white font-bold text-lg mb-2">{section.label}</h4>
+                                        <p className="text-gray-400 text-sm mb-3">
+                                            {section.id === 'overview' && 'Dashboard overview and quick stats'}
+                                            {section.id === 'users' && 'Manage user accounts and permissions'}
+                                            {section.id === 'notices' && 'Create and manage platform notices'}
+                                            {section.id === 'blogs' && 'Write and publish blog posts'}
+                                            {section.id === 'gallery' && 'Manage event gallery and images'}
+                                            {section.id === 'team' && 'Manage team members'}
+                                            {section.id === 'roles' && 'Configure roles and permissions'}
+                                            {section.id === 'contact' && 'View contact messages'}
+                                            {section.id === 'hiring' && 'Review hiring applications'}
+                                            {section.id === 'esports' && 'Manage esports registrations'}
+                                            {section.id === 'forms' && 'Create and manage custom forms'}
+                                            {section.id === 'submissions' && 'View form submissions'}
+                                            {section.id === 'feedback' && 'Core team feedback system'}
+                                        </p>
+                                        <div className="flex items-center gap-2 text-purple-400 text-xs font-medium">
+                                            <span>{isActive ? 'Active' : 'Open Section'}</span>
+                                            <span>→</span>
+                                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const renderTabContent = () => {
         switch (activeTab) {
+            case 'overview':
+                return <OverviewDashboard />;
             case 'notices':
                 return (
                   <AdminAccessWrapper permission="notices_management">
@@ -193,86 +348,149 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen  bg-gray-900 p-2 pt-24 sm:p-5 sm:pt-24">
-            <style>
-                {`
-                    .hide-scrollbar::-webkit-scrollbar {
-                        display: none;
-                    }
-                    .hide-scrollbar {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;
-                    }
-                `}
-            </style>
-            <div className="container-max">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-                    <p className="text-gray-400">Manage notices, blogs, users, and gallery highlights</p>
-                </div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+            {/* Animated Background Elements */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            </div>
 
-                {/* Stats Cards - Updated */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                                <Users className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Total Users</p>
-                                <p className="text-2xl font-bold text-white">{stats.totalUsers}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                                <Users className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Total Core Team</p>
-                                <p className="text-2xl font-bold text-white">{stats.totalCore}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
-                                <BarChart3 className="text-white" size={24} />
-                            </div>
-                            <div className="ml-4">
-                                <p className="text-gray-400 text-sm">Hiring Requests</p>
-                                <p className="text-2xl font-bold text-white">{stats.totalHiringRequests}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Tabs */}
-                <div className="card">
-                    <div className="border-b border-gray-700 mb-6">
-                        <nav className="flex space-x-8 overflow-x-auto hide-scrollbar">
-                            {tabs.map((tab) => (
+            <div className="relative">
+                {/* Top Navigation Bar */}
+                <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/50">
+                    <div className="px-4 sm:px-6 lg:px-8">
+                        <div className="flex items-center justify-between h-16">
+                            <div className="flex items-center gap-4">
                                 <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === tab.id
-                                        ? 'border-primary-500 text-primary-500'
-                                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                                        }`}
+                                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-slate-800 transition-all lg:hidden"
                                 >
-                                    {tab.label}
+                                    {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                                 </button>
-                            ))}
-                        </nav>
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg shadow-purple-500/50">
+                                        <Shield className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+                                        <p className="text-xs text-gray-400">Code Catalyst</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3 px-4 py-2 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700/50">
+                                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-semibold text-sm">{user?.name?.charAt(0) || 'A'}</span>
+                                    </div>
+                                    <div className="hidden md:block">
+                                        <p className="text-sm font-medium text-white">{user?.name || 'Admin'}</p>
+                                        <p className="text-xs text-gray-400 capitalize">{user?.role || 'User'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </nav>
 
-                    {/* Tab Content */}
-                    <div className="min-h-[500px]">
-                        {renderTabContent()}
-                    </div>
+                <div className="flex pt-16">
+                    {/* Sidebar */}
+                    <aside className={`fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+                        <div className="h-full overflow-y-auto p-6 space-y-2">
+                            {/* Welcome Section */}
+                            <div className="mb-6 p-4 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Sparkles className="w-5 h-5 text-purple-400 animate-pulse" />
+                                    <span className="text-sm font-semibold text-white">Welcome back!</span>
+                                </div>
+                                <p className="text-xs text-gray-400">Manage your platform efficiently</p>
+                            </div>
+
+                            {/* Stats Overview */}
+                            <div className="mb-6 space-y-3">
+                                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">Quick Stats</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
+                                        <Users className="w-5 h-5 text-blue-400 mb-1" />
+                                        <p className="text-xs text-gray-400">Users</p>
+                                        <p className="text-lg font-bold text-white">{stats.totalUsers}</p>
+                                    </div>
+                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
+                                        <UserCog className="w-5 h-5 text-purple-400 mb-1" />
+                                        <p className="text-xs text-gray-400">Core Team</p>
+                                        <p className="text-lg font-bold text-white">{stats.totalCore}</p>
+                                    </div>
+                                    <div className="col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
+                                        <Briefcase className="w-5 h-5 text-teal-400 mb-1" />
+                                        <p className="text-xs text-gray-400">Hiring Requests</p>
+                                        <p className="text-lg font-bold text-white">{stats.totalHiringRequests}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Navigation Tabs */}
+                            <div className="space-y-2">
+                                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">Navigation</h3>
+                                {tabs.map((tab) => {
+                                    const Icon = tab.icon;
+                                    const isActive = activeTab === tab.id;
+                                    return (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => {
+                                                setActiveTab(tab.id);
+                                                setSidebarOpen(false);
+                                            }}
+                                            className={`w-full group relative flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                                                isActive
+                                                    ? `bg-gradient-to-r ${tab.gradient || 'from-purple-500 to-pink-500'} text-white shadow-lg shadow-purple-500/30`
+                                                    : 'text-gray-400 hover:text-white hover:bg-slate-800/50'
+                                            }`}
+                                        >
+                                            <Icon className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                                            <span className="flex-1 text-left">{tab.label}</span>
+                                            {isActive && (
+                                                <Zap className="w-4 h-4 ml-auto animate-pulse" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </aside>
+
+                    {/* Main Content */}
+                    <main className="flex-1 p-4 sm:p-6 lg:p-8">
+                        <div className="max-w-7xl mx-auto">
+                            {/* Content Header */}
+                            <div className="mb-8">
+                                <div className="flex items-center gap-3 mb-3">
+                                    {tabs.find(t => t.id === activeTab)?.icon && 
+                                        React.createElement(tabs.find(t => t.id === activeTab).icon, {
+                                            className: "w-8 h-8 text-purple-400"
+                                        })
+                                    }
+                                    <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                                        {tabs.find(t => t.id === activeTab)?.label || 'Dashboard'}
+                                    </h2>
+                                </div>
+                                <p className="text-gray-400">Manage and monitor your platform content</p>
+                            </div>
+
+                            {/* Tab Content */}
+                            <div className="min-h-[500px]">
+                                {renderTabContent()}
+                            </div>
+                        </div>
+                    </main>
                 </div>
+
+                {/* Mobile Overlay */}
+                {sidebarOpen && (
+                    <div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
             </div>
 
             {/* Form Builder Modal */}

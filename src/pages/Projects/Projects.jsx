@@ -341,7 +341,7 @@ const Projects = () => {
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Frontend</div>
                               <div className="flex flex-wrap gap-1.5">
-                                {project.techStack.frontend.map((tech, techIndex) => {
+                                {Array.isArray(project.techStack?.frontend) && project.techStack.frontend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
                                     <span
@@ -360,7 +360,7 @@ const Projects = () => {
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Backend</div>
                               <div className="flex flex-wrap gap-1.5">
-                                {project.techStack.backend.map((tech, techIndex) => {
+                                {Array.isArray(project.techStack?.backend) && project.techStack.backend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
                                     <span
@@ -380,7 +380,7 @@ const Projects = () => {
                               <div>
                                 <div className="text-sm font-medium text-gray-700 mb-2">Other Tools</div>
                                 <div className="flex flex-wrap gap-2">
-                                  {project.techStack.other.map((tech, techIndex) => {
+                                  {Array.isArray(project.techStack?.other) && project.techStack.other.map((tech, techIndex) => {
                                     const IconComponent = getTechIcon(tech)
                                     return (
                                       <span
@@ -397,7 +397,7 @@ const Projects = () => {
                               <div>
                                 <div className="text-sm font-medium text-gray-700 mb-2">Deployment</div>
                                 <div className="flex flex-wrap gap-2">
-                                  {project.techStack.deployment.map((tech, techIndex) => {
+                                  {Array.isArray(project.techStack?.deployment) && project.techStack.deployment.map((tech, techIndex) => {
                                     const IconComponent = getTechIcon(tech)
                                     return (
                                       <span
@@ -418,7 +418,7 @@ const Projects = () => {
                           <div>
                             <h4 className="font-semibold text-gray-900 text-base mb-2">Key Features</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {project.features.map((feature, featureIndex) => (
+                              {Array.isArray(project.features) && project.features.map((feature, featureIndex) => (
                                 <div key={featureIndex} className="flex items-center space-x-1.5">
                                   <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
                                   <span className="text-gray-600 text-xs">{feature}</span>
@@ -534,7 +534,7 @@ const Projects = () => {
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Frontend</div>
                               <div className="flex flex-wrap gap-1.5">
-                                {project.techStack.frontend.map((tech, techIndex) => {
+                                {Array.isArray(project.techStack?.frontend) && project.techStack.frontend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
                                     <span
@@ -553,7 +553,7 @@ const Projects = () => {
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">Backend</div>
                               <div className="flex flex-wrap gap-1.5">
-                                {project.techStack.backend.map((tech, techIndex) => {
+                                {Array.isArray(project.techStack?.backend) && project.techStack.backend.map((tech, techIndex) => {
                                   const IconComponent = getTechIcon(tech)
                                   return (
                                     <span
@@ -573,7 +573,7 @@ const Projects = () => {
                               <div>
                                 <div className="text-sm font-medium text-gray-700 mb-2">Other Tools</div>
                                 <div className="flex flex-wrap gap-2">
-                                  {project.techStack.other.map((tech, techIndex) => {
+                                  {Array.isArray(project.techStack?.other) && project.techStack.other.map((tech, techIndex) => {
                                     const IconComponent = getTechIcon(tech)
                                     return (
                                       <span
@@ -590,7 +590,7 @@ const Projects = () => {
                               <div>
                                 <div className="text-sm font-medium text-gray-700 mb-2">Deployment</div>
                                 <div className="flex flex-wrap gap-2">
-                                  {project.techStack.deployment.map((tech, techIndex) => {
+                                  {Array.isArray(project.techStack?.deployment) && project.techStack.deployment.map((tech, techIndex) => {
                                     const IconComponent = getTechIcon(tech)
                                     return (
                                       <span
@@ -611,7 +611,7 @@ const Projects = () => {
                           <div>
                             <h4 className="font-semibold text-gray-900 text-base mb-2">Planned Features</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {project.features.map((feature, featureIndex) => (
+                              {Array.isArray(project.features) && project.features.map((feature, featureIndex) => (
                                 <div key={featureIndex} className="flex items-center space-x-1.5">
                                   <Clock size={14} className="text-blue-500 flex-shrink-0" />
                                   <span className="text-gray-600 text-xs">{feature}</span>

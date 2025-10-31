@@ -151,9 +151,9 @@ const Home = () => {
           api.get('/blogs'),
         ]);
         setLatestContent({
-          events: galleryEvents.slice(0, 3),
-          notices: noticesRes.data.data.slice(0, 3),
-          blogs: blogsRes.data.slice(0, 3),
+          events: Array.isArray(galleryEvents) ? galleryEvents.slice(0, 3) : [],
+          notices: Array.isArray(noticesRes?.data?.data) ? noticesRes.data.data.slice(0, 3) : [],
+          blogs: Array.isArray(blogsRes?.data) ? blogsRes.data.slice(0, 3) : [],
         });
         
       } catch (err) {

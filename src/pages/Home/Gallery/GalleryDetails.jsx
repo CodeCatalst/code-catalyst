@@ -29,9 +29,9 @@ const GalleryDetails = () => {
       setEvent(eventData);
 
       // Get related events (same category, excluding current event)
-      const related = allEvents
-        .filter(e => e.id !== eventData.id && e.category === eventData.category)
-        .slice(0, 3);
+      const related = Array.isArray(allEvents) 
+        ? allEvents.filter(e => e.id !== eventData.id && e.category === eventData.category).slice(0, 3)
+        : [];
       setRelatedEvents(related);
     } catch (error) {
       console.error('Failed to load event:', error);
@@ -238,7 +238,7 @@ const GalleryDetails = () => {
               </div>
 
               {/* Thumbnail Strip */}
-              {event.images.length > 1 && (
+              {Array.isArray(event.images) && event.images.length > 1 && (
                 <div className="flex justify-center space-x-2 overflow-x-auto pb-2">
                   {event.images.map((image, index) => (
                     <button

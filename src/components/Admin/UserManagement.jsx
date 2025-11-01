@@ -6,11 +6,11 @@ import AdminAccessWrapper from './AdminAccessWrapper'
 import { hasPermission } from '../../utils/adminAccess'
 import * as XLSX from 'xlsx'
 
-const UserManagement = ({ onUserCountUpdate }) => {
+const UserManagement = ({ onUserCountUpdate, initialFilter = 'all' }) => {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
-    const [filterRole, setFilterRole] = useState('all')
+    const [filterRole, setFilterRole] = useState(initialFilter)
     const [deleteConfirm, setDeleteConfirm] = useState(null)
     const [message, setMessage] = useState(null)
     const [showForm, setShowForm] = useState(false)
@@ -19,6 +19,11 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const [editingNotes, setEditingNotes] = useState({});
     const [savingNotesId, setSavingNotesId] = useState(null);
     const [rolesList, setRolesList] = useState([]);
+
+    // Update filter when initialFilter prop changes
+    useEffect(() => {
+        setFilterRole(initialFilter);
+    }, [initialFilter]);
 
     useEffect(() => {
         // Only fetch if user has permission or is admin
@@ -199,7 +204,16 @@ const UserManagement = ({ onUserCountUpdate }) => {
     const filteredUsers = users.filter(user => {
         const matchesSearch = user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase())
-        const matchesRole = filterRole === 'all' || user.role === filterRole
+        
+        // Handle 'core' filter to show only core team members
+        let matchesRole;
+        if (filterRole === 'core') {
+            const coreRoles = ['admin', 'super_admin', 'team_lead', 'team_member', 'community_member', 'HR Lead', 'Technical Lead', 'Project Manager', 'Developer', 'Designer', 'staff', 'Blogger'];
+            matchesRole = coreRoles.includes(user.role);
+        } else {
+            matchesRole = filterRole === 'all' || user.role === filterRole;
+        }
+        
         return matchesSearch && matchesRole
     })
 

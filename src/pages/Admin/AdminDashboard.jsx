@@ -52,6 +52,8 @@ import AdminEsportsManager from '../../components/Admin/AdminEsportsManager';
 const AdminDashboard = () => {
     const { user } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
+    const [userFilter, setUserFilter] = useState('all'); // 'all', 'core', or specific filter
     
     // Show tabs based on user role
     const accessibleTabs = getAccessibleTabs(user?.permissions || []);
@@ -142,70 +144,93 @@ const AdminDashboard = () => {
     // Overview Dashboard Component
     const OverviewDashboard = () => {
         return (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
                 {/* Welcome Banner */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-3xl p-8 shadow-2xl">
+                <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl">
                     <div className="relative z-10">
-                        <div className="flex items-center gap-3 mb-3">
-                            <Sparkles className="w-8 h-8 text-yellow-300 animate-pulse" />
-                            <h2 className="text-3xl font-bold text-white">Welcome back, {user?.name || 'Admin'}!</h2>
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300 animate-pulse" />
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Welcome back, {user?.name || 'Admin'}!</h2>
                         </div>
-                        <p className="text-purple-100 text-lg mb-4">Here's what's happening with Code Catalyst today</p>
-                        <div className="flex flex-wrap gap-4">
-                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                                <Activity className="w-5 h-5 text-green-300" />
-                                <span className="text-white font-medium">All Systems Operational</span>
+                        <p className="text-purple-100 text-sm sm:text-base lg:text-lg mb-3 sm:mb-4">Here's what's happening with Code Catalyst today</p>
+                        <div className="flex flex-wrap gap-2 sm:gap-4">
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 sm:px-4 sm:py-2">
+                                <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-300" />
+                                <span className="text-white font-medium text-xs sm:text-sm">All Systems Operational</span>
                             </div>
-                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                                <TrendingUp className="w-5 h-5 text-blue-300" />
-                                <span className="text-white font-medium">High Activity</span>
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 sm:px-4 sm:py-2">
+                                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-300" />
+                                <span className="text-white font-medium text-xs sm:text-sm">High Activity</span>
                             </div>
                         </div>
                     </div>
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-white/10 rounded-full blur-3xl -mr-32 sm:-mr-48 -mt-32 sm:-mt-48"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-64 sm:h-64 bg-white/10 rounded-full blur-3xl -ml-24 sm:-ml-32 -mb-24 sm:-mb-32"></div>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1">
-                        <div className="flex items-center mb-4">
-                            <div className="p-3 bg-blue-500/10 rounded-xl">
-                                <Users className="w-6 h-6 text-blue-400" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                    <button 
+                        onClick={() => {
+                            setUserFilter('all');
+                            setActiveTab('users');
+                            setSidebarOpen(false);
+                        }}
+                        className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-blue-500 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 hover:-translate-y-1 cursor-pointer text-left active:scale-95"
+                    >
+                        <div className="flex items-center mb-3 sm:mb-4">
+                            <div className="p-2 sm:p-3 bg-blue-500/10 rounded-lg sm:rounded-xl group-hover:bg-blue-500/20 transition-colors">
+                                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
                             </div>
                         </div>
-                        <h3 className="text-gray-400 text-sm font-medium mb-1">Total Users</h3>
-                        <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
-                    </div>
+                        <h3 className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Total Users</h3>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.totalUsers}</p>
+                        <p className="text-xs text-blue-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to view all users →</p>
+                    </button>
 
-                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1">
-                        <div className="flex items-center mb-4">
-                            <div className="p-3 bg-purple-500/10 rounded-xl">
-                                <UserCog className="w-6 h-6 text-purple-400" />
+                    <button 
+                        onClick={() => {
+                            setUserFilter('core');
+                            setActiveTab('users');
+                            setSidebarOpen(false);
+                        }}
+                        className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-purple-500 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1 cursor-pointer text-left active:scale-95"
+                    >
+                        <div className="flex items-center mb-3 sm:mb-4">
+                            <div className="p-2 sm:p-3 bg-purple-500/10 rounded-lg sm:rounded-xl group-hover:bg-purple-500/20 transition-colors">
+                                <UserCog className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                             </div>
                         </div>
-                        <h3 className="text-gray-400 text-sm font-medium mb-1">Core Team</h3>
-                        <p className="text-3xl font-bold text-white">{stats.totalCore}</p>
-                    </div>
+                        <h3 className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Core Team</h3>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.totalCore}</p>
+                        <p className="text-xs text-purple-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to view core members →</p>
+                    </button>
 
-                    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                        <div className="flex items-center mb-4">
-                            <div className="p-3 bg-teal-500/10 rounded-xl">
-                                <Briefcase className="w-6 h-6 text-teal-400" />
+                    <button 
+                        onClick={() => {
+                            setActiveTab('hiring');
+                            setSidebarOpen(false);
+                        }}
+                        className="group bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-teal-500 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/20 hover:-translate-y-1 cursor-pointer text-left active:scale-95 sm:col-span-2 lg:col-span-1"
+                    >
+                        <div className="flex items-center mb-3 sm:mb-4">
+                            <div className="p-2 sm:p-3 bg-teal-500/10 rounded-lg sm:rounded-xl group-hover:bg-teal-500/20 transition-colors">
+                                <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
                             </div>
                         </div>
-                        <h3 className="text-gray-400 text-sm font-medium mb-1">Hiring Requests</h3>
-                        <p className="text-3xl font-bold text-white">{stats.totalHiringRequests}</p>
-                    </div>
+                        <h3 className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Hiring Requests</h3>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.totalHiringRequests}</p>
+                        <p className="text-xs text-teal-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to view hiring requests →</p>
+                    </button>
                 </div>
 
                 {/* All Admin Sections Overview */}
-                <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6">
-                    <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <LayoutDashboard className="w-7 h-7 text-purple-400" />
+                <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                        <LayoutDashboard className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
                         All Admin Sections
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                         {tabs.filter(tab => tab.id === 'overview' || accessibleTabs.includes(tab.id)).map((section) => {
                             const Icon = section.icon;
                             const isActive = activeTab === section.id;
@@ -230,8 +255,11 @@ const AdminDashboard = () => {
                             return (
                                 <button
                                     key={section.id}
-                                    onClick={() => setActiveTab(section.id)}
-                                    className={`group relative overflow-hidden rounded-xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+                                    onClick={() => {
+                                        setActiveTab(section.id);
+                                        setSidebarOpen(false);
+                                    }}
+                                    className={`group relative overflow-hidden rounded-lg sm:rounded-xl p-4 sm:p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95 ${
                                         isActive 
                                             ? 'ring-2 ring-purple-500 shadow-lg shadow-purple-500/20' 
                                             : 'bg-slate-800/50 hover:bg-slate-800'
@@ -239,11 +267,11 @@ const AdminDashboard = () => {
                                 >
                                     <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
                                     <div className="relative z-10">
-                                        <div className={`p-3 ${getColorClass('bg')} rounded-xl w-fit mb-4`}>
-                                            <Icon className={`w-6 h-6 ${getColorClass('text')}`} />
+                                        <div className={`p-2 sm:p-3 ${getColorClass('bg')} rounded-lg sm:rounded-xl w-fit mb-3 sm:mb-4`}>
+                                            <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${getColorClass('text')}`} />
                                         </div>
-                                        <h4 className="text-white font-bold text-lg mb-2">{section.label}</h4>
-                                        <p className="text-gray-400 text-sm mb-3">
+                                        <h4 className="text-white font-bold text-base sm:text-lg mb-1 sm:mb-2">{section.label}</h4>
+                                        <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">
                                             {section.id === 'overview' && 'Dashboard overview and quick stats'}
                                             {section.id === 'users' && 'Manage user accounts and permissions'}
                                             {section.id === 'notices' && 'Create and manage platform notices'}
@@ -291,7 +319,7 @@ const AdminDashboard = () => {
             case 'users':
                 return (
                   <AdminAccessWrapper permission="user_management">
-                    <UserManagement onUserCountUpdate={handleUserCountUpdate} />
+                    <UserManagement onUserCountUpdate={handleUserCountUpdate} initialFilter={userFilter} />
                   </AdminAccessWrapper>
                 );
             case 'roles':
@@ -358,69 +386,236 @@ const AdminDashboard = () => {
             <div className="relative">
                 {/* Top Navigation Bar */}
                 <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/50">
-                    <div className="px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <div className="flex items-center gap-4">
+                    <div className="px-3 sm:px-4 lg:px-8">
+                        <div className="flex items-center justify-between h-14 sm:h-16">
+                            <div className="flex items-center gap-2 sm:gap-4">
                                 <button
                                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                                    className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-slate-800 transition-all lg:hidden"
+                                    className="p-2 rounded-lg sm:rounded-xl text-gray-400 hover:text-white hover:bg-slate-800 transition-all lg:hidden active:scale-95"
                                 >
-                                    {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                                    {sidebarOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
                                 </button>
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-xl">
-                                        <img src="/logo_transparent.png" alt="Code Catalyst" className="w-8 h-8" />
+                                <a href="/" className="flex items-center gap-2 sm:gap-3">
+                                    <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl">
+                                        <img src="/logo_transparent.png" alt="Code Catalyst" className="w-6 h-6 sm:w-8 sm:h-8" />
                                     </div>
-                                    <div>
-                                        <h1 className="text-xl font-bold text-white">Admin Panel</h1>
-                                        <p className="text-xs text-gray-400">Code Catalyst</p>
+                                    <div className="hidden sm:block">
+                                        <h1 className="text-base sm:text-xl font-bold text-white">Admin Panel</h1>
+                                        <p className="text-[10px] sm:text-xs text-gray-400">Code Catalyst</p>
                                     </div>
-                                </div>
+                                </a>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-3 px-4 py-2 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700/50">
-                                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                                        <span className="text-white font-semibold text-sm">{user?.name?.charAt(0) || 'A'}</span>
+
+                            {/* Desktop Navigation Links - Hidden on mobile/tablet */}
+                            <div className="hidden xl:flex items-center gap-1 flex-1 justify-center max-w-4xl mx-8">
+                                <a
+                                    href="/"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Home
+                                </a>
+                                <a
+                                    href="/about"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    About
+                                </a>
+                                <a
+                                    href="/team"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Team
+                                </a>
+                                <a
+                                    href="/projects"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Projects
+                                </a>
+                                <a
+                                    href="/innovation"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Innovation
+                                </a>
+                                <a
+                                    href="/gallery"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Event Gallery
+                                </a>
+                                <a
+                                    href="/blog"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Blog
+                                </a>
+                                <a
+                                    href="/notices"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Notices
+                                </a>
+                                <a
+                                    href="/contact"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Contact
+                                </a>
+                                <a
+                                    href="/esports"
+                                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                                >
+                                    Esports
+                                </a>
+                                <a
+                                    href="/admin"
+                                    className="px-3 py-2 text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg transition-all duration-200"
+                                >
+                                    Admin
+                                </a>
+                            </div>
+
+                            {/* Mobile Nav Toggle & User Profile */}
+                            <div className="flex items-center gap-2 sm:gap-4">
+                                {/* Mobile Navigation Menu Button */}
+                                <button
+                                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                                    className="xl:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition-all active:scale-95"
+                                >
+                                    <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
+                                </button>
+                                
+                                <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-1.5 sm:py-2 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700/50">
+                                    <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-semibold text-xs sm:text-sm">{user?.name?.charAt(0) || 'A'}</span>
                                     </div>
                                     <div className="hidden md:block">
-                                        <p className="text-sm font-medium text-white">{user?.name || 'Admin'}</p>
-                                        <p className="text-xs text-gray-400 capitalize">{user?.role || 'User'}</p>
+                                        <p className="text-xs sm:text-sm font-medium text-white truncate max-w-[120px]">{user?.name || 'Admin'}</p>
+                                        <p className="text-[10px] sm:text-xs text-gray-400 capitalize">{user?.role || 'User'}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    {/* Mobile Navigation Dropdown */}
+                    {mobileNavOpen && (
+                        <div className="xl:hidden border-t border-slate-800/50 bg-slate-900/95 backdrop-blur-xl">
+                            <div className="px-4 py-3 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-1">
+                                    <a
+                                        href="/"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Home
+                                    </a>
+                                    <a
+                                        href="/about"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        About
+                                    </a>
+                                    <a
+                                        href="/team"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Team
+                                    </a>
+                                    <a
+                                        href="/projects"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Projects
+                                    </a>
+                                    <a
+                                        href="/innovation"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Innovation
+                                    </a>
+                                    <a
+                                        href="/gallery"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Event Gallery
+                                    </a>
+                                    <a
+                                        href="/blog"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Blog
+                                    </a>
+                                    <a
+                                        href="/notices"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Notices
+                                    </a>
+                                    <a
+                                        href="/contact"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Contact
+                                    </a>
+                                    <a
+                                        href="/esports"
+                                        className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Esports
+                                    </a>
+                                    <a
+                                        href="/admin"
+                                        className="block px-4 py-3 text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg transition-all duration-200 active:scale-95"
+                                        onClick={() => setMobileNavOpen(false)}
+                                    >
+                                        Admin
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </nav>
 
-                <div className="flex pt-16">
+                <div className="flex pt-14 sm:pt-16">
                     {/* Sidebar */}
-                    <aside className={`fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-                        <div className="h-full overflow-y-auto p-6 space-y-2">
+                    <aside className={`fixed lg:sticky top-14 sm:top-16 left-0 z-40 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-64 sm:w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+                        <div className="h-full overflow-y-auto p-4 sm:p-6 space-y-2">
                             {/* Stats Overview */}
-                            <div className="mb-6 space-y-3">
-                                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">Quick Stats</h3>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
-                                        <Users className="w-5 h-5 text-blue-400 mb-1" />
-                                        <p className="text-xs text-gray-400">Users</p>
-                                        <p className="text-lg font-bold text-white">{stats.totalUsers}</p>
+                            <div className="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+                                <h3 className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">Quick Stats</h3>
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-700/50">
+                                        <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mb-1" />
+                                        <p className="text-[10px] sm:text-xs text-gray-400">Users</p>
+                                        <p className="text-base sm:text-lg font-bold text-white">{stats.totalUsers}</p>
                                     </div>
-                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
-                                        <UserCog className="w-5 h-5 text-purple-400 mb-1" />
-                                        <p className="text-xs text-gray-400">Core Team</p>
-                                        <p className="text-lg font-bold text-white">{stats.totalCore}</p>
+                                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-700/50">
+                                        <UserCog className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 mb-1" />
+                                        <p className="text-[10px] sm:text-xs text-gray-400">Core Team</p>
+                                        <p className="text-base sm:text-lg font-bold text-white">{stats.totalCore}</p>
                                     </div>
-                                    <div className="col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700/50">
-                                        <Briefcase className="w-5 h-5 text-teal-400 mb-1" />
-                                        <p className="text-xs text-gray-400">Hiring Requests</p>
-                                        <p className="text-lg font-bold text-white">{stats.totalHiringRequests}</p>
+                                    <div className="col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 border border-slate-700/50">
+                                        <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400 mb-1" />
+                                        <p className="text-[10px] sm:text-xs text-gray-400">Hiring Requests</p>
+                                        <p className="text-base sm:text-lg font-bold text-white">{stats.totalHiringRequests}</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Navigation Tabs */}
-                            <div className="space-y-2">
-                                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">Navigation</h3>
+                            <div className="space-y-1 sm:space-y-2">
+                                <h3 className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2 sm:mb-3">Navigation</h3>
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;
@@ -431,16 +626,16 @@ const AdminDashboard = () => {
                                                 setActiveTab(tab.id);
                                                 setSidebarOpen(false);
                                             }}
-                                            className={`w-full group relative flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                                            className={`w-full group relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 active:scale-95 ${
                                                 isActive
                                                     ? `bg-gradient-to-r ${tab.gradient || 'from-purple-500 to-pink-500'} text-white shadow-lg shadow-purple-500/30`
                                                     : 'text-gray-400 hover:text-white hover:bg-slate-800/50'
                                             }`}
                                         >
-                                            <Icon className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
-                                            <span className="flex-1 text-left">{tab.label}</span>
+                                            <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                                            <span className="flex-1 text-left text-sm sm:text-base">{tab.label}</span>
                                             {isActive && (
-                                                <Zap className="w-4 h-4 ml-auto animate-pulse" />
+                                                <Zap className="w-3 h-3 sm:w-4 sm:h-4 ml-auto animate-pulse" />
                                             )}
                                         </button>
                                     );
@@ -450,25 +645,25 @@ const AdminDashboard = () => {
                     </aside>
 
                     {/* Main Content */}
-                    <main className="flex-1 p-4 sm:p-6 lg:p-8">
+                    <main className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8">
                         <div className="max-w-7xl mx-auto">
                             {/* Content Header */}
-                            <div className="mb-8">
-                                <div className="flex items-center gap-3 mb-3">
+                            <div className="mb-4 sm:mb-6 lg:mb-8">
+                                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                                     {tabs.find(t => t.id === activeTab)?.icon && 
                                         React.createElement(tabs.find(t => t.id === activeTab).icon, {
-                                            className: "w-8 h-8 text-purple-400"
+                                            className: "w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-purple-400"
                                         })
                                     }
-                                    <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                                         {tabs.find(t => t.id === activeTab)?.label || 'Dashboard'}
                                     </h2>
                                 </div>
-                                <p className="text-gray-400">Manage and monitor your platform content</p>
+                                <p className="text-sm sm:text-base text-gray-400">Manage and monitor your platform content</p>
                             </div>
 
                             {/* Tab Content */}
-                            <div className="min-h-[500px]">
+                            <div className="min-h-[400px] sm:min-h-[500px]">
                                 {renderTabContent()}
                             </div>
                         </div>
@@ -480,6 +675,14 @@ const AdminDashboard = () => {
                     <div
                         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
                         onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+
+                {/* Mobile Nav Overlay */}
+                {mobileNavOpen && (
+                    <div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 xl:hidden"
+                        onClick={() => setMobileNavOpen(false)}
                     />
                 )}
             </div>

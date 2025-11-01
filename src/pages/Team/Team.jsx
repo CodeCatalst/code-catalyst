@@ -156,73 +156,169 @@ const Team = () => {
       </section>
 
       {/* Filter and View Controls */}
-      <section className="py-8 border-b border-gray-700/50 bg-gray-900">
+      <section className="sticky top-0 z-40 py-6 bg-slate-900/95 backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-purple-500/10">
         <div className="container-max">
-          <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            {/* Department Filter */}
-            {/* <div className="flex items-center space-x-4 w-full lg:w-auto">
-              <Filter size={20} className="text-gray-400 flex-shrink-0" />
-              <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide min-w-0 flex-1">
+          <div className="flex flex-col space-y-4">
+            {/* Header with Stats */}
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1">Our Team</h2>
+                <p className="text-gray-400 text-sm">
+                  {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'} 
+                  {selectedDepartment !== 'All' && ` in ${selectedDepartment}`}
+                </p>
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-400 hidden sm:inline">View:</span>
+                <div className="flex items-center space-x-1 bg-slate-800/50 rounded-xl p-1 border border-slate-700/50">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
+                      viewMode === 'grid' 
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30' 
+                        : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                    }`}
+                  >
+                    <Grid size={16} />
+                    <span className="hidden sm:inline text-sm font-medium">Grid</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
+                      viewMode === 'list' 
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30' 
+                        : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                    }`}
+                  >
+                    <List size={16} />
+                    <span className="hidden sm:inline text-sm font-medium">List</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Department Filter with Pills */}
+            <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              <Filter size={18} className="text-purple-400 flex-shrink-0" />
+              <div className="flex gap-2 flex-nowrap">
                 {departments.map((dept) => (
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 ${selectedDepartment === dept
-                      ? 'bg-primary-600 text-white shadow-lg'
-                      : 'bg-gray-900 text-gray-400 hover:bg-gray-950/50 border border-gray-700/50'
-                      }`}
+                    className={`group relative px-5 py-2.5 rounded-full font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
+                      selectedDepartment === dept
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30 scale-105'
+                        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50 hover:text-white border border-slate-700/50 hover:border-purple-500/30'
+                    }`}
                   >
-                    {dept}
+                    <span className="relative z-10 flex items-center gap-2">
+                      {dept}
+                      {selectedDepartment === dept && (
+                        <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                      )}
+                    </span>
+                    {selectedDepartment !== dept && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    )}
                   </button>
                 ))}
               </div>
-            </div> */}
-
-            {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2 bg-gray-900 rounded-lg p-1 border border-gray-700/50 flex-shrink-0">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-100'
-                  }`}
-              >
-                <Grid size={18} />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-100'
-                  }`}
-              >
-                <List size={18} />
-              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Team Members */}
-      <section className=" bg-slate-900 section-padding flex justify-center" id="team-section">
-        <div className="container-max">
+      <section className="py-16 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950" id="team-section">
+        <div className="container-max px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          {selectedDepartment !== 'All' && (
+            <div className="mb-12 text-center">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-slate-800/50 backdrop-blur-sm rounded-full border border-purple-500/20 mb-4">
+                <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+                <span className="text-purple-400 font-medium">{selectedDepartment} Department</span>
+              </div>
+              <h3 className="text-3xl font-bold text-white">
+                Meet the {selectedDepartment} Team
+              </h3>
+            </div>
+          )}
+
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {filteredMembers.map((member) => (
-                <Card key={member.id} member={member} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+              {filteredMembers.map((member, index) => (
+                <div
+                  key={member.id}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <Card member={member} />
+                </div>
               ))}
             </div>
           ) : (
-            <div className="space-y-6">
-              {filteredMembers.map((member) => (
-                <Card key={member.id} member={member} layout="list" />
+            <div className="space-y-4 max-w-5xl mx-auto">
+              {filteredMembers.map((member, index) => (
+                <div
+                  key={member.id}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <Card member={member} layout="list" />
+                </div>
               ))}
             </div>
           )}
 
           {filteredMembers.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-400 text-lg">No team members found in this department.</p>
+            <div className="text-center py-20">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-800/50 rounded-full mb-6">
+                <Filter size={32} className="text-gray-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
+              <p className="text-gray-400 text-lg mb-8">
+                No team members found in the {selectedDepartment} department.
+              </p>
+              <button
+                onClick={() => setSelectedDepartment('All')}
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:scale-105 transition-transform duration-300"
+              >
+                View All Members
+              </button>
             </div>
           )}
         </div>
       </section>
+
+      {/* Add custom animations */}
+      <style>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+          opacity: 0;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   )
 }

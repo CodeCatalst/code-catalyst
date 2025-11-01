@@ -142,8 +142,8 @@ const Socials = () => {
     {
       name: 'Email',
       icon: Mail,
-      username: 'contact@codecatalyst.com',
-      href: 'mailto:contact@codecatalyst.com',
+      username: 'codecatalystjb@gmail.com',
+      href: 'mailto:codecatalystjb@gmail.com',
       description: 'Get in touch with us directly via email for inquiries, partnerships, or support.',
       color: 'from-orange-600 to-red-600',
       hoverColor: 'hover:from-orange-500 hover:to-red-500',

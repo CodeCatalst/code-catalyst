@@ -8,16 +8,18 @@ const Layout = ({ children, transparentOnTop = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
   
-  // Hide footer on admin pages
+  // Hide header and footer on admin pages
   const isAdminPage = location.pathname.startsWith('/admin')
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-        transparentOnTop={transparentOnTop}
-      />
+      {!isAdminPage && (
+        <Header
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+          transparentOnTop={transparentOnTop}
+        />
+      )}
       <main className="flex-grow">
         {children}
       </main>

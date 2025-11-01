@@ -368,8 +368,8 @@ const AdminDashboard = () => {
                                     {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                                 </button>
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg shadow-purple-500/50">
-                                        <Shield className="w-6 h-6 text-white" />
+                                    <div className="p-2 rounded-xl">
+                                        <img src="/logo_transparent.png" alt="Code Catalyst" className="w-8 h-8" />
                                     </div>
                                     <div>
                                         <h1 className="text-xl font-bold text-white">Admin Panel</h1>
@@ -396,15 +396,6 @@ const AdminDashboard = () => {
                     {/* Sidebar */}
                     <aside className={`fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
                         <div className="h-full overflow-y-auto p-6 space-y-2">
-                            {/* Welcome Section */}
-                            <div className="mb-6 p-4 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Sparkles className="w-5 h-5 text-purple-400 animate-pulse" />
-                                    <span className="text-sm font-semibold text-white">Welcome back!</span>
-                                </div>
-                                <p className="text-xs text-gray-400">Manage your platform efficiently</p>
-                            </div>
-
                             {/* Stats Overview */}
                             <div className="mb-6 space-y-3">
                                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">Quick Stats</h3>

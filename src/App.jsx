@@ -55,13 +55,6 @@ function App() {
   const location = useLocation()
   const transparentOnTop = HERO_ROUTES.includes(location.pathname)
 
-  useEffect(() => {
-    const ws = new WebSocket('ws://localhost:5174');
-    ws.onopen = () => console.log('Manual WebSocket opened successfully');
-    ws.onerror = (e) => console.log('Manual WebSocket error:', e);
-    ws.onclose = () => console.log('Manual WebSocket closed');
-  }, []);
-
   // Prefetch common GET endpoints on app mount to reduce spinner times
   useEffect(() => {
     const urls = ['/gallery', '/blogs', '/notices']

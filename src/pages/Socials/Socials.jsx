@@ -19,6 +19,7 @@ import {
   Send
 } from 'lucide-react'
 import DiscordIcon from '../../components/Layout/DiscordIcon'
+import BackgroundAnimation from './BackgroundAnimation'
 import NeuralWaveAnimation from './NeuralWaveAnimation'
 
 const Socials = () => {
@@ -154,6 +155,8 @@ const Socials = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-slate-900 to-black text-white">
+      <BackgroundAnimation />
+
       {/* Hero Section */}
       <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden transition-all duration-300">
         <NeuralWaveAnimation />

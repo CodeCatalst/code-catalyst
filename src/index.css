@@ -27,60 +27,116 @@
 }
 
 @layer components {
-  /* stylelint-disable-next-line at-rule-no-unknown */
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+    background-image: linear-gradient(to right, rgb(96 165 250), rgb(192 132 252), rgb(244 114 182));
     background-size: 200% 200%;
     animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(0);
   }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
+  .btn-primary:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    transform: translateY(-0.125rem);
+  }
+
   .btn-secondary {
-    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg border-2 border-blue-600 transition-all duration-300 hover:shadow-lg;
+    background-image: linear-gradient(to right, rgb(96 165 250), rgb(192 132 252), rgb(244 114 182));
     background-size: 200% 200%;
     animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgb(37 99 235);
+    transition: all 0.3s;
   }
+
+  .btn-secondary:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
 @keyframes gradient-x {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
   .card {
-    @apply bg-gray-900 border border-gray-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-gray-100;
+    background-color: rgb(17 24 39);
+    border: 1px solid rgb(55 65 81 / 0.5);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transition: all 0.3s;
+    padding: 1.5rem;
+    color: rgb(243 244 246);
   }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
+  .card:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
   .input-field {
-    @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
-    @apply bg-gray-900 text-gray-100 border border-gray-700 placeholder-gray-400;
-    @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    background-color: rgb(17 24 39);
+    color: rgb(243 244 246);
+    border: 1px solid rgb(55 65 81);
     box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.04);
   }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
   .input-field::placeholder {
-    @apply text-gray-400;
+    color: rgb(156 163 175);
   }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
+  .input-field:focus {
+    outline: none;
+    border-color: rgb(59 130 246);
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 0.5);
+  }
+
   .section-padding {
-    @apply py-16 px-4 sm:px-6 lg:px-8;
+    padding: 4rem 1rem;
   }
 
-  /* stylelint-disable-next-line at-rule-no-unknown */
+  @media (min-width: 640px) {
+    .section-padding {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
   .container-max {
-    @apply max-w-7xl mx-auto;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, rgb(37 99 235), rgb(147 51 234));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .bg-gradient-primary {
-    @apply bg-gradient-to-br from-primary-500 via-primary-600 to-secondary-600;
+    background-image: linear-gradient(to bottom right, rgb(59 130 246), rgb(37 99 235), rgb(147 51 234));
   }
 
   .animate-gradient-x {

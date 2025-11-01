@@ -10,10 +10,11 @@ const Layout = ({ children, transparentOnTop = false }) => {
   
   // Hide header and footer on admin pages
   const isAdminPage = location.pathname.startsWith('/admin')
+  const isSocialsPage = location.pathname === '/socials'
 
   return (
     <div className="min-h-screen flex flex-col">
-      {!isAdminPage && (
+      {!isAdminPage && !isSocialsPage && (
         <Header
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}

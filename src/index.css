@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
 
 
 @layer base {
@@ -9,15 +11,30 @@
     scroll-behavior: smooth;
     font-family: 'Inter', sans-serif;
   }
+  
+  * {
+    /* Hardware acceleration for smooth scrolling */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    /* GPU acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 }
 
 @layer components {
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .btn-primary {
     @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
     background-size: 200% 200%;
     animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
   }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .btn-secondary {
     @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-medium py-2 px-6 rounded-lg border-2 border-blue-600 transition-all duration-300 hover:shadow-lg;
     background-size: 200% 200%;
@@ -28,10 +45,12 @@
   50% { background-position: 100% 50%; }
 }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .card {
     @apply bg-gray-900 border border-gray-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-gray-100;
   }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .input-field {
     @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
     @apply bg-gray-900 text-gray-100 border border-gray-700 placeholder-gray-400;
@@ -39,14 +58,17 @@
     box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.04);
   }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .input-field::placeholder {
     @apply text-gray-400;
   }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
   }
 
+  /* stylelint-disable-next-line at-rule-no-unknown */
   .container-max {
     @apply max-w-7xl mx-auto;
   }
@@ -64,5 +86,46 @@
   .animate-gradient-x {
     background-size: 200% 200%;
     animation: gradient-x 3s cubic-bezier(0.4,0,0.2,1) infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 30px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  /* Performance optimization for scrolling */
+  .hero-section,
+  .social-card,
+  section {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 }

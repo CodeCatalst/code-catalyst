@@ -17,6 +17,7 @@ const Footer = () => {
     { name: 'Our Team', href: '/team' },
     { name: 'Events', href: '/gallery' },
     { name: 'Notices', href: '/notices' },
+    { name: 'Dance Society', href: '/dance-society/register' },
   ]
 
   const contactInfo = [

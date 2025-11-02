@@ -37,6 +37,7 @@ const Test = lazy(() => import('./Test'))
 const Innovation = lazy(() => import('./pages/Innovation/Innovation'))
 const Projects = lazy(() => import('./pages/Projects/Projects'))
 const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
+const DanceSocietyRegistration = lazy(() => import('./pages/jbiansRegistration/RegistrationJbian'))
 
 const HERO_ROUTES = [
   '/',
@@ -87,6 +88,7 @@ function App() {
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/esports" element={<EsportsRegistration />} />
+                <Route path="/dance-society/register" element={<DanceSocietyRegistration />} />
                 <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

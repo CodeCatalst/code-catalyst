@@ -66,6 +66,25 @@
   50% { background-position: 100% 50%; }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+.delay-2000 {
+  animation-delay: 2s;
+}
+
   .card {
     background-color: rgb(17 24 39);
     border: 1px solid rgb(55 65 81 / 0.5);

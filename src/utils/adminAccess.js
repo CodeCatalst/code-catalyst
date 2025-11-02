@@ -12,6 +12,7 @@ export const tabPermissions = {
   hiring: 'hiring_requests',
   team: 'team_management', // Added for Manage Team tab
   esports: 'esports',
+  jbians: 'jbians_management', // Added for JBIANS dance society registrations
 };
 
 // Check if user has a specific permission

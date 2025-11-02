@@ -48,6 +48,7 @@ import AdminAccessWrapper from '../../components/Admin/AdminAccessWrapper';
 import AdminTeamTab from '../../components/Admin/AdminTeamTab';
 import RoleManagement from '../../components/Admin/RoleManagement.jsx'
 import AdminEsportsManager from '../../components/Admin/AdminEsportsManager';
+import AdminJbiansManager from '../../components/Admin/AdminJbiansManager';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -133,6 +134,7 @@ const AdminDashboard = () => {
         { id: 'contact', label: 'Messages', icon: Mail, gradient: 'from-orange-500 to-red-500' },
         { id: 'hiring', label: 'Hiring', icon: Briefcase, gradient: 'from-teal-500 to-cyan-500' },
         { id: 'esports', label: 'Esports', icon: Trophy, gradient: 'from-red-500 to-pink-500' },
+        { id: 'jbians', label: 'JBIANS', icon: Users, gradient: 'from-orange-500 to-yellow-500' },
     ].filter(tab => tab.accessible || accessibleTabs.includes(tab.id));
 
     const handleUserCountUpdate = (count) => {
@@ -282,6 +284,7 @@ const AdminDashboard = () => {
                                             {section.id === 'contact' && 'View contact messages'}
                                             {section.id === 'hiring' && 'Review hiring applications'}
                                             {section.id === 'esports' && 'Manage esports registrations'}
+                                            {section.id === 'jbians' && 'Manage JBIANS dance society registrations'}
                                             {section.id === 'forms' && 'Create and manage custom forms'}
                                             {section.id === 'submissions' && 'View form submissions'}
                                             {section.id === 'feedback' && 'Core team feedback system'}
@@ -368,6 +371,12 @@ const AdminDashboard = () => {
                 return (
                   <AdminAccessWrapper permission="esports_management">
                     <AdminEsportsManager />
+                  </AdminAccessWrapper>
+                );
+            case 'jbians':
+                return (
+                  <AdminAccessWrapper permission="jbians_management">
+                    <AdminJbiansManager />
                   </AdminAccessWrapper>
                 );
             default:

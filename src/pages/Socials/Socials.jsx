@@ -263,8 +263,7 @@ const Socials = () => {
                       {/* CTA Button */}
                       <a
                         href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {...(social.name !== 'Email' && { target: '_blank', rel: 'noopener noreferrer' })}
                         className="group/btn inline-flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:scale-105 mt-auto"
                       >
                         <span>Visit {social.name}</span>

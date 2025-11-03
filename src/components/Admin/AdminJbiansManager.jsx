@@ -262,20 +262,20 @@ const AdminJbiansManager = () => {
       {/* Image Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4"
           onClick={closeImageModal}
         >
-          <div className="relative max-w-4xl w-full">
+          <div className="relative w-full h-full flex items-center justify-center">
             <button
               onClick={closeImageModal}
-              className="absolute -top-12 right-0 bg-white/10 backdrop-blur-md text-white p-3 rounded-full hover:bg-white/20 transition-all"
+              className="absolute top-4 right-4 bg-white/10 backdrop-blur-md text-white p-3 rounded-full hover:bg-white/20 transition-all z-10"
             >
               <X className="w-6 h-6" />
             </button>
             <img
               src={selectedImage}
               alt="Payment Screenshot"
-              className="w-full h-auto rounded-2xl shadow-2xl border-4 border-white/20"
+              className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border-4 border-white/20"
               onClick={(e) => e.stopPropagation()}
             />
           </div>

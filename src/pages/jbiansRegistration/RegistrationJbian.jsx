@@ -283,6 +283,18 @@ const Registrationjbians = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-orange-300 drop-shadow-lg">
             DANCE BATTLE 2025 🔥
           </h2>
+          
+          {/* Download Rulebook Button */}
+          <div className="mt-6 flex justify-center">
+            <a 
+              href="/jbiansrulebook.pdf" 
+              download
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 via-red-500 to-yellow-500 hover:from-orange-600 hover:via-red-600 hover:to-yellow-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-white/30 hover:border-white/50 group"
+            >
+              <Download className="w-5 h-5 group-hover:animate-bounce" />
+              <span>Download Rulebook</span>
+            </a>
+          </div>
         </div>
 
         {/* Registration Form Card */}
@@ -500,6 +512,8 @@ const Registrationjbians = () => {
                 </div>
               </div>
             )}
+
+
 
             {/* Submit Button */}
             <button

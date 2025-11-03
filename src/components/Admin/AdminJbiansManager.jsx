@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Download, Eye, Trash2, User, Phone, Hash, Calendar, X, RefreshCw } from 'lucide-react'
+import { Download, Eye, Trash2, User, Phone, Hash, Calendar, X, RefreshCw, Mail, Music, Building2 } from 'lucide-react'
 import { toast } from '../hooks/use-toast'
 import * as XLSX from 'xlsx'
 
@@ -46,8 +46,11 @@ const AdminJbiansManager = () => {
       const excelData = submissions.map((sub, index) => ({
         'S.No': index + 1,
         'Name': sub.name,
+        'Email': sub.email || 'N/A',
         'WhatsApp Number': sub.whatsappNo,
         'ERP Number': sub.erp,
+        'Form of Dance': sub.formOfDance || 'N/A',
+        'Branch': sub.branch || 'N/A',
         'Submitted At': new Date(sub.submittedAt).toLocaleString(),
         'User ID': sub.userId
       }))
@@ -198,6 +201,16 @@ const AdminJbiansManager = () => {
                     </div>
                   </div>
 
+                  <div className="flex items-center gap-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-2 rounded-lg">
+                      <Mail className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs font-medium">Email Address</p>
+                      <p className="text-white font-semibold">{submission.email || 'N/A'}</p>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex items-center gap-3">
                       <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-lg">
@@ -216,6 +229,26 @@ const AdminJbiansManager = () => {
                       <div>
                         <p className="text-gray-400 text-xs font-medium">ERP Number</p>
                         <p className="text-white font-semibold">{submission.erp}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="bg-gradient-to-r from-pink-500 to-rose-600 p-2 rounded-lg">
+                        <Music className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs font-medium">Form of Dance</p>
+                        <p className="text-white font-semibold">{submission.formOfDance || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="bg-gradient-to-r from-cyan-500 to-blue-600 p-2 rounded-lg">
+                        <Building2 className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs font-medium">Branch</p>
+                        <p className="text-white font-semibold">{submission.branch || 'N/A'}</p>
                       </div>
                     </div>
                   </div>

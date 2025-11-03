@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { User, Phone, Hash, CheckCircle, AlertCircle, Download, Trash2, Eye, Upload } from 'lucide-react'
+import { User, Phone, Hash, CheckCircle, AlertCircle, Download, Trash2, Eye, Upload, Mail, Music, Building2 } from 'lucide-react'
 import { toast } from '../../components/hooks/use-toast'
 import * as XLSX from 'xlsx'
 
@@ -11,8 +11,11 @@ const Registrationjbians = () => {
   const [showSubmissions, setShowSubmissions] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     whatsappNo: '',
     erp: '',
+    formOfDance: '',
+    branch: '',
     paymentScreenshot: null
   })
   const [screenshotPreview, setScreenshotPreview] = useState(null)
@@ -128,10 +131,20 @@ const Registrationjbians = () => {
     e.preventDefault()
     
     // Validation
-    if (!formData.name || !formData.whatsappNo || !formData.erp || !formData.paymentScreenshot) {
+    if (!formData.name || !formData.email || !formData.whatsappNo || !formData.erp || !formData.formOfDance || !formData.branch || !formData.paymentScreenshot) {
       toast({
         title: "Error",
         description: "Please fill all required fields and upload payment screenshot",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Validate email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address",
         variant: "destructive",
       })
       return
@@ -155,8 +168,11 @@ const Registrationjbians = () => {
         id: Date.now().toString(),
         userId: currentUserId,
         name: formData.name,
+        email: formData.email,
         whatsappNo: formData.whatsappNo,
         erp: formData.erp,
+        formOfDance: formData.formOfDance,
+        branch: formData.branch,
         paymentScreenshot: formData.paymentScreenshot,
         submittedAt: new Date().toISOString()
       }
@@ -178,8 +194,11 @@ const Registrationjbians = () => {
       // Reset form
       setFormData({
         name: '',
+        email: '',
         whatsappNo: '',
         erp: '',
+        formOfDance: '',
+        branch: '',
         paymentScreenshot: null
       })
       setScreenshotPreview(null)
@@ -212,7 +231,7 @@ const Registrationjbians = () => {
       {/* Sticky "Developed by CC" Tag */}
       <div className="fixed bottom-4 right-4 z-50">
         <a 
-          href="https://codecatalyst.com" 
+          href="https://code-catalyst.pages.dev/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-lg shadow-lg hover:bg-black/90 hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/30 group"
@@ -252,13 +271,18 @@ const Registrationjbians = () => {
             <img 
               src="/jbianslogo.png" 
               alt="JBIANS Dance Society" 
-              className="h-28 w-auto drop-shadow-2xl relative z-10 transform hover:scale-110 transition-transform duration-500"
+              className="h-28 w-28 object-cover rounded-full drop-shadow-2xl relative z-10 transform hover:scale-110 transition-transform duration-500 border-4 border-white/30"
             />
           </div>
+          <p className="text-lg md:text-xl text-orange-200 font-medium tracking-wide mb-2">
+            JBians Dance Society Presents:
+          </p>
           <h1 className="text-5xl md:text-6xl font-black text-white mb-3 drop-shadow-lg">
-            Dance <span className="bg-gradient-to-r from-orange-400 via-red-400 to-yellow-400 bg-clip-text text-transparent animate-gradient-x">Society</span>
+            BREAK THE <span className="bg-gradient-to-r from-orange-400 via-red-400 to-yellow-400 bg-clip-text text-transparent animate-gradient-x">BEAT</span>
           </h1>
-          <p className="text-xl text-orange-200 font-medium tracking-wide">Join the rhythm, express yourself! ✨</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-orange-300 drop-shadow-lg">
+            DANCE BATTLE 2025 🔥
+          </h2>
         </div>
 
         {/* Registration Form Card */}
@@ -284,6 +308,26 @@ const Registrationjbians = () => {
                 required
                 placeholder="Enter your full name"
                 className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-orange-300/50 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/30 transition-all outline-none hover:border-orange-400 hover:bg-white text-gray-800 font-medium placeholder:text-gray-400 shadow-lg"
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className="group">
+              <label htmlFor="email" className="flex items-center text-white font-semibold mb-3 text-lg">
+                <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-2 rounded-lg mr-3 shadow-lg group-hover:shadow-purple-500/50 transition-all group-hover:scale-110">
+                  <Mail className="w-5 h-5 text-white" />
+                </div>
+                Email Address <span className="text-yellow-400 ml-1 text-xl">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter your email address"
+                className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-purple-300/50 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/30 transition-all outline-none hover:border-purple-400 hover:bg-white text-gray-800 font-medium placeholder:text-gray-400 shadow-lg"
               />
             </div>
 
@@ -329,6 +373,46 @@ const Registrationjbians = () => {
               />
             </div>
 
+            {/* Form of Dance Field */}
+            <div className="group">
+              <label htmlFor="formOfDance" className="flex items-center text-white font-semibold mb-3 text-lg">
+                <div className="bg-gradient-to-r from-pink-500 to-rose-600 p-2 rounded-lg mr-3 shadow-lg group-hover:shadow-pink-500/50 transition-all group-hover:scale-110">
+                  <Music className="w-5 h-5 text-white" />
+                </div>
+                Form of Dance <span className="text-yellow-400 ml-1 text-xl">*</span>
+              </label>
+              <input
+                type="text"
+                id="formOfDance"
+                name="formOfDance"
+                value={formData.formOfDance}
+                onChange={handleInputChange}
+                required
+                placeholder="e.g., Hip-Hop, Contemporary, Classical, etc."
+                className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-pink-300/50 rounded-xl focus:border-pink-500 focus:ring-4 focus:ring-pink-500/30 transition-all outline-none hover:border-pink-400 hover:bg-white text-gray-800 font-medium placeholder:text-gray-400 shadow-lg"
+              />
+            </div>
+
+            {/* Branch Field */}
+            <div className="group">
+              <label htmlFor="branch" className="flex items-center text-white font-semibold mb-3 text-lg">
+                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 p-2 rounded-lg mr-3 shadow-lg group-hover:shadow-cyan-500/50 transition-all group-hover:scale-110">
+                  <Building2 className="w-5 h-5 text-white" />
+                </div>
+                Branch <span className="text-yellow-400 ml-1 text-xl">*</span>
+              </label>
+              <input
+                type="text"
+                id="branch"
+                name="branch"
+                value={formData.branch}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter your branch (e.g., CS, IT, ME, etc.)"
+                className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-cyan-300/50 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/30 transition-all outline-none hover:border-cyan-400 hover:bg-white text-gray-800 font-medium placeholder:text-gray-400 shadow-lg"
+              />
+            </div>
+
             {/* Payment QR Code Display */}
             <div className="md:col-span-2">
               <div className="relative overflow-hidden bg-gradient-to-br from-orange-500/20 via-red-500/20 to-yellow-500/20 backdrop-blur-md p-8 rounded-2xl border-2 border-white/30 shadow-2xl hover:shadow-orange-500/30 transition-all group">
@@ -340,6 +424,11 @@ const Registrationjbians = () => {
                     </div>
                   </div>
                   <h3 className="text-2xl font-black text-white mb-3 text-center drop-shadow-lg">Payment Information</h3>
+                  <div className="mb-4 bg-gradient-to-r from-orange-500 to-red-500 p-4 rounded-xl shadow-lg">
+                    <p className="text-2xl font-black text-white text-center drop-shadow-lg">
+                      Registration Charges: ₹99
+                    </p>
+                  </div>
                   <p className="text-base text-orange-100 mb-6 text-center font-medium">
                     Scan the QR code below to complete your registration payment 💳
                   </p>

@@ -15,10 +15,8 @@ const Registrationjbians = () => {
     whatsappNo: '',
     erp: '',
     formOfDance: '',
-    branch: '',
-    paymentScreenshot: null
+    branch: ''
   })
-  const [screenshotPreview, setScreenshotPreview] = useState(null)
   const formRef = useRef(null)
 
   useEffect(() => {
@@ -43,40 +41,6 @@ const Registrationjbians = () => {
       ...prev,
       [name]: value
     }))
-  }
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast({
-          title: "Error",
-          description: "File size should be less than 5MB",
-          variant: "destructive",
-        })
-        return
-      }
-      
-      if (!file.type.startsWith('image/')) {
-        toast({
-          title: "Error",
-          description: "Please upload an image file",
-          variant: "destructive",
-        })
-        return
-      }
-
-      // Create preview
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setScreenshotPreview(reader.result)
-        setFormData(prev => ({
-          ...prev,
-          paymentScreenshot: reader.result
-        }))
-      }
-      reader.readAsDataURL(file)
-    }
   }
 
   const downloadExcel = () => {
@@ -131,10 +95,10 @@ const Registrationjbians = () => {
     e.preventDefault()
     
     // Validation
-    if (!formData.name || !formData.email || !formData.whatsappNo || !formData.erp || !formData.formOfDance || !formData.branch || !formData.paymentScreenshot) {
+    if (!formData.name || !formData.email || !formData.whatsappNo || !formData.erp || !formData.formOfDance || !formData.branch) {
       toast({
         title: "Error",
-        description: "Please fill all required fields and upload payment screenshot",
+        description: "Please fill all required fields",
         variant: "destructive",
       })
       return
@@ -173,7 +137,6 @@ const Registrationjbians = () => {
         erp: formData.erp,
         formOfDance: formData.formOfDance,
         branch: formData.branch,
-        paymentScreenshot: formData.paymentScreenshot,
         submittedAt: new Date().toISOString()
       }
 
@@ -198,14 +161,8 @@ const Registrationjbians = () => {
         whatsappNo: '',
         erp: '',
         formOfDance: '',
-        branch: '',
-        paymentScreenshot: null
+        branch: ''
       })
-      setScreenshotPreview(null)
-      
-      // Reset file input
-      const fileInput = document.getElementById('paymentScreenshot')
-      if (fileInput) fileInput.value = ''
 
     } catch (error) {
       console.error('Registration error:', error)
@@ -424,96 +381,6 @@ const Registrationjbians = () => {
                 className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-cyan-300/50 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/30 transition-all outline-none hover:border-cyan-400 hover:bg-white text-gray-800 font-medium placeholder:text-gray-400 shadow-lg"
               />
             </div>
-
-            {/* Payment QR Code Display */}
-            <div className="md:col-span-2">
-              <div className="relative overflow-hidden bg-gradient-to-br from-orange-500/20 via-red-500/20 to-yellow-500/20 backdrop-blur-md p-8 rounded-2xl border-2 border-white/30 shadow-2xl hover:shadow-orange-500/30 transition-all group">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 via-red-600/10 to-yellow-600/10 animate-gradient-x"></div>
-                <div className="relative z-10">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 p-3 rounded-full shadow-lg">
-                      <Upload className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-black text-white mb-3 text-center drop-shadow-lg">Payment Information</h3>
-                  <div className="mb-4 bg-gradient-to-r from-orange-500 to-red-500 p-4 rounded-xl shadow-lg">
-                    <p className="text-2xl font-black text-white text-center drop-shadow-lg">
-                      Registration Charges: ₹99
-                    </p>
-                  </div>
-                  <p className="text-base text-orange-100 mb-6 text-center font-medium">
-                    Scan the QR code below to complete your registration payment 💳
-                  </p>
-                  <div className="flex justify-center">
-                    <div className="relative group/qr">
-                      <div className="absolute -inset-2 bg-gradient-to-r from-orange-500 via-red-500 to-yellow-500 rounded-2xl blur-lg opacity-50 group-hover/qr:opacity-75 transition-opacity"></div>
-                      <img 
-                        src="/qr.jpg" 
-                        alt="Payment QR Code" 
-                        className="relative max-w-xs h-auto rounded-2xl shadow-2xl border-4 border-white/50 transform group-hover/qr:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-6 bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20">
-                    <p className="text-sm text-orange-100 text-center font-medium">
-                      ⚡ Please complete the payment before submitting the form
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Screenshot Upload */}
-            <div className="md:col-span-2 group">
-              <label htmlFor="paymentScreenshot" className="flex items-center text-white font-semibold mb-3 text-lg">
-                <div className="bg-gradient-to-r from-red-500 to-orange-600 p-2 rounded-lg mr-3 shadow-lg group-hover:shadow-red-500/50 transition-all group-hover:scale-110">
-                  <Upload className="w-5 h-5 text-white" />
-                </div>
-                Upload Payment Screenshot <span className="text-yellow-400 ml-1 text-xl">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type="file"
-                  id="paymentScreenshot"
-                  name="paymentScreenshot"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  required
-                  className="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border-2 border-red-300/50 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-500/30 transition-all outline-none hover:border-red-400 hover:bg-white text-gray-800 font-medium shadow-lg
-                  file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold 
-                  file:bg-gradient-to-r file:from-orange-500 file:to-red-500 file:text-white 
-                  hover:file:from-orange-600 hover:file:to-red-600 file:cursor-pointer file:shadow-lg file:transition-all hover:file:scale-105"
-                />
-              </div>
-              <p className="text-sm text-orange-200 mt-2 ml-1 font-medium">📸 Upload a clear screenshot of your payment confirmation (Max 5MB)</p>
-            </div>
-
-            {/* Payment Screenshot Preview */}
-            {screenshotPreview && (
-              <div className="md:col-span-2 animate-fade-in">
-                <div className="relative overflow-hidden bg-gradient-to-br from-green-500/20 via-emerald-500/20 to-teal-500/20 backdrop-blur-md p-6 rounded-2xl border-2 border-green-300/30 shadow-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 via-emerald-600/10 to-teal-600/10 animate-gradient-x"></div>
-                  <div className="relative z-10">
-                    <div className="flex items-center mb-4">
-                      <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-2 rounded-full shadow-lg mr-3">
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      </div>
-                      <p className="text-white text-lg font-bold">Payment Screenshot Preview</p>
-                    </div>
-                    <div className="relative group/preview">
-                      <div className="absolute -inset-2 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 rounded-2xl blur-lg opacity-30 group-hover/preview:opacity-50 transition-opacity"></div>
-                      <img 
-                        src={screenshotPreview} 
-                        alt="Payment Screenshot" 
-                        className="relative max-w-full h-auto max-h-64 rounded-xl mx-auto shadow-2xl border-3 border-white/50 transform group-hover/preview:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
 
             {/* Submit Button */}
             <button

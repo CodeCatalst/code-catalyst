@@ -301,16 +301,14 @@ export async function createDanceSocietyRegistration(formData) {
     const formattedData = {
       name: formData.name,
       email: formData.email,
-      whatsappNo: formData.whatsappNo.startsWith('+91')
-        ? formData.whatsappNo
-        : `+91${formData.whatsappNo}`,
+      whatsappNo: formData.whatsappNo.replace(/\D/g, '').slice(-10), // Clean phone number
       erp: formData.erp,
       form_of_dance: formData.formOfDance,
       branch: formData.branch
     }
 
     // Use relative path - api instance already has baseURL configured
-    const response = await api.post('/public/dance/registrations', formattedData)
+    const response = await api.post('/dance/registrations', formattedData)
 
     return response.data
   } catch (error) {
@@ -321,6 +319,50 @@ export async function createDanceSocietyRegistration(formData) {
 
     console.error('Registration error:', error)
     throw new Error(error.response?.data?.error || error.message || 'Failed to submit registration')
+  }
+}
+
+// Get all dance registrations (Admin only)
+export async function getDanceRegistrations() {
+  try {
+    const response = await api.get('/dance/registrations')
+    return response.data
+  } catch (error) {
+    console.error('Error fetching dance registrations:', error)
+    throw new Error(error.response?.data?.error || 'Failed to fetch registrations')
+  }
+}
+
+// Get a specific dance registration by ID (Admin only)
+export async function getDanceRegistrationById(id) {
+  try {
+    const response = await api.get(`/dance/registrations/${id}`)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching dance registration:', error)
+    throw new Error(error.response?.data?.error || 'Failed to fetch registration')
+  }
+}
+
+// Delete a dance registration (Admin only)
+export async function deleteDanceRegistration(id) {
+  try {
+    const response = await api.delete(`/dance/registrations/${id}`)
+    return response.data
+  } catch (error) {
+    console.error('Error deleting dance registration:', error)
+    throw new Error(error.response?.data?.error || 'Failed to delete registration')
+  }
+}
+
+// Get dance registration statistics (Admin only)
+export async function getDanceRegistrationStats() {
+  try {
+    const response = await api.get('/dance/stats')
+    return response.data
+  } catch (error) {
+    console.error('Error fetching dance registration stats:', error)
+    throw new Error(error.response?.data?.error || 'Failed to fetch statistics')
   }
 }
 

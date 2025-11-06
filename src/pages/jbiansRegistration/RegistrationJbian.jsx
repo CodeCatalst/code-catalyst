@@ -4,27 +4,17 @@ import {
   Phone,
   Hash,
   CheckCircle,
-  AlertCircle,
-  Download,
-  Trash2,
-  Eye,
-  Upload,
   Mail,
   Music,
   Building2,
+  Download,
 } from "lucide-react";
 import { toast } from "../../components/hooks/use-toast";
-import * as XLSX from "xlsx";
 import { createDanceSocietyRegistration } from "../../services/api";
 
 const Registrationjbians = () => {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [currentUserId] = useState(
-    "user-" + Math.random().toString(36).substr(2, 9)
-  ); // Simulate user ID
-  const [submissions, setSubmissions] = useState([]);
-  const [showSubmissions, setShowSubmissions] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -43,12 +33,6 @@ const Registrationjbians = () => {
         formRef.current.style.transform = "translateY(0)";
       }, 300);
     }
-
-    // Load submissions from localStorage
-    const savedSubmissions = localStorage.getItem("danceRegistrations");
-    if (savedSubmissions) {
-      setSubmissions(JSON.parse(savedSubmissions));
-    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -58,64 +42,6 @@ const Registrationjbians = () => {
       [name]: value,
     }));
   };
-
-  const downloadExcel = () => {
-    if (submissions.length === 0) {
-      toast({
-        title: "No Data",
-        description: "No registrations to export",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Prepare data for Excel
-    const excelData = submissions.map((sub, index) => ({
-      "S.No": index + 1,
-      Name: sub.name,
-      "WhatsApp Number": sub.whatsappNo,
-      "ERP Number": sub.erp,
-      "Submitted At": new Date(sub.submittedAt).toLocaleString(),
-      "User ID": sub.userId,
-    }));
-
-    // Create worksheet
-    const ws = XLSX.utils.json_to_sheet(excelData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Registrations");
-
-    // Download
-    XLSX.writeFile(
-      wb,
-      `Dance_Society_Registrations_${
-        new Date().toISOString().split("T")[0]
-      }.xlsx`
-    );
-
-    toast({
-      title: "Success",
-      description: "Excel file downloaded successfully!",
-    });
-  };
-
-  const deleteSubmission = (id) => {
-    const updatedSubmissions = submissions.filter((sub) => sub.id !== id);
-    setSubmissions(updatedSubmissions);
-    localStorage.setItem(
-      "danceRegistrations",
-      JSON.stringify(updatedSubmissions)
-    );
-
-    toast({
-      title: "Success",
-      description: "Registration deleted successfully",
-    });
-  };
-
-  // Filter to show only current user's submissions
-  const userSubmissions = submissions.filter(
-    (sub) => sub.userId === currentUserId
-  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -161,23 +87,7 @@ const Registrationjbians = () => {
 
     try {
       // Submit to backend API
-      await createDanceSocietyRegistration(formData);
-
-      // Create new submission for local storage
-      const newSubmission = {
-        id: Date.now().toString(),
-        userId: currentUserId,
-        ...formData,
-        submittedAt: new Date().toISOString(),
-      };
-
-      // Save to state and localStorage
-      const updatedSubmissions = [...submissions, newSubmission];
-      setSubmissions(updatedSubmissions);
-      localStorage.setItem(
-        "danceRegistrations",
-        JSON.stringify(updatedSubmissions)
-      );
+      const response = await createDanceSocietyRegistration(formData);
 
       // Show success message
       setShowSuccess(true);
@@ -185,7 +95,7 @@ const Registrationjbians = () => {
 
       toast({
         title: "Success",
-        description: "Registration submitted successfully!",
+        description: response.message || "Registration submitted successfully!",
       });
 
       // Reset form

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Download, Eye, Trash2, User, Phone, Hash, Calendar, X, RefreshCw, Mail, Music, Building2 } from 'lucide-react'
+import { Download, Trash2, User, Phone, Hash, Calendar, RefreshCw, Mail, Music, Building2 } from 'lucide-react'
 import { toast } from '../hooks/use-toast'
 import * as XLSX from 'xlsx'
 
 const AdminJbiansManager = () => {
   const [submissions, setSubmissions] = useState([])
-  const [selectedImage, setSelectedImage] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -99,13 +98,7 @@ const AdminJbiansManager = () => {
     }
   }
 
-  const viewImage = (imageData) => {
-    setSelectedImage(imageData)
-  }
 
-  const closeImageModal = () => {
-    setSelectedImage(null)
-  }
 
   return (
     <div className="space-y-6">
@@ -139,16 +132,10 @@ const AdminJbiansManager = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-orange-500/10 backdrop-blur-sm p-4 rounded-xl border border-orange-500/20">
             <p className="text-orange-300 text-sm font-medium">Total Registrations</p>
             <p className="text-3xl font-black text-white mt-1">{submissions.length}</p>
-          </div>
-          <div className="bg-green-500/10 backdrop-blur-sm p-4 rounded-xl border border-green-500/20">
-            <p className="text-green-300 text-sm font-medium">With Payment Proof</p>
-            <p className="text-3xl font-black text-white mt-1">
-              {submissions.filter(s => s.paymentScreenshot).length}
-            </p>
           </div>
           <div className="bg-blue-500/10 backdrop-blur-sm p-4 rounded-xl border border-blue-500/20">
             <p className="text-blue-300 text-sm font-medium">Latest Registration</p>
@@ -268,16 +255,6 @@ const AdminJbiansManager = () => {
 
                 {/* Actions */}
                 <div className="lg:col-span-4 flex flex-col gap-3">
-                  {submission.paymentScreenshot && (
-                    <button
-                      onClick={() => viewImage(submission.paymentScreenshot)}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                    >
-                      <Eye className="w-5 h-5" />
-                      View Payment Screenshot
-                    </button>
-                  )}
-
                   <button
                     onClick={() => deleteSubmission(submission.id)}
                     className="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
@@ -292,28 +269,7 @@ const AdminJbiansManager = () => {
         </div>
       )}
 
-      {/* Image Modal */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4"
-          onClick={closeImageModal}
-        >
-          <div className="relative w-full h-full flex items-center justify-center">
-            <button
-              onClick={closeImageModal}
-              className="absolute top-4 right-4 bg-white/10 backdrop-blur-md text-white p-3 rounded-full hover:bg-white/20 transition-all z-10"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <img
-              src={selectedImage}
-              alt="Payment Screenshot"
-              className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border-4 border-white/20"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
+      {/* Image modal removed (payment screenshots disabled) */}
     </div>
   )
 }

@@ -2,31 +2,46 @@ import React, { useState, useEffect } from 'react'
 import { Download, Trash2, User, Phone, Hash, Calendar, RefreshCw, Mail, Music, Building2 } from 'lucide-react'
 import { toast } from '../hooks/use-toast'
 import * as XLSX from 'xlsx'
+import { getDanceRegistrations, deleteDanceRegistration, getDanceRegistrationStats } from '../../services/api'
 
 const AdminJbiansManager = () => {
   const [submissions, setSubmissions] = useState([])
+  const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadSubmissions()
+    loadStats()
   }, [])
 
-  const loadSubmissions = () => {
+  const loadSubmissions = async () => {
     setLoading(true)
     try {
-      const savedSubmissions = localStorage.getItem('danceRegistrations')
-      if (savedSubmissions) {
-        setSubmissions(JSON.parse(savedSubmissions))
+      const response = await getDanceRegistrations()
+      if (response.success && response.data) {
+        setSubmissions(response.data)
       }
     } catch (error) {
       console.error('Error loading submissions:', error)
       toast({
         title: "Error",
-        description: "Failed to load submissions",
+        description: error.message || "Failed to load submissions",
         variant: "destructive",
       })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadStats = async () => {
+    try {
+      const response = await getDanceRegistrationStats()
+      if (response.success && response.stats) {
+        setStats(response.stats)
+      }
+    } catch (error) {
+      console.error('Error loading stats:', error)
+      // Don't show error toast for stats, as it's not critical
     }
   }
 
@@ -45,13 +60,12 @@ const AdminJbiansManager = () => {
       const excelData = submissions.map((sub, index) => ({
         'S.No': index + 1,
         'Name': sub.name,
-        'Email': sub.email || 'N/A',
+        'Email': sub.email,
         'WhatsApp Number': sub.whatsappNo,
         'ERP Number': sub.erp,
-        'Form of Dance': sub.formOfDance || 'N/A',
-        'Branch': sub.branch || 'N/A',
-        'Submitted At': new Date(sub.submittedAt).toLocaleString(),
-        'User ID': sub.userId
+        'Form of Dance': sub.form_of_dance,
+        'Branch': sub.branch,
+        'Submitted At': new Date(sub.created_at).toLocaleString(),
       }))
 
       // Create worksheet
@@ -76,12 +90,16 @@ const AdminJbiansManager = () => {
     }
   }
 
-  const deleteSubmission = (id) => {
+  const deleteSubmission = async (id) => {
     if (window.confirm('Are you sure you want to delete this registration?')) {
       try {
-        const updatedSubmissions = submissions.filter(sub => sub.id !== id)
-        setSubmissions(updatedSubmissions)
-        localStorage.setItem('danceRegistrations', JSON.stringify(updatedSubmissions))
+        await deleteDanceRegistration(id)
+        
+        // Remove from local state
+        setSubmissions(prevSubmissions => prevSubmissions.filter(sub => sub.id !== id))
+        
+        // Reload stats
+        loadStats()
         
         toast({
           title: "Success",
@@ -91,7 +109,7 @@ const AdminJbiansManager = () => {
         console.error('Error deleting submission:', error)
         toast({
           title: "Error",
-          description: "Failed to delete registration",
+          description: error.message || "Failed to delete registration",
           variant: "destructive",
         })
       }
@@ -113,7 +131,10 @@ const AdminJbiansManager = () => {
           </div>
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={loadSubmissions}
+              onClick={() => {
+                loadSubmissions()
+                loadStats()
+              }}
               disabled={loading}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center gap-2 disabled:opacity-50"
             >
@@ -132,16 +153,24 @@ const AdminJbiansManager = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-orange-500/10 backdrop-blur-sm p-4 rounded-xl border border-orange-500/20">
             <p className="text-orange-300 text-sm font-medium">Total Registrations</p>
-            <p className="text-3xl font-black text-white mt-1">{submissions.length}</p>
+            <p className="text-3xl font-black text-white mt-1">
+              {stats?.total || submissions.length}
+            </p>
+          </div>
+          <div className="bg-green-500/10 backdrop-blur-sm p-4 rounded-xl border border-green-500/20">
+            <p className="text-green-300 text-sm font-medium">Recent (Last 7 Days)</p>
+            <p className="text-3xl font-black text-white mt-1">
+              {stats?.recent || 0}
+            </p>
           </div>
           <div className="bg-blue-500/10 backdrop-blur-sm p-4 rounded-xl border border-blue-500/20">
             <p className="text-blue-300 text-sm font-medium">Latest Registration</p>
             <p className="text-lg font-bold text-white mt-1">
               {submissions.length > 0 
-                ? new Date(submissions[submissions.length - 1].submittedAt).toLocaleDateString()
+                ? new Date(submissions[0].created_at).toLocaleDateString()
                 : 'N/A'
               }
             </p>
@@ -194,7 +223,7 @@ const AdminJbiansManager = () => {
                     </div>
                     <div>
                       <p className="text-gray-400 text-xs font-medium">Email Address</p>
-                      <p className="text-white font-semibold">{submission.email || 'N/A'}</p>
+                      <p className="text-white font-semibold">{submission.email}</p>
                     </div>
                   </div>
 
@@ -225,7 +254,7 @@ const AdminJbiansManager = () => {
                       </div>
                       <div>
                         <p className="text-gray-400 text-xs font-medium">Form of Dance</p>
-                        <p className="text-white font-semibold">{submission.formOfDance || 'N/A'}</p>
+                        <p className="text-white font-semibold">{submission.form_of_dance}</p>
                       </div>
                     </div>
 
@@ -235,7 +264,7 @@ const AdminJbiansManager = () => {
                       </div>
                       <div>
                         <p className="text-gray-400 text-xs font-medium">Branch</p>
-                        <p className="text-white font-semibold">{submission.branch || 'N/A'}</p>
+                        <p className="text-white font-semibold">{submission.branch}</p>
                       </div>
                     </div>
                   </div>
@@ -247,7 +276,7 @@ const AdminJbiansManager = () => {
                     <div>
                       <p className="text-gray-400 text-xs font-medium">Submitted At</p>
                       <p className="text-white font-semibold">
-                        {new Date(submission.submittedAt).toLocaleString()}
+                        {new Date(submission.created_at).toLocaleString()}
                       </p>
                     </div>
                   </div>

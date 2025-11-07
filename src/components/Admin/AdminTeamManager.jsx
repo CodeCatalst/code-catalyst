@@ -114,7 +114,7 @@ const AdminTeamManager = ({ onClose, onChange }) => {
   return (
     <div className="p-4">
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
-      <h2 className="text-2xl font-bold mb-4 flex items-center justify-between">
+      <h2 className="text-2xl font-bold text-white mb-4 flex items-center justify-between">
         Manage Team Members
         <button
           className="ml-4 px-3 py-1 rounded bg-gray-700 text-white hover:bg-gray-600 text-base"
@@ -141,9 +141,9 @@ const AdminTeamManager = ({ onClose, onChange }) => {
               <tbody>
                 {members.map(m => (
                   <tr key={m.id} className={editing === m.id ? 'bg-primary-900/30' : 'hover:bg-gray-700/50'}>
-                    <td className="px-4 py-2 font-semibold">{m.name}</td>
-                    <td className="px-4 py-2">{m.role}</td>
-                    <td className="px-4 py-2">{m.department}</td>
+                    <td className="px-4 py-2 font-semibold text-white">{m.name}</td>
+                    <td className="px-4 py-2 text-white">{m.role}</td>
+                    <td className="px-4 py-2 text-white">{m.department}</td>
                     <td className="px-4 py-2">
                       <div className="flex flex-wrap gap-1">
                         {(m.skills || []).map((s, i) => <span key={i} className="bg-primary-700 text-white px-2 py-0.5 rounded text-xs">{s}</span>)}

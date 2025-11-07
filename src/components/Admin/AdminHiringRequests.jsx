@@ -15,6 +15,7 @@ const AdminHiringRequests = () => {
   const [updatingStatusId, setUpdatingStatusId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [modalRequest, setModalRequest] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch requests (refactored for refresh)
   const fetchRequests = async () => {
@@ -116,10 +117,23 @@ const AdminHiringRequests = () => {
     XLSX.writeFile(wb, 'hiring_requests.xlsx');
   };
 
+  // Filter requests based on search query
+  const filteredRequests = requests.filter(req => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      req.name?.toLowerCase().includes(query) ||
+      req.position?.toLowerCase().includes(query) ||
+      req.email?.toLowerCase().includes(query) ||
+      req.phone?.includes(query) ||
+      req.course?.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Hiring Requests</h2>
+        <h2 className="text-2xl font-bold text-white">Hiring Requests</h2>
         <div className="flex gap-2">
           <button
             onClick={fetchRequests}
@@ -138,6 +152,44 @@ const AdminHiringRequests = () => {
           </button>
         </div>
       </div>
+
+      {/* Search Bar */}
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by name, position, email, phone, or course..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-3 pl-10 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <svg 
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+              title="Clear search"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-sm text-gray-400">
+            Found {filteredRequests.length} result{filteredRequests.length !== 1 ? 's' : ''} for "{searchQuery}"
+          </p>
+        )}
+      </div>
+
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}
       {!loading && !error && (
@@ -153,10 +205,12 @@ const AdminHiringRequests = () => {
               </tr>
             </thead>
             <tbody>
-              {requests.length === 0 ? (
-                <tr><td colSpan={5} className="text-center py-4">No hiring requests found.</td></tr>
+              {filteredRequests.length === 0 ? (
+                <tr><td colSpan={5} className="text-center py-4">
+                  {searchQuery ? `No hiring requests found matching "${searchQuery}"` : 'No hiring requests found.'}
+                </td></tr>
               ) : (
-                requests.map((req) => (
+                filteredRequests.map((req) => (
                   <tr key={req.id} className="border-b border-gray-700">
                     <td className="px-4 py-2">{req.name}</td>
                     <td className="px-4 py-2">{req.position}</td>

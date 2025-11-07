@@ -62,6 +62,20 @@ const Team = () => {
     }
   }, [selectedDepartment, teamMembers])
 
+  // Separate leaders from other members
+  // Only separate leaders when viewing all departments
+  const leaderRoles = ['President', 'Vice President', 'Secretary']
+  
+  const leaders = selectedDepartment === 'All' 
+    ? filteredMembers
+        .filter(member => leaderRoles.includes(member.role))
+        .sort((a, b) => leaderRoles.indexOf(a.role) - leaderRoles.indexOf(b.role))
+    : []
+  
+  const otherMembers = selectedDepartment === 'All'
+    ? filteredMembers.filter(member => !leaderRoles.includes(member.role))
+    : []
+
   // const getSocialIcon = (platform) => {
   //   switch (platform) {
   //     case 'github': return Github
@@ -247,29 +261,135 @@ const Team = () => {
           )}
 
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-              {filteredMembers.map((member, index) => (
-                <div
-                  key={member.id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <Card member={member} />
+            <>
+              {selectedDepartment === 'All' ? (
+                <>
+                  {/* Leadership Section - President, Vice President, Secretary */}
+                  {leaders.length > 0 && (
+                    <div className="mb-16">
+                      <div className="text-center mb-8">
+                        <h3 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                          Leadership Team
+                        </h3>
+                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+                      </div>
+                      <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
+                        {leaders.map((member, index) => (
+                          <div
+                            key={member.id}
+                            className="animate-fade-in-up max-w-sm"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
+                            <Card member={member} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Other Team Members */}
+                  {otherMembers.length > 0 && (
+                    <>
+                      {leaders.length > 0 && (
+                        <div className="text-center mb-8">
+                          <h3 className="text-2xl font-bold text-white mb-2">Team Members</h3>
+                          <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                        {otherMembers.map((member, index) => (
+                          <div
+                            key={member.id}
+                            className="animate-fade-in-up"
+                            style={{ animationDelay: `${(leaders.length + index) * 50}ms` }}
+                          >
+                            <Card member={member} />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                /* When filtering by department, show all members in grid */
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                  {filteredMembers.map((member, index) => (
+                    <div
+                      key={member.id}
+                      className="animate-fade-in-up"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <Card member={member} />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
-            <div className="space-y-4 max-w-5xl mx-auto">
-              {filteredMembers.map((member, index) => (
-                <div
-                  key={member.id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <Card member={member} layout="list" />
+            <>
+              {selectedDepartment === 'All' ? (
+                <>
+                  {/* Leadership Section - List View */}
+                  {leaders.length > 0 && (
+                    <div className="mb-12">
+                      <div className="text-center mb-6">
+                        <h3 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                          Leadership Team
+                        </h3>
+                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+                      </div>
+                      <div className="space-y-4 max-w-5xl mx-auto">
+                        {leaders.map((member, index) => (
+                          <div
+                            key={member.id}
+                            className="animate-fade-in-up"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
+                            <Card member={member} layout="list" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Other Team Members - List View */}
+                  {otherMembers.length > 0 && (
+                    <>
+                      {leaders.length > 0 && (
+                        <div className="text-center mb-6">
+                          <h3 className="text-2xl font-bold text-white mb-2">Team Members</h3>
+                          <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+                        </div>
+                      )}
+                      <div className="space-y-4 max-w-5xl mx-auto">
+                        {otherMembers.map((member, index) => (
+                          <div
+                            key={member.id}
+                            className="animate-fade-in-up"
+                            style={{ animationDelay: `${(leaders.length + index) * 50}ms` }}
+                          >
+                            <Card member={member} layout="list" />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                /* When filtering by department, show all members in list */
+                <div className="space-y-4 max-w-5xl mx-auto">
+                  {filteredMembers.map((member, index) => (
+                    <div
+                      key={member.id}
+                      className="animate-fade-in-up"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <Card member={member} layout="list" />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
 
           {filteredMembers.length === 0 && (

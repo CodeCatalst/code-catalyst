@@ -21,6 +21,24 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open and close on Escape
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      window.removeEventListener('keydown', handleKey)
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen, setMobileMenuOpen])
+
   const navigationLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
@@ -158,6 +176,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {mobileMenuOpen ? (
@@ -165,31 +185,59 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             ) : (
               <Menu size={24} className={isAuthPage ? 'text-white' : scrolled ? 'text-white' : 'text-white'} />
             )}
+            <span className="sr-only">Toggle navigation</span>
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - fixed overlay for better UX on small screens */}
         {mobileMenuOpen && (
-          <div className="lg:hidden card p-0 shadow-lg rounded-b-2xl mx-4 mb-4">
-            <div className="px-4 py-6 space-y-4">
-              {[...navigationLinks, ...adminLinks].map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`block font-medium py-2 hover:text-primary-600 transition-colors ${location.pathname === link.href ? 'text-primary-600' : 'text-white'
-                    }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
+          <div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            className="lg:hidden fixed inset-0 z-40"
+          >
+            {/* Overlay */}
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
 
-              <div className="border-t pt-4 space-y-3">
+            {/* Panel */}
+            <div className="relative bg-gray-900 text-white h-full w-full p-6 overflow-auto">
+              <div className="flex justify-between items-center mb-6">
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
+                  <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-14 h-14" />
+                </Link>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="p-2 rounded-md hover:bg-white/10"
+                >
+                  <X size={22} />
+                </button>
+              </div>
+
+              <nav className="space-y-4">
+                {[...navigationLinks, ...adminLinks].map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className={`block text-lg font-medium py-3 px-2 rounded-md hover:bg-white/5 ${location.pathname === link.href ? 'text-primary-400' : 'text-white'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="border-t border-white/10 mt-6 pt-6">
                 {isAuthenticated ? (
-                  <>
+                  <div className="space-y-3">
                     <Link
                       to="/profile"
-                      className="flex items-center space-x-2 py-2 text-white hover:text-primary-600 transition-colors"
+                      className="flex items-center space-x-3 py-2 text-white hover:text-primary-600 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <User size={18} />
@@ -200,17 +248,17 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                         handleLogout()
                         setMobileMenuOpen(false)
                       }}
-                      className="flex items-center space-x-2 py-2 text-red-600 hover:text-red-700 transition-colors"
+                      className="flex items-center space-x-3 py-2 text-red-500 hover:text-red-600"
                     >
                       <LogOut size={18} />
                       <span>Logout</span>
                     </button>
-                  </>
+                  </div>
                 ) : (
-                  <>
+                  <div className="space-y-3">
                     <Link
                       to="/login"
-                      className="block py-2 text-white hover:text-primary-600 transition-colors"
+                      className="block py-3 text-white hover:text-primary-600 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Login
@@ -222,7 +270,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                     >
                       Join Us
                     </Link>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

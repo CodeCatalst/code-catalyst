@@ -48,6 +48,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Event Gallery', href: '/gallery' },
     { name: 'Blog', href: '/blog' },
     { name: 'Notices', href: '/notices' },
+    { name: 'Open Source', href: '/opensource' },
     { name: 'Contact', href: '/contact' },
     // { name: 'Hiring', href: '/hiring' },
     { name: 'Esports', href:'/esports'}
@@ -102,7 +103,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-medium transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
+                className={`font-medium whitespace-nowrap transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
                   ? 'text-primary-600'
                   : 'text-white'
                   }`}
@@ -118,7 +119,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors"
                 >
                   {user?.profile_picture_url ? (
                     <img
@@ -133,7 +134,9 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       </span>
                     </div>
                   )}
-                  <span className={`font-medium ${scrolled ? 'text-white' : 'text-white'}`}>
+                  <span
+                    className={`font-medium text-white max-w-[140px] whitespace-nowrap overflow-hidden text-ellipsis`}
+                  >
                     {user?.full_name}
                   </span>
                 </button>
@@ -162,11 +165,11 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className={`font-medium hover:text-primary-600 transition-colors text-white`}
+                  className={`font-medium whitespace-nowrap hover:text-primary-600 transition-colors text-white`}
                 >
                   Login
                 </Link>
-                <Link to="/signup" className="btn-primary">
+                <Link to="/signup" className="btn-primary whitespace-nowrap">
                   Join Us
                 </Link>
               </div>
@@ -191,46 +194,19 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
         {/* Mobile Menu - fixed overlay for better UX on small screens */}
         {mobileMenuOpen && (
-          <div
-            id="mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            className="lg:hidden fixed inset-0 z-40"
-          >
-            {/* Overlay */}
-            <div
-              className="absolute inset-0 bg-black/40"
-              onClick={() => setMobileMenuOpen(false)}
-              aria-hidden="true"
-            />
-
-            {/* Panel */}
-            <div className="relative bg-gray-900 text-white h-full w-full p-6 overflow-auto">
-              <div className="flex justify-between items-center mb-6">
-                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
-                  <img src={'/logo_transparent.png'} alt="Code Catalyst" className="w-14 h-14" />
-                </Link>
-                <button
+          <div className="lg:hidden card p-0 shadow-lg rounded-b-2xl mx-4 mb-4">
+            <div className="px-4 py-6 space-y-4">
+              {[...navigationLinks, ...adminLinks].map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`block font-medium py-2 hover:text-primary-600 transition-colors ${location.pathname === link.href ? 'text-primary-600' : 'text-white'
+                    }`}
                   onClick={() => setMobileMenuOpen(false)}
-                  aria-label="Close menu"
-                  className="p-2 rounded-md hover:bg-white/10"
                 >
-                  <X size={22} />
-                </button>
-              </div>
-
-              <nav className="space-y-4">
-                {[...navigationLinks, ...adminLinks].map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`block text-lg font-medium py-3 px-2 rounded-md hover:bg-white/5 ${location.pathname === link.href ? 'text-primary-400' : 'text-white'}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </nav>
+                  {link.name}
+                </Link>
+              ))}
 
               <div className="border-t border-white/10 mt-6 pt-6">
                 {isAuthenticated ? (

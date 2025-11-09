@@ -44,6 +44,17 @@ const OpenSource = () => {
       contributors: 8,
       difficulty: 'Intermediate to Advanced',
       color: 'from-purple-500 to-pink-500'
+    },
+    {
+      id: 3,
+      name: 'Movie Recommendation Platform',
+      description: 'A web application that recommends movies to users. Browse, search, and rate movies to get personalized recommendations based on popularity and genre.',
+      repoUrl: 'https://github.com/codeCatalyst-Jb/Movie-Recommendation-System',
+      techStack: ['Python', 'MySQL', 'Flask'],
+      issues: 0,
+      contributors: 2,
+      difficulty: 'Beginner to Intermediate',
+      color: 'from-red-500 to-yellow-500'
     }
   ]
 

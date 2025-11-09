@@ -96,6 +96,30 @@ const Projects = () => {
       progress: 75,
       expectedCompletion: 'Q2 2025',
       color: 'from-blue-500 to-cyan-500'
+    },
+    {
+      id: 3,
+      name: 'Movie Recommendation Platform',
+      description: 'A web application that recommends movies to users. Browse, search, and rate movies to get personalized recommendations based on popularity and genre.',
+      status: 'ongoing',
+      category: 'Web Dev & Recommendation System',
+      link: 'https://github.com/codeCatalyst-Jb/Movie-Recommendation-System',
+      image: '/Movie_Recommendation.png',
+      techStack: {
+        frontend: ['HTML', 'CSS', 'JavaScript'],
+        backend: ['Python', 'Flask', 'MySQL'],
+        other: ['MovieLens Dataset', 'Recommendation Algorithm'],
+        deployment: ['In Development']
+      },
+      features: [
+        'Browse movies with posters, titles, and genres',
+        'Search movies by title',
+        'Rate movies and save preferences',
+        'Get personalized recommendations based on ratings'
+      ],
+      progress: 85,
+      expectedCompletion: 'Q1 2025',
+      color: 'from-red-500 to-yellow-500'
     }
   ]
 

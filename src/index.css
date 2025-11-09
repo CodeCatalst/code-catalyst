@@ -175,6 +175,18 @@
     transform: translateZ(0);
   }
 
+  .animate-fade-in-down {
+    animation: fadeInDown 0.2s ease-out forwards;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+  }
+
+  .animate-dropdown {
+    animation: dropdownScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: opacity, transform;
+    transform-origin: top;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -192,6 +204,28 @@
     to {
       opacity: 1;
       transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -10px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes dropdownScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
   }
   

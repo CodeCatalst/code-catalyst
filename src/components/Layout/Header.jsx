@@ -1,12 +1,14 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, User, LogOut, ChevronDown, ChevronUp } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { hasPermission } from '../../utils/adminAccess';
 
 const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const [scrolled, setScrolled] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [updatesOpen, setUpdatesOpen] = useState(false)
+  const [mobileUpdatesOpen, setMobileUpdatesOpen] = useState(false)
   const location = useLocation()
   const { user, isAuthenticated, logout } = useAuth()
 
@@ -30,7 +32,10 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     }
 
     const handleKey = (e) => {
-      if (e.key === 'Escape') setMobileMenuOpen(false)
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false)
+        setUpdatesOpen(false)
+      }
     }
     window.addEventListener('keydown', handleKey)
     return () => {
@@ -39,19 +44,27 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     }
   }, [mobileMenuOpen, setMobileMenuOpen])
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (updatesOpen && !e.target.closest('#updates-dropdown-container')) {
+        setUpdatesOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [updatesOpen])
+
   const navigationLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Team', href: '/team' },
-    {name: 'Projects', href: '/projects'},
+    { name: 'Projects', href: '/projects' },
     { name: 'Innovation', href: '/innovation' },
-    { name: 'Event Gallery', href: '/gallery' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Notices', href: '/notices' },
     { name: 'Open Source', href: '/opensource' },
     { name: 'Contact', href: '/contact' },
     // { name: 'Hiring', href: '/hiring' },
-    { name: 'Esports', href:'/esports'}
+    { name: 'Esports', href: '/esports' }
   ];
 
   // Add admin link if user has any admin permission
@@ -111,6 +124,62 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 {link.name}
               </Link>
             ))}
+
+            {/* Updates dropdown */}
+            <div className="relative" id="updates-dropdown-container">
+              <button
+                onClick={() => setUpdatesOpen(!updatesOpen)}
+                aria-expanded={updatesOpen}
+                aria-controls="updates-menu"
+                className={`font-medium transition-colors duration-200 hover:text-primary-600 ${updatesOpen ? 'text-primary-600' : 'text-white'}`}
+              >
+                <span className="inline-flex items-center gap-2">
+                  Updates
+                  <ChevronDown 
+                    size={14} 
+                    className={`transition-transform duration-300 ${updatesOpen ? 'rotate-180' : 'rotate-0'}`}
+                  />
+                </span>
+              </button>
+
+              {updatesOpen && (
+                <div 
+                  id="updates-menu" 
+                  className="absolute right-0 mt-1 w-48 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-lg shadow-2xl ring-1 ring-purple-500/30 z-50 animate-dropdown overflow-hidden backdrop-blur-sm"
+                >
+                  <Link 
+                    to="/gallery" 
+                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-blue-500/20 hover:to-purple-500/20 rounded-t-lg transition-all duration-300 border-b border-gray-700/50 group" 
+                    onClick={() => setUpdatesOpen(false)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 group-hover:scale-150 transition-transform"></span>
+                      Event Gallery
+                    </span>
+                  </Link>
+                  <Link 
+                    to="/blog" 
+                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-300 border-b border-gray-700/50 group" 
+                    onClick={() => setUpdatesOpen(false)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-150 transition-transform"></span>
+                      Blog
+                    </span>
+                  </Link>
+                  <Link 
+                    to="/notices" 
+                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-orange-500/20 rounded-b-lg transition-all duration-300 group" 
+                    onClick={() => setUpdatesOpen(false)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400 group-hover:scale-150 transition-transform"></span>
+                      Notices
+                    </span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Auth Section */}
@@ -207,6 +276,27 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                   {link.name}
                 </Link>
               ))}
+
+              {/* Mobile Updates collapsible */}
+              <div className="mt-2">
+                <button
+                  onClick={() => setMobileUpdatesOpen(!mobileUpdatesOpen)}
+                  className="w-full flex items-center justify-between text-lg font-medium py-3 px-2 rounded-md hover:bg-white/5"
+                  aria-expanded={mobileUpdatesOpen}
+                  aria-controls="mobile-updates"
+                >
+                  <span className="text-white">Updates</span>
+                  {mobileUpdatesOpen ? <ChevronUp size={18} className="text-white" /> : <ChevronDown size={18} className="text-white" />}
+                </button>
+
+                {mobileUpdatesOpen && (
+                  <div id="mobile-updates" className="pl-4 mt-2 space-y-2">
+                    <Link to="/gallery" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Event Gallery</Link>
+                    <Link to="/blog" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                    <Link to="/notices" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Notices</Link>
+                  </div>
+                )}
+              </div>
 
               <div className="border-t border-white/10 mt-6 pt-6">
                 {isAuthenticated ? (

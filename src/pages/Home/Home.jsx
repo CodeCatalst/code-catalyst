@@ -177,6 +177,15 @@ const Home = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Scroll the page slightly past the hero section when Explore community is clicked
+  const scrollPastHero = () => {
+    if (!heroRef.current) return;
+    const heroBottom = heroRef.current.offsetTop + heroRef.current.offsetHeight;
+    // Scroll a little past the bottom of the hero so the next section's top is visible
+    const target = Math.max(0, heroBottom - 56); // 56px for header height offset
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  };
   
 
   if (loading) {
@@ -329,12 +338,11 @@ const Home = () => {
 
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link to="/signup" className="group relative flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
+            <button onClick={scrollPastHero} className="group relative flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <ArrowRight className="mr-2 transition-transform duration-300 group-hover:translate-x-1" size={22} />
-              <span className="relative z-10">Join Our Community</span>
-            </Link>
-            
+              <span className="relative z-10">Explore community</span>
+            </button>
           </div>
         </div>
         {/* Enhanced Scroll Indicator */}

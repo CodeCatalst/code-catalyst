@@ -25,28 +25,6 @@ const OpenSource = () => {
   const openSourceProjects = [
     {
       id: 1,
-      name: 'Code Catalyst Website',
-      description: 'The main website for Code Catalyst technical team. Help us improve features, fix bugs, or add new functionality.',
-      repoUrl: 'https://github.com/codeCatalyst-Jb/code-catalyst-website',
-      techStack: ['React', 'Vite', 'TailwindCSS'],
-      issues: 5,
-      contributors: 12,
-      difficulty: 'Beginner to Advanced',
-      color: 'from-blue-500 to-purple-500'
-    },
-    {
-      id: 2,
-      name: 'Eve Chatbot',
-      description: 'An intelligent chatbot for community information. Contributions welcome for NLP improvements, UI enhancements, and new features.',
-      repoUrl: 'https://github.com/codeCatalyst-Jb/eve-chatbot',
-      techStack: ['React', 'Node.js', 'LLM'],
-      issues: 8,
-      contributors: 8,
-      difficulty: 'Intermediate to Advanced',
-      color: 'from-purple-500 to-pink-500'
-    },
-    {
-      id: 3,
       name: 'Movie Recommendation Platform',
       description: 'A web application that recommends movies to users. Browse, search, and rate movies to get personalized recommendations based on popularity and genre.',
       repoUrl: 'https://github.com/codeCatalyst-Jb/Movie-Recommendation-System',

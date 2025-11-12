@@ -16,8 +16,8 @@ const AdminAccessWrapper = ({ permission, children, emptyPanel = null }) => {
   const { user } = useAuth();
   const userPermissions = user?.permissions || [];
 
- 
-
+  // console.log(userPermissions)
+  // console.log(permission)
   
   // Special case: if user has admin role, grant access to everything
   if (user?.role === 'admin' || user?.role === 'super_admin') {

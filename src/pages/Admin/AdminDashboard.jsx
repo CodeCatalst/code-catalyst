@@ -363,7 +363,7 @@ const AdminDashboard = () => {
                 );
             case 'team':
                 return (
-                  <AdminAccessWrapper permission="team_management">
+                  <AdminAccessWrapper permission="hiring_requests">
                     <AdminTeamTab />
                   </AdminAccessWrapper>
                 );

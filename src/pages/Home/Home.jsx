@@ -620,8 +620,8 @@ const Home = () => {
               </a>
               <div className="text-center bg-blue-900/50 rounded-xl p-4 border border-blue-700">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-                  60+
-                </div>
+                    70+
+                  </div>
                 <div className="text-gray-300 font-medium text-sm">LinkedIn Connections</div>
               </div>
             </div>

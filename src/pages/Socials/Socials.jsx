@@ -123,7 +123,7 @@ const Socials = () => {
       color: 'from-blue-700 to-blue-900',
       hoverColor: 'hover:from-blue-600 hover:to-blue-800',
       gradient: 'from-blue-600 to-blue-800',
-      stats: { label: 'Followers', value: '60+', icon: Users },
+      stats: { label: 'Followers', value: '70+', icon: Users },
       features: ['Professional Network', 'Job Opportunities', 'Industry Updates', 'Alumni Connect']
     },
     {

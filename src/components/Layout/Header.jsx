@@ -85,7 +85,6 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const userPermissions = user?.permissions || [];
   const userRoles = user?.roles || [];
   const hasAdminAccess = adminPermissions.some(perm => userPermissions.includes(perm));
-  
   const adminLinks = hasAdminAccess
     ? [{ name: 'Admin', href: '/admin' }]
     : [];

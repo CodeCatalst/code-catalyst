@@ -1,119 +1,189 @@
-import React, { useState, useEffect } from 'react'
-import { getTeamMembers, addTeamMember, updateTeamMember, deleteTeamMember } from '../../services/team'
-import Toast from '../Common/Toast'
+import React, { useState, useEffect } from "react";
+import {
+  getTeamMembers,
+  addTeamMember,
+  updateTeamMember,
+  deleteTeamMember,
+} from "../../services/team";
+import Toast from "../Common/Toast";
 
 const emptyMember = {
-  name: '',
-  role: '',
-  department: '',
-  image: '',
-  bio: '',
+  name: "",
+  role: "",
+  department: "",
+  image: "",
+  bio: "",
   skills: [],
-  social: {}
-}
+  social: {},
+};
 
 const AdminTeamManager = ({ onClose, onChange }) => {
-  const [members, setMembers] = useState([])
-  const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState(emptyMember)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [toast, setToast] = useState({ message: '', type: 'success' })
+  const [members, setMembers] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyMember);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [toast, setToast] = useState({ message: "", type: "success" });
 
   useEffect(() => {
-    fetchMembers()
-  }, [])
+    fetchMembers();
+  }, []);
 
   const fetchMembers = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      console.log('Fetching team members...')
-      const res = await getTeamMembers()
-      console.log('Raw team members response:', res.data)
+      console.log("Fetching team members...");
+      const res = await getTeamMembers();
+      console.log("Raw team members response:", res.data);
 
       // Parse skills and social fields for all members
-      const parsedMembers = res.data.map(m => ({
-        ...m,
-        skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
-        social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
-      }))
+      const parsedMembers = res.data.map((m) => {
+        let parsedSocial = {};
+        if (m.social) {
+          if (typeof m.social === "string") {
+            try {
+              parsedSocial = JSON.parse(m.social);
+            } catch {
+              parsedSocial = {};
+            }
+          } else if (typeof m.social === "object") {
+            parsedSocial = m.social;
+          }
+        }
 
-      console.log('Parsed team members:', parsedMembers)
-      setMembers(parsedMembers)
+        return {
+          ...m,
+          skills:
+            typeof m.skills === "string"
+              ? m.skills
+                ? m.skills
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : []
+              : Array.isArray(m.skills)
+              ? m.skills
+              : [],
+          social: parsedSocial,
+        };
+      });
+
+      console.log("Parsed team members:", parsedMembers);
+      setMembers(parsedMembers);
     } catch (e) {
-      console.error('Failed to load team members:', e)
-      console.error('Error response:', e.response?.data)
-      setError(`Failed to load team members: ${e.response?.data?.error || e.message || 'Unknown error'}`)
+      console.error("Failed to load team members:", e);
+      console.error("Error response:", e.response?.data);
+      setError(
+        `Failed to load team members: ${
+          e.response?.data?.error || e.message || "Unknown error"
+        }`
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleEdit = (member) => {
-    setEditing(member.id)
+    let parsedSocial = {};
+    if (member.social) {
+      if (typeof member.social === "string") {
+        try {
+          parsedSocial = JSON.parse(member.social);
+        } catch {
+          parsedSocial = {};
+        }
+      } else if (typeof member.social === "object") {
+        parsedSocial = member.social;
+      }
+    }
+
+    setEditing(member.id);
     setForm({
       ...member,
-      skills: Array.isArray(member.skills) ? member.skills : (typeof member.skills === 'string' ? member.skills.split(',').map(s => s.trim()).filter(Boolean) : []),
-      social: typeof member.social === 'string' ? (member.social ? JSON.parse(member.social) : {}) : (member.social || {})
-    })
-  }
+      skills: Array.isArray(member.skills)
+        ? member.skills
+        : typeof member.skills === "string"
+        ? member.skills
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [],
+      social: parsedSocial,
+    });
+  };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this member?')) return
+    if (!window.confirm("Delete this member?")) return;
     try {
-      await deleteTeamMember(id)
-      setToast({ message: 'Team member deleted.', type: 'success' })
-      fetchMembers()
-      onChange && onChange()
+      await deleteTeamMember(id);
+      setToast({ message: "Team member deleted.", type: "success" });
+      fetchMembers();
+      onChange && onChange();
     } catch {
-      setToast({ message: 'Failed to delete team member.', type: 'error' })
+      setToast({ message: "Failed to delete team member.", type: "error" });
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Validate required fields
     if (!form.name || !form.role) {
-      setToast({ message: 'Name and role are required fields.', type: 'error' })
-      return
+      setToast({
+        message: "Name and role are required fields.",
+        type: "error",
+      });
+      return;
     }
 
     // Convert skills array to comma-separated string for backend
     const submitForm = {
       ...form,
-      skills: Array.isArray(form.skills) ? form.skills.join(',') : '',
-      social: typeof form.social === 'object' ? form.social : {}
-    }
+      skills: Array.isArray(form.skills) ? form.skills.join(",") : "",
+      social: typeof form.social === "object" ? form.social : {},
+    };
 
-    console.log('Submitting team member data:', submitForm)
+    console.log("Submitting team member data:", submitForm);
 
     try {
       if (editing) {
-        console.log('Updating team member with ID:', editing)
-        await updateTeamMember(editing, submitForm)
-        setToast({ message: 'Team member updated successfully.', type: 'success' })
+        console.log("Updating team member with ID:", editing);
+        await updateTeamMember(editing, submitForm);
+        setToast({
+          message: "Team member updated successfully.",
+          type: "success",
+        });
       } else {
-        console.log('Adding new team member')
-        await addTeamMember(submitForm)
-        setToast({ message: 'Team member added successfully.', type: 'success' })
+        console.log("Adding new team member");
+        await addTeamMember(submitForm);
+        setToast({
+          message: "Team member added successfully.",
+          type: "success",
+        });
       }
-      setEditing(null)
-      setForm(emptyMember)
-      fetchMembers()
-      onChange && onChange()
+      setEditing(null);
+      setForm(emptyMember);
+      fetchMembers();
+      onChange && onChange();
     } catch (error) {
-      console.error('Team member save error:', error)
-      console.error('Error response:', error.response?.data)
-      const errorMessage = error.response?.data?.error || error.message || 'Failed to save team member.'
-      setToast({ message: errorMessage, type: 'error' })
+      console.error("Team member save error:", error);
+      console.error("Error response:", error.response?.data);
+      const errorMessage =
+        error.response?.data?.error ||
+        error.message ||
+        "Failed to save team member.";
+      setToast({ message: errorMessage, type: "error" });
     }
-  }
+  };
 
   return (
     <div className="p-4">
-      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "", type: "success" })}
+      />
       <h2 className="text-2xl font-bold text-white mb-4 flex items-center justify-between">
         Manage Team Members
         <button
@@ -125,7 +195,11 @@ const AdminTeamManager = ({ onClose, onChange }) => {
           ⟳ Refresh
         </button>
       </h2>
-      {loading ? <div>Loading...</div> : error ? <div className="text-red-500">{error}</div> : (
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
+      ) : (
         <>
           <div className="overflow-x-auto rounded-lg shadow mb-6">
             <table className="w-full text-left border-collapse bg-gray-800">
@@ -139,19 +213,45 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                 </tr>
               </thead>
               <tbody>
-                {members.map(m => (
-                  <tr key={m.id} className={editing === m.id ? 'bg-primary-900/30' : 'hover:bg-gray-700/50'}>
-                    <td className="px-4 py-2 font-semibold text-white">{m.name}</td>
+                {members.map((m) => (
+                  <tr
+                    key={m.id}
+                    className={
+                      editing === m.id
+                        ? "bg-primary-900/30"
+                        : "hover:bg-gray-700/50"
+                    }
+                  >
+                    <td className="px-4 py-2 font-semibold text-white">
+                      {m.name}
+                    </td>
                     <td className="px-4 py-2 text-white">{m.role}</td>
                     <td className="px-4 py-2 text-white">{m.department}</td>
                     <td className="px-4 py-2">
                       <div className="flex flex-wrap gap-1">
-                        {(m.skills || []).map((s, i) => <span key={i} className="bg-primary-700 text-white px-2 py-0.5 rounded text-xs">{s}</span>)}
+                        {(m.skills || []).map((s, i) => (
+                          <span
+                            key={i}
+                            className="bg-primary-700 text-white px-2 py-0.5 rounded text-xs"
+                          >
+                            {s}
+                          </span>
+                        ))}
                       </div>
                     </td>
                     <td className="px-4 py-2 flex gap-2">
-                      <button onClick={() => handleEdit(m)} className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all">Edit</button>
-                      <button onClick={() => handleDelete(m.id)} className="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white font-medium transition-all">Delete</button>
+                      <button
+                        onClick={() => handleEdit(m)}
+                        className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(m.id)}
+                        className="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white font-medium transition-all"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -160,33 +260,109 @@ const AdminTeamManager = ({ onClose, onChange }) => {
           </div>
           {/* Remove Modal, show update form inline below table */}
           <div className="max-w-xl mx-auto bg-gray-900 rounded-lg shadow p-6 mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-primary-400">{editing ? 'Update' : 'Add'} Team Member</h3>
+            <h3 className="text-xl font-semibold mb-4 text-primary-400">
+              {editing ? "Update" : "Add"} Team Member
+            </h3>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="flex gap-2">
-                <input className="flex-1 p-2 rounded bg-gray-800 text-white" placeholder="Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
-                <input className="flex-1 p-2 rounded bg-gray-800 text-white" placeholder="Role" value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))} required />
+                <input
+                  className="flex-1 p-2 rounded bg-gray-800 text-white"
+                  placeholder="Name"
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, name: e.target.value }))
+                  }
+                  required
+                />
+                <input
+                  className="flex-1 p-2 rounded bg-gray-800 text-white"
+                  placeholder="Role"
+                  value={form.role}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, role: e.target.value }))
+                  }
+                  required
+                />
               </div>
               <div className="flex gap-2">
-                <input className="flex-1 p-2 rounded bg-gray-800 text-white" placeholder="Department" value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))} required />
-                <input className="flex-1 p-2 rounded bg-gray-800 text-white" placeholder="Image URL" value={form.image} onChange={e => setForm(f => ({ ...f, image: e.target.value }))} />
+                <input
+                  className="flex-1 p-2 rounded bg-gray-800 text-white"
+                  placeholder="Department"
+                  value={form.department}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, department: e.target.value }))
+                  }
+                  required
+                />
+                <input
+                  className="flex-1 p-2 rounded bg-gray-800 text-white"
+                  placeholder="Image URL"
+                  value={form.image}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, image: e.target.value }))
+                  }
+                />
               </div>
-              <textarea className="w-full p-2 rounded bg-gray-800 text-white" placeholder="Bio" value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} />
-              <input className="w-full p-2 rounded bg-gray-800 text-white" placeholder="Skills (comma separated)" value={form.skills.join(', ')} onChange={e => setForm(f => ({ ...f, skills: e.target.value.split(',').map(s => s.trim()) }))} />
-              <input className="w-full p-2 rounded bg-gray-800 text-white" placeholder="Social (JSON)" value={JSON.stringify(form.social)} onChange={e => {
-                try {
-                  setForm(f => ({ ...f, social: JSON.parse(e.target.value) }))
-                } catch {}
-              }} />
+              <textarea
+                className="w-full p-2 rounded bg-gray-800 text-white"
+                placeholder="Bio"
+                value={form.bio}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, bio: e.target.value }))
+                }
+              />
+              <input
+                className="w-full p-2 rounded bg-gray-800 text-white"
+                placeholder="Skills (comma separated)"
+                value={form.skills.join(", ")}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    skills: e.target.value.split(",").map((s) => s.trim()),
+                  }))
+                }
+              />
+              {/* <input
+                className="w-full p-2 rounded bg-gray-800 text-white"
+                placeholder="Social (JSON)"
+                value={JSON.stringify(form.social || {})}
+                onChange={(e) => {
+                  try {
+                    const parsed = e.target.value.trim()
+                      ? JSON.parse(e.target.value)
+                      : {};
+                    setForm((f) => ({ ...f, social: parsed }));
+                  } catch {
+                    // Invalid JSON, ignore the change
+                  }
+                }}
+              /> */}
               <div className="flex gap-2 justify-end">
-                {editing && <button type="button" className="btn-secondary" onClick={() => { setEditing(null); setForm(emptyMember) }}>Cancel</button>}
-                <button type="submit" className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white font-semibold transition-all">{editing ? 'Update' : 'Add'}</button>
+                {editing && (
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => {
+                      setEditing(null);
+                      setForm(emptyMember);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white font-semibold transition-all"
+                >
+                  {editing ? "Update" : "Add"}
+                </button>
               </div>
             </form>
           </div>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default AdminTeamManager
+export default AdminTeamManager;

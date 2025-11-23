@@ -48,7 +48,7 @@ const AdminGalleryManager = () => {
 
                 Promise.all(base64Promises).then(base64Strings => {
                     // Validate image sizes before adding to form (must match backend limit)
-                    const MAX_IMAGE_SIZE = 900 * 1024; // 900KB
+                    const MAX_IMAGE_SIZE = 2048 * 1024; // 2MB
                     const oversizedImages = [];
 
                     base64Strings.forEach((base64String, index) => {

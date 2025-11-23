@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Share2, Copy, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2, Copy, Tag, Download } from 'lucide-react';
 import { getNotices, getNotice } from '../../services/notices';
 import { useToast } from '../../components/hooks/use-toast';
 
@@ -186,15 +186,38 @@ const NoticeDetails = () => {
           </div>
         </div>
 
-        {/* Notice Image */}
+        {/* Notice Image/PDF */}
         {notice.images && (
           <div className="mb-12">
             <div className="max-w-4xl mx-auto">
-              <img
-                src={notice.images}
-                alt={notice.title}
-                className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg"
-              />
+              {notice.images.startsWith('data:application/pdf') ? (
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900">Attached PDF Document</h3>
+                    <a
+                      href={notice.images}
+                      download={`${notice.title.replace(/\s+/g, '_')}.pdf`}
+                      className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                    >
+                      <Download size={18} />
+                      <span>Download PDF</span>
+                    </a>
+                  </div>
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    <embed
+                      src={notice.images}
+                      type="application/pdf"
+                      className="w-full h-[80vh]"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={notice.images}
+                  alt={notice.title}
+                  className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg"
+                />
+              )}
             </div>
           </div>
         )}
@@ -245,11 +268,20 @@ const NoticeDetails = () => {
                 >
                   <div className="relative overflow-hidden">
                     {relatedNotice.images ? (
-                      <img
-                        src={relatedNotice.images}
-                        alt={relatedNotice.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      relatedNotice.images.startsWith('data:application/pdf') ? (
+                        <div className="w-full h-48 bg-gradient-to-br from-red-50 to-orange-50 flex flex-col items-center justify-center">
+                          <svg className="w-16 h-16 text-red-500 mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
+                          </svg>
+                          <span className="text-red-600 text-sm font-medium">PDF Document</span>
+                        </div>
+                      ) : (
+                        <img
+                          src={relatedNotice.images}
+                          alt={relatedNotice.title}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )
                     ) : (
                       <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
                         <span className="text-gray-400 text-sm">No Image</span>

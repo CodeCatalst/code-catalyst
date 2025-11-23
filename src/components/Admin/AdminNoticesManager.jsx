@@ -19,8 +19,13 @@ const AdminNoticeManager = () => {
     images: '',
     tags: [],
     hidden: false,
+    type: '',
+    hasForm: false,
+    form: null,
+    submissions: []
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [fileType, setFileType] = useState(null);
   const [newTag, setNewTag] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -51,6 +56,16 @@ const AdminNoticeManager = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const isPDF = fileExtension === 'pdf';
+      const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension);
+      
+      if (!isPDF && !isImage) {
+        setError('Please upload only images (JPG, PNG, GIF, WEBP) or PDF files');
+        return;
+      }
+      
+      setFileType(isPDF ? 'pdf' : 'image');
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, images: reader.result }));
@@ -83,6 +98,10 @@ const AdminNoticeManager = () => {
         images: formData.images || '',
         hidden: !!formData.hidden,
         tags: formData.tags,
+        type: formData.type || '',
+        hasForm: formData.hasForm || false,
+        form: formData.form || null,
+        submissions: formData.submissions || []
       };
       if (editingNotice) {
         await updateNotice(editingNotice.id, noticePayload);
@@ -92,6 +111,7 @@ const AdminNoticeManager = () => {
       await fetchNotices();
       resetForm();
     } catch (err) {
+      console.error('Notice submission error:', err);
       setError(editingNotice ? 'Failed to update notice' : 'Failed to create notice');
     } finally {
       setSubmitting(false);
@@ -99,10 +119,21 @@ const AdminNoticeManager = () => {
   };
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', images: '', tags: [], hidden: false });
+    setFormData({ 
+      title: '', 
+      description: '', 
+      images: '', 
+      tags: [], 
+      hidden: false,
+      type: '',
+      hasForm: false,
+      form: null,
+      submissions: []
+    });
     setEditingNotice(null);
     setShowForm(false);
     setImagePreview(null);
+    setFileType(null);
     setNewTag('');
   };
 
@@ -113,8 +144,16 @@ const AdminNoticeManager = () => {
       images: notice.images || '',
       tags: Array.isArray(notice.tags) ? notice.tags : [],
       hidden: !!notice.hidden,
+      type: notice.type || '',
+      hasForm: notice.hasForm || false,
+      form: notice.form || null,
+      submissions: Array.isArray(notice.submissions) ? notice.submissions : []
     });
     setImagePreview(notice.images || null);
+    // Detect file type from data URL
+    if (notice.images) {
+      setFileType(notice.images.startsWith('data:application/pdf') ? 'pdf' : 'image');
+    }
     setEditingNotice(notice);
     setShowForm(true);
   };
@@ -142,10 +181,15 @@ const AdminNoticeManager = () => {
         images: notice.images || '',
         hidden: !currentStatus,
         tags: Array.isArray(notice.tags) ? notice.tags : [],
+        type: notice.type || '',
+        hasForm: notice.hasForm || false,
+        form: notice.form || null,
+        submissions: notice.submissions || []
       };
       await updateNotice(id, noticePayload);
       await fetchNotices();
     } catch (err) {
+      console.error('Toggle visibility error:', err);
       setError('Failed to update notice visibility');
     } finally {
       setSubmitting(false);
@@ -243,17 +287,29 @@ const AdminNoticeManager = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2 min-w-[180px]">
-              <label className="block font-medium mb-1 text-blue-300">Attach Image</label>
+              <label className="block font-medium mb-1 text-blue-300">Attach File (Image/PDF)</label>
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,.pdf"
                 onChange={handleImageChange}
                 className="rounded border border-gray-700 px-3 py-2 focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
               />
               {imagePreview && (
-                <div className="relative mt-2 w-28 h-28 rounded-lg overflow-hidden shadow border border-gray-700">
-                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                  <button type="button" className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, images: '' })); setImagePreview(null); }}>
+                <div className="relative mt-2 rounded-lg overflow-hidden shadow border border-gray-700">
+                  {fileType === 'pdf' ? (
+                    <div className="w-28 h-28 bg-red-900 flex flex-col items-center justify-center">
+                      <svg className="w-12 h-12 text-red-200" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+                        <text x="10" y="14" fontSize="6" textAnchor="middle" fill="currentColor">PDF</text>
+                      </svg>
+                      <span className="text-xs text-red-200 mt-1">PDF File</span>
+                    </div>
+                  ) : (
+                    <div className="w-28 h-28">
+                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <button type="button" className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs" onClick={() => { setFormData(prev => ({ ...prev, images: '' })); setImagePreview(null); setFileType(null); }}>
                     Remove
                   </button>
                 </div>
@@ -285,9 +341,18 @@ const AdminNoticeManager = () => {
                   <div className="flex items-center justify-between mb-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${notice.hidden ? 'bg-yellow-900 text-yellow-300' : 'bg-green-900 text-green-300'}`}>{notice.hidden ? 'Hidden' : 'Public'}</span>
                     {notice.images ? (
-                      <img src={notice.images} alt="Notice" className="w-16 h-16 object-cover rounded-lg border border-gray-700" />
+                      notice.images.startsWith('data:application/pdf') ? (
+                        <div className="w-16 h-16 bg-red-900 flex flex-col items-center justify-center rounded-lg border border-gray-700">
+                          <svg className="w-8 h-8 text-red-200" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+                            <text x="10" y="13" fontSize="5" textAnchor="middle" fill="currentColor">PDF</text>
+                          </svg>
+                        </div>
+                      ) : (
+                        <img src={notice.images} alt="Notice" className="w-16 h-16 object-cover rounded-lg border border-gray-700" />
+                      )
                     ) : (
-                      <span className="w-16 h-16 flex items-center justify-center bg-gray-900 text-gray-500 rounded-lg border border-gray-700">No Image</span>
+                      <span className="w-16 h-16 flex items-center justify-center bg-gray-900 text-gray-500 rounded-lg border border-gray-700">No File</span>
                     )}
                   </div>
                   <h2 className="text-2xl font-semibold text-blue-200 mb-2">{notice.title}</h2>

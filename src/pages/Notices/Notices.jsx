@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, ArrowRight, X, ClipboardCheck } from 'lucide-react'
+import { Calendar, ArrowRight, X, ClipboardCheck, FileText, Image } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import { getNotices } from '../../services/notices'
 
@@ -177,8 +177,17 @@ const Notices = () => {
                       </div>
                       {notice.images && (
                         <div className="flex items-center text-xs text-gray-500">
-                          <span className="mr-1">📎</span>
-                          <span>Attachment</span>
+                          {notice.images.startsWith('data:application/pdf') ? (
+                            <>
+                              <FileText size={14} className="mr-1" />
+                              <span>PDF</span>
+                            </>
+                          ) : (
+                            <>
+                              <Image size={14} className="mr-1" />
+                              <span>Image</span>
+                            </>
+                          )}
                         </div>
                       )}
                     </div>

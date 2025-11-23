@@ -36,11 +36,45 @@ const AdminGalleryManager = () => {
         if (name === 'imageFiles') {
             const selectedFiles = Array.from(files);
             if (selectedFiles.length > 0) {
-                // Convert all files to base64
+                // Compress and convert all files to base64
                 const base64Promises = selectedFiles.map(file => {
                     return new Promise((resolve, reject) => {
                         const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
+                        reader.onload = (event) => {
+                            const img = new Image();
+                            img.onload = () => {
+                                // Create canvas to compress image
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                
+                                // Calculate new dimensions (max 1920px width/height)
+                                let width = img.width;
+                                let height = img.height;
+                                const maxDimension = 1920;
+                                
+                                if (width > maxDimension || height > maxDimension) {
+                                    if (width > height) {
+                                        height = (height / width) * maxDimension;
+                                        width = maxDimension;
+                                    } else {
+                                        width = (width / height) * maxDimension;
+                                        height = maxDimension;
+                                    }
+                                }
+                                
+                                canvas.width = width;
+                                canvas.height = height;
+                                
+                                // Draw and compress
+                                ctx.drawImage(img, 0, 0, width, height);
+                                
+                                // Convert to base64 with compression (0.8 quality for JPEG)
+                                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                                resolve(compressedBase64);
+                            };
+                            img.onerror = reject;
+                            img.src = event.target.result;
+                        };
                         reader.onerror = reject;
                         reader.readAsDataURL(file);
                     });
@@ -70,7 +104,7 @@ const AdminGalleryManager = () => {
                         const errorMsg = oversizedImages.map(img =>
                             `Image ${img.index} (${img.size}KB) exceeds limit (${img.maxSize}KB)`
                         ).join(', ');
-                        setMessage({ type: 'error', text: `Image size error: ${errorMsg}. Please use smaller images.` });
+                        setMessage({ type: 'error', text: `Image size error: ${errorMsg}. Please use smaller images or reduce quality.` });
                         return;
                     }
 

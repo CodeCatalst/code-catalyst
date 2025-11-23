@@ -66,12 +66,69 @@ const AdminNoticeManager = () => {
       }
       
       setFileType(isPDF ? 'pdf' : 'image');
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, images: reader.result }));
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+      
+      if (isPDF) {
+        // For PDFs, just read as is (with size limit check)
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Data = reader.result.split(',')[1];
+          const sizeInBytes = Math.ceil(base64Data.length * 3 / 4);
+          if (sizeInBytes > 2048 * 1024) { // 2MB limit for PDFs
+            setError('PDF file too large. Please use a file under 2MB.');
+            return;
+          }
+          setFormData((prev) => ({ ...prev, images: reader.result }));
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // For images, compress before storing
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Calculate new dimensions (max 1920px for notices)
+            let width = img.width;
+            let height = img.height;
+            const maxDimension = 1920;
+            
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = (height / width) * maxDimension;
+                width = maxDimension;
+              } else {
+                width = (width / height) * maxDimension;
+                height = maxDimension;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Convert to base64 with compression
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+            
+            // Validate size
+            const base64Data = compressedBase64.split(',')[1];
+            const sizeInBytes = Math.ceil(base64Data.length * 3 / 4);
+            if (sizeInBytes > 2048 * 1024) {
+              setError('Image too large even after compression. Please use a smaller image.');
+              return;
+            }
+            
+            setFormData((prev) => ({ ...prev, images: compressedBase64 }));
+            setImagePreview(compressedBase64);
+          };
+          img.onerror = () => setError('Failed to load image');
+          img.src = event.target.result;
+        };
+        reader.onerror = () => setError('Failed to read file');
+        reader.readAsDataURL(file);
+      }
     }
   };
 

@@ -122,10 +122,57 @@ const AdminTeamManager = ({ onClose, onChange }) => {
         setToast({ message: 'Please select an image file', type: 'error' });
         return;
       }
+      
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm(prev => ({ ...prev, image: reader.result }));
-        setImagePreview(reader.result);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas to compress image
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Calculate new dimensions (max 800px width/height for profile images)
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 800;
+          
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = (height / width) * maxDimension;
+              width = maxDimension;
+            } else {
+              width = (width / height) * maxDimension;
+              height = maxDimension;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.85 quality for JPEG)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          
+          // Validate size (should be under 500KB after compression)
+          const base64Data = compressedBase64.split(',')[1];
+          const sizeInBytes = Math.ceil(base64Data.length * 3 / 4);
+          if (sizeInBytes > 500 * 1024) {
+            setToast({ message: 'Image too large even after compression. Please use a smaller image.', type: 'error' });
+            return;
+          }
+          
+          setForm(prev => ({ ...prev, image: compressedBase64 }));
+          setImagePreview(compressedBase64);
+        };
+        img.onerror = () => {
+          setToast({ message: 'Failed to load image', type: 'error' });
+        };
+        img.src = event.target.result;
+      };
+      reader.onerror = () => {
+        setToast({ message: 'Failed to read file', type: 'error' });
       };
       reader.readAsDataURL(file);
     }

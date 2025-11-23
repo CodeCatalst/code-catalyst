@@ -55,25 +55,6 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [userFilter, setUserFilter] = useState("all"); // 'all', 'core', or specific filter
-
-  // Show tabs based on user role
-  const accessibleTabs = getAccessibleTabs(user?.permissions || []);
-  // If user is not allowed any tabs, do not render dashboard
-  if (!user || !accessibleTabs.length) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        <div className="text-center max-w-md p-8 bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl">
-          <Shield className="w-16 h-16 mx-auto text-red-500 mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
-          <p className="text-gray-400">
-            You do not have permission to access the admin dashboard.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Set the default tab to overview
   const [activeTab, setActiveTab] = useState("overview");
   const [showFormBuilder, setShowFormBuilder] = useState(false);
   const [stats, setStats] = useState({
@@ -82,6 +63,10 @@ const AdminDashboard = () => {
     totalHiringRequests: 0,
   });
   const [userCount, setUserCount] = useState(0);
+
+  // Show tabs based on user role
+  const accessibleTabs = getAccessibleTabs(user?.permissions || []);
+
   useEffect(() => {
     // Only fetch stats if user is authenticated and has user_management permission or is admin
     if (
@@ -222,6 +207,21 @@ const AdminDashboard = () => {
   const handleUserCountUpdate = (count) => {
     setUserCount(count);
   };
+
+  // If user is not allowed any tabs, do not render dashboard
+  if (!user || !accessibleTabs.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <div className="text-center max-w-md p-8 bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl">
+          <Shield className="w-16 h-16 mx-auto text-red-500 mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
+          <p className="text-gray-400">
+            You do not have permission to access the admin dashboard.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Overview Dashboard Component
   const OverviewDashboard = () => {

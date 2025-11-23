@@ -24,6 +24,7 @@ const AdminTeamManager = ({ onClose, onChange }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [toast, setToast] = useState({ message: "", type: "success" });
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     fetchMembers();
@@ -111,6 +112,23 @@ const AdminTeamManager = ({ onClose, onChange }) => {
         : [],
       social: parsedSocial,
     });
+    setImagePreview(member.image || null);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setToast({ message: 'Please select an image file', type: 'error' });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm(prev => ({ ...prev, image: reader.result }));
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -164,6 +182,7 @@ const AdminTeamManager = ({ onClose, onChange }) => {
       }
       setEditing(null);
       setForm(emptyMember);
+      setImagePreview(null);
       fetchMembers();
       onChange && onChange();
     } catch (error) {
@@ -284,9 +303,9 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                   required
                 />
               </div>
-              <div className="flex gap-2">
+              <div>
                 <input
-                  className="flex-1 p-2 rounded bg-gray-800 text-white"
+                  className="w-full p-2 rounded bg-gray-800 text-white"
                   placeholder="Department"
                   value={form.department}
                   onChange={(e) =>
@@ -294,14 +313,24 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                   }
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Profile Image</label>
                 <input
-                  className="flex-1 p-2 rounded bg-gray-800 text-white"
-                  placeholder="Image URL"
-                  value={form.image}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, image: e.target.value }))
-                  }
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full p-2 rounded bg-gray-800 text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-primary-600 file:text-white hover:file:bg-primary-700 file:cursor-pointer"
                 />
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-32 h-32 object-cover rounded-lg border-2 border-gray-700"
+                    />
+                  </div>
+                )}
               </div>
               <textarea
                 className="w-full p-2 rounded bg-gray-800 text-white"
@@ -345,6 +374,7 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                     onClick={() => {
                       setEditing(null);
                       setForm(emptyMember);
+                      setImagePreview(null);
                     }}
                   >
                     Cancel

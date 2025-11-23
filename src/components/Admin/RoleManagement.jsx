@@ -30,6 +30,7 @@ const RoleManagement = () => {
   const fetchPermissions = async () => {
     try {
       const response = await getPermissions();
+      console.log('Fetched permissions:', response);
       
       let permissions;
       if (Array.isArray(response)) {
@@ -64,7 +65,8 @@ const RoleManagement = () => {
       
     } catch (error) {
       console.error('Error fetching permissions:', error);
-      setMessage({ type: 'error', text: 'Failed to load permissions' });
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to load permissions';
+      setMessage({ type: 'error', text: errorMsg });
       setAvailablePermissions([]); // Set empty array as fallback
     }
   };
@@ -80,10 +82,14 @@ const RoleManagement = () => {
     try {
       setLoading(true)
       const response = await getRoles()
-      setRoles(response)
+      console.log('Fetched roles:', response)
+      setRoles(Array.isArray(response) ? response : [])
       setMessage({ type: 'success', text: 'Roles loaded successfully' })
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to load roles' })
+    } catch (error) {
+      console.error('Error fetching roles:', error)
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to load roles'
+      setMessage({ type: 'error', text: errorMsg })
+      setRoles([])
     } finally {
       setLoading(false)
     }
@@ -203,9 +209,9 @@ const RoleManagement = () => {
     }
   }
 
-  const filteredRoles = roles.filter(r =>
+  const filteredRoles = Array.isArray(roles) ? roles.filter(r =>
     r.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  ) : []
 
   const handleDownloadExcel = () => {
     const wsData = [
@@ -236,7 +242,7 @@ const RoleManagement = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-white">Manage Roles</h2>
           <div className="flex items-center gap-4">
-            <div className="text-gray-400">Total Roles: {roles.length}</div>
+            <div className="text-gray-400">Total Roles: {Array.isArray(roles) ? roles.length : 0}</div>
             <button
               onClick={fetchRoles}
               disabled={loading}

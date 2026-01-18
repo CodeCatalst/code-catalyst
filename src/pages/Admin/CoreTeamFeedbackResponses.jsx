@@ -117,13 +117,11 @@ const CoreTeamFeedbackResponses = () => {
           <table className="min-w-full divide-y divide-gray-800">
             <thead>
               <tr className="bg-gray-800/80">
-                <th className="py-3 px-4 text-left text-primary-300">Name</th>
-                <th className="py-3 px-4 text-left text-primary-300">Email</th>
+                <th className="py-3 px-4 text-left text-primary-300">S.No</th>
                 <th className="py-3 px-4 text-left text-primary-300">Admin Rating</th>
                 <th className="py-3 px-4 text-left text-primary-300">Community Rating</th>
                 <th className="py-3 px-4 text-left text-primary-300">Admin Suggestions</th>
                 <th className="py-3 px-4 text-left text-primary-300">Community Suggestions</th>
-                <th className="py-3 px-4 text-left text-primary-300">Status</th>
                 <th className="py-3 px-4 text-left text-primary-300">Notes</th>
                 <th className="py-3 px-4 text-left text-primary-300">Submitted</th>
                 <th className="py-3 px-4 text-left text-primary-300">Actions</th>
@@ -136,8 +134,7 @@ const CoreTeamFeedbackResponses = () => {
                   className="hover:bg-primary-900/30 transition cursor-pointer"
                   onClick={() => setSelectedResponse(resp)}
                 >
-                  <td className="py-2 px-4 font-semibold text-primary-400">{resp.name}</td>
-                  <td className="py-2 px-4">{resp.email}</td>
+                  <td className="py-2 px-4 font-semibold text-primary-400">{idx + 1}</td>
                   <td className="py-2 px-4">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                       resp.admin_rating >= 4 ? 'bg-green-900/50 text-green-300' :
@@ -165,18 +162,6 @@ const CoreTeamFeedbackResponses = () => {
                     <div className="truncate" title={resp.community_suggestions}>
                       {resp.community_suggestions.length > 50 ? resp.community_suggestions.slice(0, 50) + '...' : resp.community_suggestions}
                     </div>
-                  </td>
-                  <td className="py-2 px-4" onClick={(e) => e.stopPropagation()}>
-                    <select
-                      value={resp.status}
-                      onChange={e => handleStatusChange(resp.id, e.target.value)}
-                      disabled={updatingId === resp.id}
-                      className="rounded bg-gray-800 border border-gray-700 text-primary-200 px-2 py-1 focus:ring-primary-500 text-sm"
-                    >
-                      {STATUS_OPTIONS.map(opt => (
-                        <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
-                      ))}
-                    </select>
                   </td>
                   <td className="py-2 px-4" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center gap-2">
@@ -221,8 +206,7 @@ const CoreTeamFeedbackResponses = () => {
           <div className="bg-gray-900 rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-1">{selectedResponse.name}</h2>
-                <p className="text-gray-400 text-sm">{selectedResponse.email}</p>
+                <h2 className="text-2xl font-bold text-white mb-1">Feedback Details</h2>
               </div>
               <button
                 className="text-gray-400 hover:text-white text-2xl font-bold"
@@ -262,8 +246,7 @@ const CoreTeamFeedbackResponses = () => {
 
             {/* Footer */}
             <div className="border-t border-gray-700 pt-4">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Status: <span className="text-white font-medium">{selectedResponse.status}</span></span>
+              <div className="flex justify-end items-center text-sm">
                 <span className="text-gray-400 text-xs">
                   {selectedResponse.submitted_at ? new Date(selectedResponse.submitted_at).toLocaleString() : 'N/A'}
                 </span>

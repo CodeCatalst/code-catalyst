@@ -87,32 +87,11 @@ const CoreTeamFeedback = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-10">
-            {/* User Info Section */}
+            {/* Anonymous Assurance */}
             <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/50">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
-                Your Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-3">Full Name</label>
-                  <input
-                    type="text"
-                    value={user?.full_name || ''}
-                    disabled
-                    className="block w-full rounded-lg border border-slate-600 bg-slate-800/50 text-slate-200 p-4 cursor-not-allowed focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-3">Email Address</label>
-                  <input
-                    type="email"
-                    value={user?.email || ''}
-                    disabled
-                    className="block w-full rounded-lg border border-slate-600 bg-slate-800/50 text-slate-200 p-4 cursor-not-allowed focus:outline-none"
-                  />
-                </div>
-              </div>
+              <p className="text-slate-300 text-center font-medium">
+                Your feedback is anonymous and it is always safe with us
+              </p>
             </div>
 
             {/* Ratings Section */}

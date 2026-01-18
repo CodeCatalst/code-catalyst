@@ -64,6 +64,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Open Source', href: '/opensource' },
     { name: 'Contact', href: '/contact' },
     // { name: 'Hiring', href: '/hiring' },
+    {name:'Core Feedback', href:'/feedback'},
     { name: 'Esports', href: '/esports' }
   ];
 

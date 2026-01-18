@@ -1,1 +1,1 @@
-export { default } from '../../pages/Admin/CoreTeamFeedback.jsx';
+export { default } from '../../pages/feedback/CoreTeamFeedback';

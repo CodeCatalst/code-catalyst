@@ -1,5 +1,6 @@
 import { getAccessibleTabs, hasPermission } from "../../utils/adminAccess";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getStats } from "../../services/stats";
 import api, { getUsers } from "../../services/api";
@@ -23,6 +24,7 @@ import {
   UserCog,
   Shield,
   Mail,
+  MessageSquare,
   Briefcase,
   Trophy,
   LayoutDashboard,
@@ -183,6 +185,13 @@ const AdminDashboard = () => {
       label: "Messages",
       icon: Mail,
       gradient: "from-orange-500 to-red-500",
+    },
+    {
+      id: "feedback",
+      label: "Feedback",
+      icon: MessageSquare,
+      gradient: "from-emerald-500 to-teal-500",
+      accessible: true,
     },
     {
       id: "hiring",
@@ -384,6 +393,43 @@ const AdminDashboard = () => {
                   return type === "bg" ? "bg-gray-500/10" : "text-gray-400";
                 };
 
+                if (section.id === "feedback") {
+                  return (
+                    <Link
+                      key={section.id}
+                      to="/admin/feedback-responses"
+                      className={`group relative overflow-hidden rounded-lg sm:rounded-xl p-4 sm:p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95 bg-slate-800/50 hover:bg-slate-800`}
+                    >
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity`}
+                      ></div>
+                      <div className="relative z-10">
+                        <div
+                          className={`p-2 sm:p-3 ${getColorClass(
+                            "bg"
+                          )} rounded-lg sm:rounded-xl w-fit mb-3 sm:mb-4`}
+                        >
+                          <Icon
+                            className={`w-5 h-5 sm:w-6 sm:h-6 ${getColorClass(
+                              "text"
+                            )}`}
+                          />
+                        </div>
+                        <h4 className="text-white font-bold text-base sm:text-lg mb-1 sm:mb-2">
+                          {section.label}
+                        </h4>
+                        <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">
+                          {section.id === "feedback" &&
+                            "Core team feedback system"}
+                        </p>
+                        <div className="flex items-center gap-2 text-purple-400 text-xs font-medium">
+                          <span>Open Page</span>
+                          <span>→</span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                }
                 return (
                   <button
                     key={section.id}
@@ -440,8 +486,6 @@ const AdminDashboard = () => {
                           "Create and manage custom forms"}
                         {section.id === "submissions" &&
                           "View form submissions"}
-                        {section.id === "feedback" &&
-                          "Core team feedback system"}
                       </p>
                       <div className="flex items-center gap-2 text-purple-400 text-xs font-medium">
                         <span>{isActive ? "Active" : "Open Section"}</span>
@@ -488,19 +532,13 @@ const AdminDashboard = () => {
             <RoleManagement />
           </AdminAccessWrapper>
         );
-      case "CoreTeamFeedback":
-        return (
-          <AdminAccessWrapper permission="core_team_feedback">
-            <CoreTeamFeedback />
-          </AdminAccessWrapper>
-        );
       case "gallery":
         return (
           <AdminAccessWrapper permission="gallery_management">
             <AdminGalleryManager />
           </AdminAccessWrapper>
         );
-      case "CoreTeamFeedbackResponses":
+      case "feedback":
         return (
           <AdminAccessWrapper permission="core_team_feedback_responses">
             <CoreTeamFeedbackResponses />
@@ -828,6 +866,20 @@ const AdminDashboard = () => {
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.id;
+                  if (tab.id === "feedback") {
+                    return (
+                      <Link
+                        key={tab.id}
+                        to="/admin/feedback-responses"
+                        className={`w-full group relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 active:scale-95 text-gray-400 hover:text-white hover:bg-slate-800/50`}
+                      >
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="flex-1 text-left text-sm sm:text-base">
+                          {tab.label}
+                        </span>
+                      </Link>
+                    );
+                  }
                   return (
                     <button
                       key={tab.id}

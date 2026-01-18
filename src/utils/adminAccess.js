@@ -9,6 +9,7 @@ export const tabPermissions = {
   roles: 'roles_management',
   gallery: 'gallery_management',
   contact: 'contact_messages',
+  feedback: 'core_team_feedback_responses',
   hiring: 'hiring_requests',
   team: 'team_management', // Added for Manage Team tab
   esports: 'esports',

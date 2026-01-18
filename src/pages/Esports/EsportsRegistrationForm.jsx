@@ -59,24 +59,10 @@ const EsportsRegistrationForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log('=== FORM SUBMIT TRIGGERED ===');
-    console.log('Event type:', e.type);
-    console.log('Default prevented:', e.defaultPrevented);
-
     e.preventDefault();
-    console.log('Form is valid:', e.target.checkValidity());
-    console.log('============================');
 
     // Basic validation
-    console.log('=== VALIDATION CHECK ===');
-    console.log('Name:', formData.name, 'Length:', formData.name?.length);
-    console.log('Email:', formData.email, 'Length:', formData.email?.length);
-    console.log('Sport:', formData.sport);
-    console.log('========================');
-
     if (!formData.name || !formData.email || !formData.sport) {
-      console.log('=== VALIDATION FAILED ===');
-      console.log('Missing required fields');
       toast({
         title: "Error",
         description: "Please fill in all required fields"
@@ -84,19 +70,11 @@ const EsportsRegistrationForm = () => {
       return;
     }
 
-    console.log('=== VALIDATION PASSED ===');
-
     // Validate team members if team size > 1
-    console.log('=== TEAM MEMBERS VALIDATION ===');
-    console.log('Team size:', formData.teamSize);
-    console.log('Team members count:', formData.teamMembers.length);
-
     if (formData.teamSize > 1) {
       for (let i = 0; i < formData.teamMembers.length; i++) {
         const member = formData.teamMembers[i];
-        console.log(`Member ${i + 1}:`, member);
         if (!member.name || !member.gameUserId || !member.inGameName) {
-          console.log(`=== TEAM MEMBER ${i + 1} VALIDATION FAILED ===`);
           toast({
             title: "Error",
             description: `Please fill in all fields for team member ${i + 1}`
@@ -106,14 +84,7 @@ const EsportsRegistrationForm = () => {
       }
     }
 
-    console.log('=== TEAM MEMBERS VALIDATION PASSED ===');
-
     try {
-      console.log('=== FORM SUBMISSION START ===');
-      console.log('Form data:', formData);
-      console.log('Team size:', formData.teamSize);
-      console.log('Team members array:', formData.teamMembers);
-
       // Always send teamMembers as an array, even for single players
       const teamMembersArray = formData.teamSize > 1
         ? formData.teamMembers
@@ -128,21 +99,6 @@ const EsportsRegistrationForm = () => {
         ...formData,
         teamMembers: teamMembersArray
       };
-
-      console.log('=== SUBMISSION DATA ===');
-      console.log('Final submission data:', submissionData);
-      console.log('Team members array length:', teamMembersArray.length);
-      console.log('========================');
-
-      // Test backend connectivity first
-      try {
-        console.log('=== TESTING BACKEND CONNECTIVITY ===');
-        const testResponse = await fetch('https://cc-backend.code-9a1.workers.dev/api/health');
-        console.log('Backend health check:', testResponse.ok ? 'REACHABLE' : 'NOT REACHABLE');
-        console.log('=============================');
-      } catch (testError) {
-        console.error('Backend connectivity test failed:', testError.message);
-      }
 
       await createEsportsRegistration(submissionData);
       toast({
@@ -162,121 +118,26 @@ const EsportsRegistrationForm = () => {
         teamMembers: []
       });
     } catch (error) {
-      console.error('=== SUBMISSION ERROR ===');
-      console.error('Error details:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      console.error('Error message:', error.message);
-      console.error('Is network error:', error.isNetworkError);
-      console.error('Is CORS error:', error.isCorsError);
-      console.error('=======================');
+      console.error('Submission error:', error);
 
-      // Handle specific error types first
-
-      // Network connectivity issues
-      if (error.isNetworkError || error.message?.includes('Network error')) {
+      // Handle different error types
+      if (!navigator.onLine || error.message?.includes('Network')) {
         toast({
           title: "Connection Error",
-          description: "Unable to connect to the server. Please check your internet connection and try again."
+          description: "Please check your internet connection and try again."
         });
-        console.log('Network error - cannot reach server');
-        return;
-      }
-
-      // CORS issues
-      if (error.isCorsError || error.message?.includes('CORS')) {
-        toast({
-          title: "Connection Error",
-          description: "Unable to connect to the server due to security restrictions. Please try again later."
-        });
-        console.log('CORS error - cross-origin request blocked');
-        return;
-      }
-
-      // Multiple strategies for handling backend errors
-
-      // Strategy 1: Check for success in error response
-      if (error.response?.data?.success) {
-        toast({
-          title: "Success",
-          description: "Registration submitted successfully!"
-        });
-        console.log('Registration was successful (found success in error response)');
-        return;
-      }
-
-      // Strategy 2: Check for specific success indicators in response
-      if (error.response?.data?.id && error.response?.data?.message?.includes('successful')) {
-        toast({
-          title: "Success",
-          description: "Registration submitted successfully!"
-        });
-        console.log('Registration was successful (found ID and success message)');
-        return;
-      }
-
-      // Strategy 3: If status is 500 but we have an ID, assume success
-      if (error.response?.status === 500 && error.response?.data?.id) {
-        toast({
-          title: "Success",
-          description: "Registration submitted successfully!"
-        });
-        console.log('Registration was successful (500 error but has ID)');
-        return;
-      }
-
-      // Strategy 4: If it's a network error but data might have been stored
-      if (error.code === 'NETWORK_ERROR' || error.message?.includes('Network Error')) {
-        toast({
-          title: "Warning",
-          description: "Registration may have been submitted. Please check your email for confirmation."
-        });
-        console.log('Network error - data might still be stored');
-        return;
-      }
-
-      // Strategy 5: Default error handling with more specific messages
-      const errorMessage = error.response?.data?.message || error.message;
-      if (errorMessage.includes('timeout')) {
-        toast({
-          title: "Timeout Error",
-          description: "The request timed out. Please try again."
-        });
-      } else if (errorMessage.includes('500')) {
+      } else if (error.response?.status === 500) {
         toast({
           title: "Server Error",
           description: "Server error occurred. Please try again later."
         });
-      } else if (errorMessage.includes('Database table not found')) {
-        toast({
-          title: "System Error",
-          description: "Database configuration issue. Please contact support."
-        });
-      } else if (errorMessage.includes('Database schema mismatch')) {
-        toast({
-          title: "System Error",
-          description: "Database schema issue. Please contact support."
-        });
-      } else if (errorMessage.includes('Invalid data provided')) {
-        toast({
-          title: "Invalid Data",
-          description: "Please check your input data and try again."
-        });
       } else {
+        const errorMessage = error.response?.data?.message || error.message || "Failed to submit registration";
         toast({
           title: "Error",
-          description: errorMessage || "Failed to submit registration"
+          description: errorMessage
         });
       }
-
-      // Strategy 6: Final fallback - assume success for esports registration
-      // Since user confirmed data is stored and emails are sent despite errors
-      setTimeout(() => {
-        toast({
-          title: "Notice",
-          description: "If you received a confirmation email, your registration was successful!"
-        });
-      }, 3000);
     }
   };
 
@@ -539,10 +400,6 @@ const EsportsRegistrationForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          onClick={(e) => {
-            console.log('=== SUBMIT BUTTON CLICKED ===');
-            console.log('Button clicked, about to submit form');
-          }}
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg"
         >
           🚀 Register for Esports

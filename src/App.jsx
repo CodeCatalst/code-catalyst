@@ -11,6 +11,7 @@ import { BlogsProvider } from './context/NoticesContext'
 import { lazy, Suspense, useEffect } from 'react'
 import Loader from './components/Common/LoadingSpinner'
 import apiBase from './services/apiBase'
+import CoreTeamFeedback from './pages/feedback/CoreTeamFeedback'
 
 
 const Home = lazy(() => import('./pages/Home/Home'))
@@ -39,6 +40,8 @@ const Projects = lazy(() => import('./pages/Projects/Projects'))
 const EsportsRegistration = lazy(() => import('./pages/Esports/EsportsRegistration'))
 const DanceSocietyRegistration = lazy(() => import('./pages/jbiansRegistration/RegistrationJbian'))
 const OpenSource = lazy(() => import('./pages/OpenSource/OpenSource'))
+const Feedback = lazy(()=> import('./pages/feedback/CoreTeamFeedback'))
+const AdminFeedbackResponses = lazy(() => import('./pages/Admin/CoreTeamFeedbackResponses'))
 
 const HERO_ROUTES = [
   '/',
@@ -51,6 +54,7 @@ const HERO_ROUTES = [
   '/test',
   '/projects',
   '/opensource',
+  '/feedback',
 // '/esports',
 ]
 
@@ -92,6 +96,7 @@ function App() {
                 <Route path="/esports" element={<EsportsRegistration />} />
                 <Route path="/dance-society/register" element={<DanceSocietyRegistration />} />
                 <Route path="/opensource" element={<OpenSource />} />
+                <Route path="/feedback" element={<CoreTeamFeedback />} />
                 <Route path='/socials' element={<Socials />}/>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
@@ -110,6 +115,14 @@ function App() {
                   element={
                     <AdminRoute>
                       <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/feedback-responses"
+                  element={
+                    <AdminRoute>
+                      <AdminFeedbackResponses />
                     </AdminRoute>
                   }
                 />

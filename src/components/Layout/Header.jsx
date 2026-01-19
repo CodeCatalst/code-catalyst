@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Menu, X, User, LogOut, ChevronDown, ChevronUp } from 'lucide-react'
+import { Menu, X, User, LogOut, ChevronDown, ChevronUp, Shield } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { hasPermission } from '../../utils/adminAccess';
 
@@ -9,6 +9,10 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [updatesOpen, setUpdatesOpen] = useState(false)
   const [mobileUpdatesOpen, setMobileUpdatesOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false)
+  const [projectsOpen, setProjectsOpen] = useState(false)
+  const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false)
   const location = useLocation()
   const { user, isAuthenticated, logout } = useAuth()
 
@@ -35,6 +39,8 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       if (e.key === 'Escape') {
         setMobileMenuOpen(false)
         setUpdatesOpen(false)
+        setAboutOpen(false)
+        setProjectsOpen(false)
       }
     }
     window.addEventListener('keydown', handleKey)
@@ -50,22 +56,22 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       if (updatesOpen && !e.target.closest('#updates-dropdown-container')) {
         setUpdatesOpen(false)
       }
+      if (aboutOpen && !e.target.closest('#about-dropdown-container')) {
+        setAboutOpen(false)
+      }
+      if (projectsOpen && !e.target.closest('#projects-dropdown-container')) {
+        setProjectsOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [updatesOpen])
+  }, [updatesOpen, aboutOpen, projectsOpen])
 
   const navigationLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
     { name: 'Team', href: '/team' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Innovation', href: '/innovation' },
-    { name: 'Open Source', href: '/opensource' },
-    { name: 'Contact', href: '/contact' },
     // { name: 'Hiring', href: '/hiring' },
-    {name:'Core Feedback', href:'/feedback'},
-    { name: 'Esports', href: '/esports' }
+    // { name: 'Esports', href: '/esports' }
   ];
 
   // Add admin link if user has any admin permission
@@ -86,9 +92,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const userPermissions = user?.permissions || [];
   const userRoles = user?.roles || [];
   const hasAdminAccess = adminPermissions.some(perm => userPermissions.includes(perm));
-  const adminLinks = hasAdminAccess
-    ? [{ name: 'Admin', href: '/admin' }]
-    : [];
+  const adminLinks = [];
 
   const handleLogout = () => {
     logout()
@@ -111,12 +115,12 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-4">
             {[...navigationLinks, ...adminLinks].map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-medium whitespace-nowrap transition-colors duration-200 hover:text-primary-600 ${location.pathname === link.href
+                className={`px-3 py-2 font-medium whitespace-nowrap transition-colors duration-200 hover:text-primary-600 rounded-lg ${location.pathname === link.href
                   ? 'text-primary-600'
                   : 'text-white'
                   }`}
@@ -125,19 +129,135 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               </Link>
             ))}
 
+            {/* About dropdown */}
+            <div className="relative" id="about-dropdown-container">
+              <button
+                onClick={() => setAboutOpen(!aboutOpen)}
+                aria-expanded={aboutOpen}
+                aria-controls="about-menu"
+                className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  aboutOpen || location.pathname === '/about' || location.pathname === '/contact' || location.pathname === '/feedback' 
+                    ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' 
+                    : 'text-white hover:bg-white/5 border border-transparent'
+                }`}
+              >
+                <span className="inline-flex items-center gap-2">
+                  About
+                  <ChevronDown 
+                    size={16} 
+                    className={`transition-transform duration-200 ${aboutOpen ? 'rotate-180' : 'rotate-0'}`}
+                  />
+                </span>
+              </button>
+
+              {aboutOpen && (
+                <div 
+                  id="about-menu" 
+                  className="absolute left-0 top-full mt-2 w-56 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden"
+                >
+                  <div className="py-2">
+                    <Link 
+                      to="/about" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setAboutOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">About Us</span>
+                    </Link>
+                    <Link 
+                      to="/contact" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setAboutOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Contact</span>
+                    </Link>
+                    <Link 
+                      to="/feedback" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setAboutOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Core Feedback</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Projects dropdown */}
+            <div className="relative" id="projects-dropdown-container">
+              <button
+                onClick={() => setProjectsOpen(!projectsOpen)}
+                aria-expanded={projectsOpen}
+                aria-controls="projects-menu"
+                className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  projectsOpen || location.pathname === '/projects' || location.pathname === '/innovation' || location.pathname === '/opensource' 
+                    ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' 
+                    : 'text-white hover:bg-white/5 border border-transparent'
+                }`}
+              >
+                <span className="inline-flex items-center gap-2">
+                  Projects
+                  <ChevronDown 
+                    size={16} 
+                    className={`transition-transform duration-200 ${projectsOpen ? 'rotate-180' : 'rotate-0'}`}
+                  />
+                </span>
+              </button>
+
+              {projectsOpen && (
+                <div 
+                  id="projects-menu" 
+                  className="absolute left-0 top-full mt-2 w-56 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden"
+                >
+                  <div className="py-2">
+                    <Link 
+                      to="/projects" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setProjectsOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Projects</span>
+                    </Link>
+                    <Link 
+                      to="/innovation" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setProjectsOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Innovation Cell</span>
+                    </Link>
+                    <Link 
+                      to="/opensource" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setProjectsOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Open Source</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Updates dropdown */}
             <div className="relative" id="updates-dropdown-container">
               <button
                 onClick={() => setUpdatesOpen(!updatesOpen)}
                 aria-expanded={updatesOpen}
                 aria-controls="updates-menu"
-                className={`font-medium transition-colors duration-200 hover:text-primary-600 ${updatesOpen ? 'text-primary-600' : 'text-white'}`}
+                className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  updatesOpen || location.pathname === '/gallery' || location.pathname === '/blog' || location.pathname === '/notices'
+                    ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' 
+                    : 'text-white hover:bg-white/5 border border-transparent'
+                }`}
               >
                 <span className="inline-flex items-center gap-2">
                   Updates
                   <ChevronDown 
-                    size={14} 
-                    className={`transition-transform duration-300 ${updatesOpen ? 'rotate-180' : 'rotate-0'}`}
+                    size={16} 
+                    className={`transition-transform duration-200 ${updatesOpen ? 'rotate-180' : 'rotate-0'}`}
                   />
                 </span>
               </button>
@@ -145,38 +265,34 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               {updatesOpen && (
                 <div 
                   id="updates-menu" 
-                  className="absolute right-0 mt-1 w-48 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-lg shadow-2xl ring-1 ring-purple-500/30 z-50 animate-dropdown overflow-hidden backdrop-blur-sm"
+                  className="absolute left-0 top-full mt-2 w-56 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden"
                 >
-                  <Link 
-                    to="/gallery" 
-                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-blue-500/20 hover:to-purple-500/20 rounded-t-lg transition-all duration-300 border-b border-gray-700/50 group" 
-                    onClick={() => setUpdatesOpen(false)}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 group-hover:scale-150 transition-transform"></span>
-                      Event Gallery
-                    </span>
-                  </Link>
-                  <Link 
-                    to="/blog" 
-                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-300 border-b border-gray-700/50 group" 
-                    onClick={() => setUpdatesOpen(false)}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 group-hover:scale-150 transition-transform"></span>
-                      Blog
-                    </span>
-                  </Link>
-                  <Link 
-                    to="/notices" 
-                    className="block px-4 py-3 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-orange-500/20 rounded-b-lg transition-all duration-300 group" 
-                    onClick={() => setUpdatesOpen(false)}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400 group-hover:scale-150 transition-transform"></span>
-                      Notices
-                    </span>
-                  </Link>
+                  <div className="py-2">
+                    <Link 
+                      to="/gallery" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setUpdatesOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Event Gallery</span>
+                    </Link>
+                    <Link 
+                      to="/blog" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setUpdatesOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Blog</span>
+                    </Link>
+                    <Link 
+                      to="/notices" 
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
+                      onClick={() => setUpdatesOpen(false)}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                      <span className="group-hover:translate-x-1 transition-transform duration-200">Notices</span>
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
@@ -220,6 +336,16 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       <User size={18} />
                       <span>Profile</span>
                     </Link>
+                    {hasAdminAccess && (
+                      <Link
+                        to="/admin"
+                        className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 transition-colors text-primary-600"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <Shield size={18} />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 transition-colors text-red-600"
@@ -277,6 +403,48 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 </Link>
               ))}
 
+              {/* Mobile About collapsible */}
+              <div className="mt-2">
+                <button
+                  onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                  className="w-full flex items-center justify-between text-lg font-medium py-3 px-2 rounded-md hover:bg-white/5"
+                  aria-expanded={mobileAboutOpen}
+                  aria-controls="mobile-about"
+                >
+                  <span className="text-white">About</span>
+                  {mobileAboutOpen ? <ChevronUp size={18} className="text-white" /> : <ChevronDown size={18} className="text-white" />}
+                </button>
+
+                {mobileAboutOpen && (
+                  <div id="mobile-about" className="pl-4 mt-2 space-y-2">
+                    <Link to="/about" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
+                    <Link to="/contact" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+                    <Link to="/feedback" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Core Feedback</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Projects collapsible */}
+              <div className="mt-2">
+                <button
+                  onClick={() => setMobileProjectsOpen(!mobileProjectsOpen)}
+                  className="w-full flex items-center justify-between text-lg font-medium py-3 px-2 rounded-md hover:bg-white/5"
+                  aria-expanded={mobileProjectsOpen}
+                  aria-controls="mobile-projects"
+                >
+                  <span className="text-white">Projects</span>
+                  {mobileProjectsOpen ? <ChevronUp size={18} className="text-white" /> : <ChevronDown size={18} className="text-white" />}
+                </button>
+
+                {mobileProjectsOpen && (
+                  <div id="mobile-projects" className="pl-4 mt-2 space-y-2">
+                    <Link to="/projects" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Projects</Link>
+                    <Link to="/innovation" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Innovation Cell</Link>
+                    <Link to="/opensource" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Open Source</Link>
+                  </div>
+                )}
+              </div>
+
               {/* Mobile Updates collapsible */}
               <div className="mt-2">
                 <button
@@ -309,6 +477,16 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       <User size={18} />
                       <span>Profile ({user?.full_name})</span>
                     </Link>
+                    {hasAdminAccess && (
+                      <Link
+                        to="/admin"
+                        className="flex items-center space-x-3 py-2 text-primary-400 hover:text-primary-600 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Shield size={18} />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
                     <button
                       onClick={() => {
                         handleLogout()

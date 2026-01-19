@@ -438,45 +438,8 @@ const Home = () => {
               </div>
             ))}
           </div>
-            {/* Unique Features as Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {[{
-                icon: Users,
-                title: 'Open for All Streams',
-                description: 'Students from Electrical, IT, Mechanical, or any branch can join and contribute.',
-                color: 'bg-blue-500'
-              }, {
-                icon: Rocket,
-                title: 'Idea to Reality',
-                description: `It's not just about discussing ideas, but actually building and testing them.`,
-                color: 'bg-purple-500'
-              }, {
-                icon: Award,
-                title: 'Strong Support System',
-                description: 'Guidance, resources, and mentorship are always provided.',
-                color: 'bg-green-500'
-              }, {
-                icon: Star,
-                title: 'Part of a Community',
-                description: 'With Code Catalyst connected, students get more exposure and opportunities.',
-                color: 'bg-orange-500'
-              }, {
-                icon: Target,
-                title: 'Focus on Real-World Skills',
-                description: 'Helps in improving teamwork, problem-solving, and leadership skills along with academics.',
-                color: 'bg-pink-500'
-              }].map((feature, idx) => (
-                <div key={idx} className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
-                  <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center mb-4`}>
-                    <feature.icon className="text-white" size={28} />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                  <p className="text-gray-300 text-base leading-relaxed">{feature.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        </div>
+      </section>
 
       {/* Social Platforms Section */}
       <section className="py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden relative">
@@ -527,7 +490,7 @@ const Home = () => {
               </a>
               <div className="text-center bg-gray-800/50 rounded-xl p-4 border border-gray-700">
                 <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                  2
+                  4
                 </div>
                 <div className="text-gray-300 font-medium text-sm">GitHub Followers</div>
               </div>
@@ -589,7 +552,7 @@ const Home = () => {
               </a>
               <div className="text-center bg-pink-900/50 rounded-xl p-4 border border-pink-700">
                 <div className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent mb-2">
-                  450+
+                  400+
                 </div>
                 <div className="text-gray-300 font-medium text-sm">Instagram Followers</div>
               </div>
@@ -651,7 +614,7 @@ const Home = () => {
               </a>
               <div className="text-center bg-green-900/50 rounded-xl p-4 border border-green-700">
                 <div className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2">
-                  400+
+                  450+
                 </div>
                 <div className="text-gray-300 font-medium text-sm">WhatsApp Members</div>
               </div>

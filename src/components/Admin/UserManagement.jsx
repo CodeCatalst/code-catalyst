@@ -287,7 +287,7 @@ const UserManagement = ({ onUserCountUpdate, initialFilter = 'all' }) => {
                         </button>
                         <button
                             onClick={handleDownloadExcel}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow"
+                            className="bg-blue-600 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded shadow"
                             disabled={filteredUsers.length === 0}
                         >
                             Download Excel
@@ -339,91 +339,86 @@ const UserManagement = ({ onUserCountUpdate, initialFilter = 'all' }) => {
                 </div>
 
                 {/* Users Table */}
-                <div className="overflow-x-auto">
-                    <table className="w-full bg-gray-900 rounded-lg">
-                        <thead>
+                <div className="overflow-y-auto">
+                    <table className="w-full bg-gray-900 rounded-lg table-fixed">
+                        <thead className="sticky top-0 z-10 bg-gray-900">
                             <tr className="border-b border-gray-700">
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Full Name</th>
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Email</th>
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Role</th>
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Registration Date</th>
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Remarks</th>
-                                <th className="text-center py-3 px-4 text-primary-400 font-semibold bg-gray-900">Actions</th>
+                                <th className="text-left py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[20%]">Name</th>
+                                <th className="text-left py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[25%]">Email</th>
+                                <th className="text-center py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[12%]">Role</th>
+                                <th className="text-center py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[16%]">Reg. Date</th>
+                                <th className="text-center py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[25%]">Remarks</th>
+                                <th className="text-center py-3 px-2 text-primary-400 font-semibold bg-gray-900 w-[10%]">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredUsers.map((user) => (
-                                <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/70 text-center">
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex items-center justify-center">
-                                            <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center mr-3">
-                                                <User className="text-white" size={16} />
+                                <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/70">
+                                    <td className="py-3 px-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <User className="text-white" size={14} />
                                             </div>
-                                            <span className="text-gray-100 font-medium">{user.fullName}</span>
+                                            <span className="text-gray-100 font-medium text-sm truncate">{user.fullName}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex items-center justify-center text-primary-200">
-                                            <Mail className="mr-2" size={16} />
-                                            {user.email}
+                                    <td className="py-3 px-2">
+                                        <div className="flex items-center gap-1 text-primary-200 text-sm">
+                                            <Mail size={14} className="flex-shrink-0" />
+                                            <span className="truncate">{user.email}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex items-center justify-center">
-                                            <Shield className="mr-2 text-primary-300" size={16} />
-                                            <select
-                                                value={user.role}
-                                                onChange={e => handleRoleChange(user.id, e.target.value)}
-                                                className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200 text-center"
-                                            >
-                                                {rolesList.map(role => (
-                                                    <option key={role.id} value={role.name}>{role.name}</option>
-                                                ))}
-                                            </select>
+                                    <td className="py-3 px-2">
+                                        <select
+                                            value={user.role}
+                                            onChange={e => handleRoleChange(user.id, e.target.value)}
+                                            className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-primary-200 text-xs w-full"
+                                        >
+                                            {rolesList.map(role => (
+                                                <option key={role.id} value={role.name}>{role.name}</option>
+                                            ))}
+                                        </select>
+                                    </td>
+                                    <td className="py-3 px-2 text-center">
+                                        <div className="flex flex-col items-center text-primary-200 text-xs">
+                                            <Calendar size={14} />
+                                            <span className="mt-1">{new Date(user.registrationDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex items-center justify-center text-primary-200">
-                                            <Calendar className="mr-2" size={16} />
-                                            {new Date(user.registrationDate).toLocaleDateString()}
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex flex-col items-center justify-center gap-2">
+                                    <td className="py-3 px-2">
+                                        <div className="flex flex-col gap-1">
                                             <textarea
                                                 value={editingNotes[user.id] !== undefined ? editingNotes[user.id] : ''}
                                                 onChange={e => handleNotesInputChange(user.id, e.target.value)}
                                                 disabled={savingNotesId === user.id}
                                                 placeholder={'Add notes...'}
-                                                className="rounded bg-gray-800 border border-gray-700 text-white px-2 w-full resize-y focus:ring-blue-500 text-center"
-                                                style={{ fontFamily: 'inherit', fontSize: '1rem', minWidth: '120px' }}
-                                                rows={Math.max(2, (editingNotes[user.id] || '').split('\n').length)}
+                                                className="rounded bg-gray-800 border border-gray-700 text-white px-2 py-1 w-full resize-y focus:ring-blue-500 text-xs"
+                                                rows={2}
                                             />
                                             <button
                                                 onClick={() => handleNotesSave(user.id)}
                                                 disabled={savingNotesId === user.id}
-                                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold disabled:opacity-60 mt-1 mx-auto"
-                                                style={{ minWidth: '70px' }}
+                                                className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs font-semibold disabled:opacity-60"
                                             >
                                                 {savingNotesId === user.id ? 'Saving...' : 'Save'}
                                             </button>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-4 text-center">
-                                        <div className="flex items-center justify-center">
+                                    <td className="py-3 px-2">
+                                        <div className="flex items-center justify-center gap-1">
                                             <button
                                                 onClick={() => setDeleteConfirm(user.id)}
-                                                className="text-red-400 hover:text-red-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
+                                                className="text-red-400 hover:text-red-300 transition-colors p-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
                                                 title="Delete Account"
                                             >
-                                                <Trash2 size={18} />
+                                                <Trash2 size={16} />
                                             </button>
                                             <button
                                                 onClick={() => handleExpirePassword(user.id)}
-                                                className="text-yellow-400 hover:text-yellow-300 transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500 mr-2"
+                                                className="text-yellow-400 hover:text-yellow-300 transition-colors p-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
                                                 title="Expire Password"
                                             >
-                                                <KeyRound size={18} />
+                                                <KeyRound size={16} />
                                             </button>
                                         </div>
                                     </td>

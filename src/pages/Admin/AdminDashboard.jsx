@@ -34,6 +34,10 @@ import {
   Activity,
   Menu,
   X,
+  ChevronDown,
+  ChevronUp,
+  User,
+  LogOut,
 } from "lucide-react";
 import FormBuilder from "../../components/Admin/FormBuilder";
 import FormManager from "../../components/Admin/FormManager";
@@ -53,9 +57,16 @@ import AdminEsportsManager from "../../components/Admin/AdminEsportsManager";
 import AdminJbiansManager from "../../components/Admin/AdminJbiansManager";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [projectsOpen, setProjectsOpen] = useState(false);
+  const [updatesOpen, setUpdatesOpen] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false);
+  const [mobileUpdatesOpen, setMobileUpdatesOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [userFilter, setUserFilter] = useState("all"); // 'all', 'core', or specific filter
   const [activeTab, setActiveTab] = useState("overview");
   const [showFormBuilder, setShowFormBuilder] = useState(false);
@@ -134,6 +145,31 @@ const AdminDashboard = () => {
       }
     })();
   }, [user]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (aboutOpen && !e.target.closest('#about-dropdown-container')) {
+        setAboutOpen(false);
+      }
+      if (projectsOpen && !e.target.closest('#projects-dropdown-container')) {
+        setProjectsOpen(false);
+      }
+      if (updatesOpen && !e.target.closest('#updates-dropdown-container')) {
+        setUpdatesOpen(false);
+      }
+      if (userMenuOpen && !e.target.closest('#user-menu-container')) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [aboutOpen, projectsOpen, updatesOpen, userMenuOpen]);
+
+  const handleLogout = () => {
+    logout();
+    setUserMenuOpen(false);
+  };
 
   // Show tabs based on user role
   const tabs = [
@@ -625,7 +661,7 @@ const AdminDashboard = () => {
                 </a>
               </div>
 
-              {/* Desktop Navigation Links - Hidden on mobile/tablet */}
+              {/* Desktop Navigation Links with Dropdowns */}
               <div className="hidden xl:flex items-center gap-1 flex-1 justify-center max-w-4xl mx-8">
                 <a
                   href="/"
@@ -634,70 +670,108 @@ const AdminDashboard = () => {
                   Home
                 </a>
                 <a
-                  href="/about"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  About
-                </a>
-                <a
                   href="/team"
                   className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
                 >
                   Team
                 </a>
-                <a
-                  href="/projects"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Projects
-                </a>
-                <a
-                  href="/innovation"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Innovation
-                </a>
-                <a
-                  href="/gallery"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Event Gallery
-                </a>
-                <a
-                  href="/blog"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Blog
-                </a>
-                <a
-                  href="/notices"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Notices
-                </a>
-                <a
-                  href="/contact"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Contact
-                </a>
-                <a
-                  href="/esports"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
-                >
-                  Esports
-                </a>
-                <a
-                  href="/admin"
-                  className="px-3 py-2 text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg transition-all duration-200"
-                >
-                  Admin
-                </a>
+
+                {/* About Dropdown */}
+                <div className="relative" id="about-dropdown-container">
+                  <button
+                    onClick={() => setAboutOpen(!aboutOpen)}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                      aboutOpen ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' : 'text-gray-300 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                    }`}
+                  >
+                    About
+                    <ChevronDown size={14} className={`transition-transform duration-200 ${aboutOpen ? 'rotate-180' : 'rotate-0'}`} />
+                  </button>
+                  {aboutOpen && (
+                    <div className="absolute left-0 top-full mt-2 w-48 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden">
+                      <div className="py-2">
+                        <a href="/about" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setAboutOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">About Us</span>
+                        </a>
+                        <a href="/contact" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setAboutOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Contact</span>
+                        </a>
+                        <a href="/feedback" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setAboutOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Core Feedback</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Projects Dropdown */}
+                <div className="relative" id="projects-dropdown-container">
+                  <button
+                    onClick={() => setProjectsOpen(!projectsOpen)}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                      projectsOpen ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' : 'text-gray-300 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                    }`}
+                  >
+                    Projects
+                    <ChevronDown size={14} className={`transition-transform duration-200 ${projectsOpen ? 'rotate-180' : 'rotate-0'}`} />
+                  </button>
+                  {projectsOpen && (
+                    <div className="absolute left-0 top-full mt-2 w-48 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden">
+                      <div className="py-2">
+                        <a href="/projects" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setProjectsOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Projects</span>
+                        </a>
+                        <a href="/innovation" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setProjectsOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Innovation Cell</span>
+                        </a>
+                        <a href="/opensource" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setProjectsOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Open Source</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Updates Dropdown */}
+                <div className="relative" id="updates-dropdown-container">
+                  <button
+                    onClick={() => setUpdatesOpen(!updatesOpen)}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                      updatesOpen ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' : 'text-gray-300 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                    }`}
+                  >
+                    Updates
+                    <ChevronDown size={14} className={`transition-transform duration-200 ${updatesOpen ? 'rotate-180' : 'rotate-0'}`} />
+                  </button>
+                  {updatesOpen && (
+                    <div className="absolute left-0 top-full mt-2 w-48 bg-gray-900/95 backdrop-blur-xl text-white rounded-xl shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden">
+                      <div className="py-2">
+                        <a href="/gallery" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setUpdatesOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Event Gallery</span>
+                        </a>
+                        <a href="/blog" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setUpdatesOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Blog</span>
+                        </a>
+                        <a href="/notices" className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" onClick={() => setUpdatesOpen(false)}>
+                          <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                          <span className="group-hover:translate-x-1 transition-transform duration-200">Notices</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Mobile Nav Toggle & User Profile */}
+              {/* User Profile & Mobile Nav */}
               <div className="flex items-center gap-2 sm:gap-4">
-                {/* Mobile Navigation Menu Button */}
                 <button
                   onClick={() => setMobileNavOpen(!mobileNavOpen)}
                   className="xl:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition-all active:scale-95"
@@ -705,20 +779,53 @@ const AdminDashboard = () => {
                   <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
 
-                <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-1.5 sm:py-2 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700/50">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-semibold text-xs sm:text-sm">
-                      {user?.name?.charAt(0) || "A"}
-                    </span>
-                  </div>
-                  <div className="hidden md:block">
-                    <p className="text-xs sm:text-sm font-medium text-white truncate max-w-[120px]">
-                      {user?.name || "Admin"}
-                    </p>
-                    <p className="text-[10px] sm:text-xs text-gray-400 capitalize">
-                      {user?.role || "User"}
-                    </p>
-                  </div>
+                <div className="relative" id="user-menu-container">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-1.5 sm:py-2 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700/50 hover:border-primary-500/50 transition-all"
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white font-semibold text-xs sm:text-sm">
+                        {user?.full_name?.charAt(0) || user?.name?.charAt(0) || "A"}
+                      </span>
+                    </div>
+                    <div className="hidden md:block">
+                      <p className="text-xs sm:text-sm font-medium text-white truncate max-w-[120px]">
+                        {user?.full_name || user?.name || "Admin"}
+                      </p>
+                      <p className="text-[10px] sm:text-xs text-gray-400 capitalize">
+                        {user?.role || "User"}
+                      </p>
+                    </div>
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2">
+                      <a
+                        href="/profile"
+                        className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 transition-colors"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <User size={18} />
+                        <span>Profile</span>
+                      </a>
+                      <a
+                        href="/admin"
+                        className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 transition-colors text-primary-600"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <Shield size={18} />
+                        <span>Admin Panel</span>
+                      </a>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 transition-colors text-red-600"
+                      >
+                        <LogOut size={18} />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -731,81 +838,72 @@ const AdminDashboard = () => {
                 <div className="space-y-1">
                   <a
                     href="/"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
                     onClick={() => setMobileNavOpen(false)}
                   >
                     Home
                   </a>
                   <a
-                    href="/about"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    About
-                  </a>
-                  <a
                     href="/team"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
                     onClick={() => setMobileNavOpen(false)}
                   >
                     Team
                   </a>
-                  <a
-                    href="/projects"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Projects
-                  </a>
-                  <a
-                    href="/innovation"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Innovation
-                  </a>
-                  <a
-                    href="/gallery"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Event Gallery
-                  </a>
-                  <a
-                    href="/blog"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Blog
-                  </a>
-                  <a
-                    href="/notices"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Notices
-                  </a>
-                  <a
-                    href="/contact"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Contact
-                  </a>
-                  <a
-                    href="/esports"
-                    className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Esports
-                  </a>
-                  <a
-                    href="/admin"
-                    className="block px-4 py-3 text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg transition-all duration-200 active:scale-95"
-                    onClick={() => setMobileNavOpen(false)}
-                  >
-                    Admin
-                  </a>
+
+                  {/* Mobile About Dropdown */}
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                      className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                    >
+                      <span>About</span>
+                      {mobileAboutOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    {mobileAboutOpen && (
+                      <div className="pl-4 mt-2 space-y-1">
+                        <a href="/about" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>About Us</a>
+                        <a href="/contact" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Contact</a>
+                        <a href="/feedback" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Core Feedback</a>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Mobile Projects Dropdown */}
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setMobileProjectsOpen(!mobileProjectsOpen)}
+                      className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                    >
+                      <span>Projects</span>
+                      {mobileProjectsOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    {mobileProjectsOpen && (
+                      <div className="pl-4 mt-2 space-y-1">
+                        <a href="/projects" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Projects</a>
+                        <a href="/innovation" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Innovation Cell</a>
+                        <a href="/opensource" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Open Source</a>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Mobile Updates Dropdown */}
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setMobileUpdatesOpen(!mobileUpdatesOpen)}
+                      className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+                    >
+                      <span>Updates</span>
+                      {mobileUpdatesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    {mobileUpdatesOpen && (
+                      <div className="pl-4 mt-2 space-y-1">
+                        <a href="/gallery" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Event Gallery</a>
+                        <a href="/blog" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Blog</a>
+                        <a href="/notices" className="block py-2 text-sm text-gray-400 hover:text-primary-400" onClick={() => setMobileNavOpen(false)}>Notices</a>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

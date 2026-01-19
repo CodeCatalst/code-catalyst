@@ -99,9 +99,9 @@ const CoreTeamFeedbackResponses = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Header />
-      <div className="text-white p-8">
+      <div className="text-white p-8 pt-24 sm:pt-28">
         <div className="mb-6">
-          <Link to="/admin" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 transition-colors">
+          <Link to="/admin" className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-primary-400 hover:text-primary-300 rounded-lg transition-all duration-200 border border-slate-700 hover:border-primary-500">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>

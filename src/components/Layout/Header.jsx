@@ -165,19 +165,11 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                       <span className="group-hover:translate-x-1 transition-transform duration-200">About Us</span>
                     </Link>
                     <Link 
-                      to="/contact" 
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
-                      onClick={() => setAboutOpen(false)}
-                    >
-                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">Contact</span>
-                    </Link>
-                    <Link 
                       to="/feedback" 
                       className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
                       onClick={() => setAboutOpen(false)}
                     >
-                      <div className="w-2 h-2 rounded-full bg-pink-400 group-hover:scale-125 transition-transform"></div>
+                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
                       <span className="group-hover:translate-x-1 transition-transform duration-200">Core Feedback</span>
                     </Link>
                   </div>
@@ -296,6 +288,18 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 </div>
               )}
             </div>
+
+            {/* Contact link */}
+            <Link
+              to="/contact"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                location.pathname === '/contact'
+                  ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30'
+                  : 'text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Auth Section */}
@@ -418,7 +422,6 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 {mobileAboutOpen && (
                   <div id="mobile-about" className="pl-4 mt-2 space-y-2">
                     <Link to="/about" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
-                    <Link to="/contact" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                     <Link to="/feedback" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Core Feedback</Link>
                   </div>
                 )}
@@ -465,6 +468,17 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                   </div>
                 )}
               </div>
+
+              {/* Mobile Contact link */}
+              <Link
+                to="/contact"
+                className={`block font-medium py-2 hover:text-primary-600 transition-colors ${
+                  location.pathname === '/contact' ? 'text-primary-600' : 'text-white'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
 
               <div className="border-t border-white/10 mt-6 pt-6">
                 {isAuthenticated ? (

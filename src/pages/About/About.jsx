@@ -250,16 +250,16 @@ const About = () => {
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="group relative perspective-1000"
+                className="group relative perspective-1000 h-full"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="relative border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d">
+                <div className="relative h-full flex flex-col border border-gray-700 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-6 hover:rotate-y-12 preserve-3d">
                   {/* Image Container with Overlay */}
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden bg-gray-800 flex-shrink-0">
                     <img
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-64 object-contain transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -270,12 +270,12 @@ const About = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="p-6 flex-grow flex flex-col">
                     <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text transition-all duration-300">
                       {member.name}
                     </h3>
                     <p className="text-purple-600 font-medium mb-3">{member.role}</p>
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">{member.bio}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed flex-grow">{member.bio}</p>
                   </div>
 
                   {/* Hover Glow */}

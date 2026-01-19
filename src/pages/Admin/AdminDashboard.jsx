@@ -628,7 +628,7 @@ const AdminDashboard = () => {
 
       <div className="relative">
         {/* Top Navigation Bar */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/50">
+        <nav className="sticky top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/50">
           <div className="px-3 sm:px-4 lg:px-8">
             <div className="flex items-center justify-between h-14 sm:h-16">
               <div className="flex items-center gap-2 sm:gap-4">
@@ -910,16 +910,16 @@ const AdminDashboard = () => {
           )}
         </nav>
 
-        <div className="flex pt-14 sm:pt-16">
+        <div className="flex">
           {/* Sidebar */}
           <aside
-            className={`fixed lg:sticky top-14 sm:top-16 left-0 z-40 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-64 sm:w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${
+            className={`fixed lg:sticky top-0 left-0 z-40 h-screen w-64 sm:w-72 bg-slate-900/50 backdrop-blur-xl border-r border-slate-800/50 transition-all duration-300 ${
               sidebarOpen
                 ? "translate-x-0"
                 : "-translate-x-full lg:translate-x-0"
             }`}
           >
-            <div className="h-full overflow-y-auto p-4 sm:p-6 space-y-2">
+            <div className="h-full overflow-y-auto p-4 sm:p-6 space-y-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {/* Stats Overview */}
               <div className="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
                 <h3 className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">

@@ -70,7 +70,6 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const navigationLinks = [
     { name: 'Home', href: '/' },
     { name: 'Team', href: '/team' },
-    { name: 'Hiring', href: '/hiring' },
     // { name: 'Esports', href: '/esports' }
   ];
 
@@ -299,6 +298,18 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               }`}
             >
               Contact
+            </Link>
+
+            {/* Hiring link */}
+            <Link
+              to="/hiring"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                location.pathname === '/hiring'
+                  ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30'
+                  : 'text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              Hiring
             </Link>
           </div>
 

@@ -70,7 +70,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const navigationLinks = [
     { name: 'Home', href: '/' },
     { name: 'Team', href: '/team' },
-    // { name: 'Hiring', href: '/hiring' },
+    { name: 'Hiring', href: '/hiring' },
     // { name: 'Esports', href: '/esports' }
   ];
 

@@ -81,11 +81,9 @@ const Profile = () => {
         setSuccess('Profile updated successfully!')
         setTimeout(() => setSuccess(''), 3000)
       } else {
-        console.error('Profile update failed:', result.error); // Debug log
         setErrors({ submit: result.error })
       }
     } catch (error) {
-      console.error('Profile update error:', error); // Debug log
       setErrors({ submit: 'Failed to update profile. Please try again.' })
     } finally {
       setLoading(false)

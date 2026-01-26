@@ -114,7 +114,6 @@ const AdminGalleryManager = () => {
                         images: editId ? [...form.images, ...base64Strings] : base64Strings
                     });
                 }).catch(error => {
-                    console.error('Error converting files to base64:', error);
                     setMessage({ type: 'error', text: 'Failed to process images' });
                 });
             } else {
@@ -144,10 +143,6 @@ const AdminGalleryManager = () => {
             setMessage({ type: 'success', text: 'Event added!' });
             setTimeout(() => setMessage(null), 2000);
         } catch (err) {
-            console.error('Error creating gallery event:', err);
-            console.error('Full error response:', err.response?.data);
-            console.error('Error status:', err.response?.status);
-
             let errorMessage = 'Failed to add event.';
 
             if (err.response?.data) {
@@ -160,11 +155,6 @@ const AdminGalleryManager = () => {
                 // Add details if available
                 if (err.response.data.details) {
                     errorMessage += ` (Details: ${err.response.data.details})`;
-                }
-
-                // Add data info if available for debugging
-                if (err.response.data.data) {
-                    console.error('Data that caused error:', err.response.data.data);
                 }
             } else {
                 errorMessage = `Network Error: ${err.message}`;

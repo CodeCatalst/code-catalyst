@@ -44,7 +44,6 @@ const Team = () => {
         setTeamMembers(data)
         setFilteredMembers(data)
       } catch (error) {
-        console.error('Failed to fetch team members:', error)
         setTeamMembers([])
         setFilteredMembers([])
       } finally {

@@ -118,7 +118,6 @@ const OpenSource = () => {
       })
       setErrors({})
     } catch (error) {
-      console.error('Failed to submit contribution:', error)
       toast({
         title: "Error",
         description: error.response?.data?.error || "Failed to submit contribution. Please try again.",

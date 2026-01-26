@@ -108,7 +108,6 @@ const Registrationjbians = () => {
         branch: "",
       });
     } catch (error) {
-      console.error("Registration error:", error);
       toast({
         title: "Error",
         description:

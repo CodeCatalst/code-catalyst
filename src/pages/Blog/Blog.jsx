@@ -55,7 +55,7 @@ const Blog = () => {
       const data = await getBlogs();
       setBlogs(data);
     } catch (error) {
-      console.error('Failed to load blogs:', error);
+      // Error handled silently
     } finally {
       setLoading(false);
     }

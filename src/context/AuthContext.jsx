@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }) => {
           setUser(response.data.user)
         })
         .catch((error) => {
-          console.error('AuthContext: Failed to fetch user data:', error.response?.data || error);
           localStorage.removeItem('token')
           setToken(null)
         })
@@ -121,7 +120,6 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      console.error('Profile update error:', error.response?.data || error); // Debug log
       const errorMessage = error.response?.data?.error || 
                           error.response?.data?.message || 
                           (error.response?.data?.details ? `Profile update failed: ${error.response.data.details}` : 'Profile update failed');
@@ -153,7 +151,6 @@ export const AuthProvider = ({ children }) => {
           setUser(response.data.user);
           return response.data.user;
         } catch (error) {
-          console.error('Failed to refresh user data:', error);
           throw error;
         }
       }

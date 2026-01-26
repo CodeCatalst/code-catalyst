@@ -168,7 +168,6 @@ const AdminNoticeManager = () => {
       await fetchNotices();
       resetForm();
     } catch (err) {
-      console.error('Notice submission error:', err);
       setError(editingNotice ? 'Failed to update notice' : 'Failed to create notice');
     } finally {
       setSubmitting(false);
@@ -246,7 +245,6 @@ const AdminNoticeManager = () => {
       await updateNotice(id, noticePayload);
       await fetchNotices();
     } catch (err) {
-      console.error('Toggle visibility error:', err);
       setError('Failed to update notice visibility');
     } finally {
       setSubmitting(false);

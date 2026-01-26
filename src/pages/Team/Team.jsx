@@ -15,8 +15,59 @@ const Team = () => {
   const [showAdmin, setShowAdmin] = useState(false)
   const heroRef = useRef(null)
 
-  const departments = ['All', 'Executive', 'Technical', 'PR & Marketing', 'HR & Events', 'Design', 'Content', 'E-Sports']
+  const departments = ['All', 'Executive', 'AI/ML', 'Full Stack', 'PR & Marketing', 'Events', 'Design', 'Content', 'E-Sports']
 
+
+  // Helper function to normalize department names
+  const normalizeDepartment = (dept, role) => {
+    if (!dept) return 'Other'
+    const d = dept.toLowerCase()
+    const r = role ? role.toLowerCase() : ''
+
+    // Leadership/Executive mapping
+    if (d.includes('executive') || d.includes('visionary') || d.includes('leadership') ||
+      r.includes('president') || r.includes('secretary') || r.includes('treasurer')) {
+      return 'Executive'
+    }
+
+    // Design mapping
+    if (d.includes('design') || d.includes('ui/ux') || d.includes('creative') || d.includes('art')) {
+      return 'Design'
+    }
+
+    // AI/ML mapping
+    if (d.includes('ai') || d.includes('ml') || d.includes('data') || d.includes('analytics') || d.includes('python')) {
+      return 'AI/ML'
+    }
+
+    // Full Stack mapping (replaces Technical)
+    if (d.includes('technical') || d.includes('tech') || d.includes('development') ||
+      d.includes('code') || d.includes('software') || d.includes('web') || d.includes('stack') || d.includes('app')) {
+      return 'Full Stack'
+    }
+
+    // Content mapping
+    if (d.includes('content') || d.includes('writing') || d.includes('video') || d.includes('editor')) {
+      return 'Content'
+    }
+
+    // PR & Marketing mapping
+    if (d.includes('pr') || d.includes('marketing') || d.includes('public relations') || d.includes('media')) {
+      return 'PR & Marketing'
+    }
+
+    // HR & Events mapping
+    if (d.includes('hr') || d.includes('events') || d.includes('human resources') || d.includes('management')) {
+      return 'Events'
+    }
+
+    // E-Sports mapping
+    if (d.includes('sport') || d.includes('gaming') || d.includes('player')) {
+      return 'E-Sports'
+    }
+
+    return dept // Fallback to original if no match found
+  }
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -39,7 +90,10 @@ const Team = () => {
         const data = response.data.map(m => ({
           ...m,
           skills: typeof m.skills === 'string' ? (m.skills ? m.skills.split(',').map(s => s.trim()).filter(Boolean) : []) : (Array.isArray(m.skills) ? m.skills : []),
-          social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {})
+          social: typeof m.social === 'string' ? (m.social ? JSON.parse(m.social) : {}) : (m.social || {}),
+          // Store original department for display if needed, but use normalized for filtering
+          originalDepartment: m.department,
+          department: normalizeDepartment(m.department, m.role)
         }))
         setTeamMembers(data)
         setFilteredMembers(data)
@@ -64,13 +118,13 @@ const Team = () => {
   // Separate leaders from other members
   // Only separate leaders when viewing all departments
   const leaderRoles = ['President', 'Vice President', 'Secretary']
-  
-  const leaders = selectedDepartment === 'All' 
+
+  const leaders = selectedDepartment === 'All'
     ? filteredMembers
-        .filter(member => leaderRoles.includes(member.role))
-        .sort((a, b) => leaderRoles.indexOf(a.role) - leaderRoles.indexOf(b.role))
+      .filter(member => leaderRoles.includes(member.role))
+      .sort((a, b) => leaderRoles.indexOf(a.role) - leaderRoles.indexOf(b.role))
     : []
-  
+
   const otherMembers = selectedDepartment === 'All'
     ? filteredMembers.filter(member => !leaderRoles.includes(member.role))
     : []
@@ -94,7 +148,7 @@ const Team = () => {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Admin Button */}
-      
+
       {/* Hero Section with Animated Background */}
       <section
         ref={heroRef}
@@ -165,7 +219,7 @@ const Team = () => {
           <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
         </button>
 
-        
+
       </section>
 
       {/* Filter and View Controls */}
@@ -177,7 +231,7 @@ const Team = () => {
               <div>
                 <h2 className="text-2xl font-bold text-white mb-1">Our Team</h2>
                 <p className="text-gray-400 text-sm">
-                  {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'} 
+                  {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'}
                   {selectedDepartment !== 'All' && ` in ${selectedDepartment}`}
                 </p>
               </div>
@@ -188,22 +242,20 @@ const Team = () => {
                 <div className="flex items-center space-x-1 bg-slate-800/50 rounded-xl p-1 border border-slate-700/50">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                      viewMode === 'grid' 
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30' 
-                        : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${viewMode === 'grid'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30'
+                      : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                      }`}
                   >
                     <Grid size={16} />
                     <span className="hidden sm:inline text-sm font-medium">Grid</span>
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                      viewMode === 'list' 
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30' 
-                        : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${viewMode === 'list'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30'
+                      : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                      }`}
                   >
                     <List size={16} />
                     <span className="hidden sm:inline text-sm font-medium">List</span>
@@ -220,11 +272,10 @@ const Team = () => {
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={`group relative px-5 py-2.5 rounded-full font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
-                      selectedDepartment === dept
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30 scale-105'
-                        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50 hover:text-white border border-slate-700/50 hover:border-purple-500/30'
-                    }`}
+                    className={`group relative px-5 py-2.5 rounded-full font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${selectedDepartment === dept
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30 scale-105'
+                      : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50 hover:text-white border border-slate-700/50 hover:border-purple-500/30'
+                      }`}
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {dept}
@@ -295,7 +346,7 @@ const Team = () => {
                           <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
                         </div>
                       )}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                      <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
                         {otherMembers.map((member, index) => (
                           <div
                             key={member.id}
@@ -311,7 +362,7 @@ const Team = () => {
                 </>
               ) : (
                 /* When filtering by department, show all members in grid */
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
                   {filteredMembers.map((member, index) => (
                     <div
                       key={member.id}

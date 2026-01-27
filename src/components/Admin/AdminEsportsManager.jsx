@@ -28,7 +28,6 @@ const AdminEsportsManager = () => {
       const data = await getEsportsRegistrations();
       setRegistrations(data);
     } catch (error) {
-      console.error('AdminEsportsManager: Failed to fetch registrations:', error);
       const errorMessage = error.response?.data?.error || error.message || 'Failed to fetch esports registrations';
       toast({
         title: "Error",

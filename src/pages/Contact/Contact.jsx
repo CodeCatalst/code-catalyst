@@ -86,7 +86,6 @@ const Contact = () => {
       setFormData({ name: '', email: '', subject: '', message: '' })
       setTimeout(() => setSuccess(false), 5000)
     } catch (error) {
-      console.error('Failed to send message:', error)
       setErrors({ submit: 'Failed to send message. Please try again.' })
     } finally {
       setLoading(false)

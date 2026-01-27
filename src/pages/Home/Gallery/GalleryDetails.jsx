@@ -34,7 +34,6 @@ const GalleryDetails = () => {
         : [];
       setRelatedEvents(related);
     } catch (error) {
-      console.error('Failed to load event:', error);
       toast({
         title: "Error",
         description: "Failed to load gallery event",

@@ -30,7 +30,6 @@ const RoleManagement = () => {
   const fetchPermissions = async () => {
     try {
       const response = await getPermissions();
-      console.log('Fetched permissions:', response);
       
       let permissions;
       if (Array.isArray(response)) {
@@ -40,18 +39,15 @@ const RoleManagement = () => {
       } else if (response && Array.isArray(response.permissions)) {
         permissions = response.permissions;
       } else {
-        console.error('Unexpected permissions response format:', response);
         throw new Error('Invalid permissions data format');
       }
 
       // Validate each permission object
       const validPermissions = permissions.map(p => {
         if (typeof p !== 'object' || !p) {
-          console.error('Invalid permission format:', p);
           return null;
         }
         if (!p.id || !p.name) {
-          console.error('Permission missing required fields:', p);
           return null;
         }
         return {
@@ -64,7 +60,6 @@ const RoleManagement = () => {
       setAvailablePermissions(validPermissions);
       
     } catch (error) {
-      console.error('Error fetching permissions:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Failed to load permissions';
       setMessage({ type: 'error', text: errorMsg });
       setAvailablePermissions([]); // Set empty array as fallback
@@ -82,11 +77,9 @@ const RoleManagement = () => {
     try {
       setLoading(true)
       const response = await getRoles()
-      console.log('Fetched roles:', response)
       setRoles(Array.isArray(response) ? response : [])
       setMessage({ type: 'success', text: 'Roles loaded successfully' })
     } catch (error) {
-      console.error('Error fetching roles:', error)
       const errorMsg = error.response?.data?.error || error.message || 'Failed to load roles'
       setMessage({ type: 'error', text: errorMsg })
       setRoles([])
@@ -204,7 +197,6 @@ const RoleManagement = () => {
       setShowForm(false)
       setEditRole(null)
     } catch (error) {
-      console.error('Error saving role:', error)
       setMessage({ type: 'error', text: 'Failed to save role' })
     }
   }

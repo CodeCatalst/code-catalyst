@@ -22,7 +22,6 @@ const AdminRoute = ({ children }) => {
     const isAllowedRole = !!user?.role && allowedAdminRoles.includes(user.role);
 
     if (!anyAdminPermission && !isAllowedRole) {
-      console.error(`Unauthorized admin access attempt by role: ${user?.role}`);
       return <Navigate to="/" replace />;
     }
 

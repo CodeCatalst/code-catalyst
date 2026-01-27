@@ -18,7 +18,7 @@ const RichTextEditor = ({ value, onChange }) => {
           }
         }
       } catch (error) {
-        console.error('Error setting editor content:', error);
+        // Error handled silently
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,7 +37,7 @@ const RichTextEditor = ({ value, onChange }) => {
       }
       handleInput(); // update parent after formatting
     } catch (error) {
-      console.error('Error executing command:', error);
+      // Error handled silently
     }
   };
 

@@ -21,7 +21,6 @@ api.interceptors.request.use(
     return config
   },
   (error) => {
-    console.error('Request interceptor error:', error)
     return Promise.reject(error)
   }
 )
@@ -317,7 +316,6 @@ export async function createDanceSocietyRegistration(formData) {
       throw new Error('Network error: Could not connect to the server. Please check your internet connection.')
     }
 
-    console.error('Registration error:', error)
     throw new Error(error.response?.data?.error || error.message || 'Failed to submit registration')
   }
 }
@@ -328,7 +326,6 @@ export async function getDanceRegistrations() {
     const response = await api.get('/dance/registrations')
     return response.data
   } catch (error) {
-    console.error('Error fetching dance registrations:', error)
     throw new Error(error.response?.data?.error || 'Failed to fetch registrations')
   }
 }
@@ -339,7 +336,6 @@ export async function getDanceRegistrationById(id) {
     const response = await api.get(`/dance/registrations/${id}`)
     return response.data
   } catch (error) {
-    console.error('Error fetching dance registration:', error)
     throw new Error(error.response?.data?.error || 'Failed to fetch registration')
   }
 }
@@ -350,7 +346,6 @@ export async function deleteDanceRegistration(id) {
     const response = await api.delete(`/dance/registrations/${id}`)
     return response.data
   } catch (error) {
-    console.error('Error deleting dance registration:', error)
     throw new Error(error.response?.data?.error || 'Failed to delete registration')
   }
 }
@@ -361,7 +356,6 @@ export async function getDanceRegistrationStats() {
     const response = await api.get('/dance/stats')
     return response.data
   } catch (error) {
-    console.error('Error fetching dance registration stats:', error)
     throw new Error(error.response?.data?.error || 'Failed to fetch statistics')
   }
 }

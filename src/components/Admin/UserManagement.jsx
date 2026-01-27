@@ -54,7 +54,6 @@ const UserManagement = ({ onUserCountUpdate, initialFilter = 'all' }) => {
                 });
                 setEditingNotes(notesMap);
             } catch (error) {
-                console.error('Failed to load users:', error);
                 // If unauthorized, force logout and redirect
                 if (error.response?.status === 401) {
                     localStorage.removeItem('token');

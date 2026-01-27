@@ -29,7 +29,6 @@ const BlogDetails = () => {
         .slice(0, 3);
       setRelatedBlogs(related);
     } catch (error) {
-      console.error('Failed to load blog:', error);
       toast({
         title: "Error",
         description: "Failed to load blog post",

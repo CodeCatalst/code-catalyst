@@ -324,11 +324,11 @@ const Team = () => {
                         </h3>
                         <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
                       </div>
-                      <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
+                      <div className="flex flex-wrap justify-center items-center gap-8 mb-12 team-grid">
                         {leaders.map((member, index) => (
                           <div
                             key={member.id}
-                            className="animate-fade-in-up max-w-sm"
+                            className="animate-fade-in-up max-w-sm card-hover-wrapper"
                             style={{ animationDelay: `${index * 100}ms` }}
                           >
                             <Card member={member} />
@@ -347,11 +347,11 @@ const Team = () => {
                           <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
                         </div>
                       )}
-                      <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
+                      <div className="flex flex-wrap justify-center gap-6 lg:gap-8 team-grid">
                         {otherMembers.map((member, index) => (
                           <div
                             key={member.id}
-                            className="animate-fade-in-up"
+                            className="animate-fade-in-up card-hover-wrapper"
                             style={{ animationDelay: `${(leaders.length + index) * 50}ms` }}
                           >
                             <Card member={member} />
@@ -363,11 +363,11 @@ const Team = () => {
                 </>
               ) : (
                 /* When filtering by department, show all members in grid */
-                <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
+                <div className="flex flex-wrap justify-center gap-6 lg:gap-8 team-grid">
                   {filteredMembers.map((member, index) => (
                     <div
                       key={member.id}
-                      className="animate-fade-in-up"
+                      className="animate-fade-in-up card-hover-wrapper"
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
                       <Card member={member} />
@@ -488,6 +488,24 @@ const Team = () => {
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+
+        /* Hover Effects */
+        /* Hover Effects */
+        /* Only apply dimming interactions when a card is actually hovered */
+        .team-grid:has(.card-hover-wrapper:hover) .card-hover-wrapper:not(:hover) {
+          opacity: 0.5;
+          filter: blur(2px) grayscale(80%);
+          transform: scale(0.95);
+          transition: all 0.4s ease;
+        }
+
+        .team-grid .card-hover-wrapper:hover {
+          opacity: 1;
+          filter: blur(0) grayscale(0%);
+          transform: scale(1.1);
+          z-index: 10;
+          transition: all 0.4s ease;
         }
       `}</style>
     </div>

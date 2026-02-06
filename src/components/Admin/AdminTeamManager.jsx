@@ -387,21 +387,30 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                   }))
                 }
               />
-              {/* <input
-                className="w-full p-2 rounded bg-gray-800 text-white"
-                placeholder="Social (JSON)"
-                value={JSON.stringify(form.social || {})}
-                onChange={(e) => {
-                  try {
-                    const parsed = e.target.value.trim()
-                      ? JSON.parse(e.target.value)
-                      : {};
-                    setForm((f) => ({ ...f, social: parsed }));
-                  } catch {
-                    // Invalid JSON, ignore the change
+              <div className="space-y-2">
+                <input
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  placeholder="GitHub URL"
+                  value={form.social?.github || ""}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      social: { ...f.social, github: e.target.value },
+                    }))
                   }
-                }}
-              /> */}
+                />
+                <input
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  placeholder="LinkedIn URL"
+                  value={form.social?.linkedin || ""}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      social: { ...f.social, linkedin: e.target.value },
+                    }))
+                  }
+                />
+              </div>
               <div className="flex gap-2 justify-end">
                 {editing && (
                   <button

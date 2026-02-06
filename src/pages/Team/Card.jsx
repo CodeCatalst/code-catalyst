@@ -6,6 +6,26 @@ import { Github, Linkedin, Twitter, Mail, Instagram, Link as LinkIcon, Code } fr
 const Card = ({ member, layout = 'grid' }) => {
   const [imageError, setImageError] = useState(false)
 
+  const getRoleConfig = (role) => {
+    if (!role) return { color: '#3B82F6', level: 'member' }
+    const r = role.toLowerCase()
+
+    // Executives (Gold)
+    if (r.includes('president') || r.includes('secretary') || r.includes('treasurer')) {
+      return { color: '#FFD700', level: 'executive' }
+    }
+
+    // Team Leads (Purple)
+    if (r.includes('lead') || r.includes('head')) {
+      return { color: '#D946EF', level: 'lead' }
+    }
+
+    // Members (Blue)
+    return { color: '#3B82F6', level: 'member' }
+  }
+
+  const { color: glowColor, level } = getRoleConfig(member.role)
+
   const getSocialIcon = (platform) => {
     switch (platform) {
       case 'github': return Github
@@ -20,7 +40,7 @@ const Card = ({ member, layout = 'grid' }) => {
 
   if (layout === 'list') {
     return (
-      <StyledListWrapper>
+      <StyledListWrapper $glowColor={glowColor} $level={level}>
         <div className="card-link">
           <Link to={`/team/${member.id}`} className="card-content-link">
             <div className="list-card">
@@ -61,7 +81,7 @@ const Card = ({ member, layout = 'grid' }) => {
                       </span>
                     ))}
                   </div>
-{/* 
+                  {/* 
                   <div className="social-links">
                     {Object.entries(member.social).map(([platform, url]) => {
                       const IconComponent = getSocialIcon(platform)
@@ -90,7 +110,7 @@ const Card = ({ member, layout = 'grid' }) => {
   }
 
   return (
-    <StyledWrapper>
+    <StyledWrapper $glowColor={glowColor} $level={level}>
       <div className="card-link">
         <Link to={`/team/${member.id}`} className="card-content-link">
           <div className="card">
@@ -128,41 +148,41 @@ const Card = ({ member, layout = 'grid' }) => {
               </div>
 
               {/* Social Links */}
-             <div className="social-links">
-  {Object.entries(member.social).map(([platform, url]) => {
-    const IconComponent = getSocialIcon(platform)
+              <div className="social-links">
+                {Object.entries(member.social).map(([platform, url]) => {
+                  const IconComponent = getSocialIcon(platform)
 
-    if (platform.toLowerCase() === "email") {
-      // ✅ email case
-      return (
-        <a
-          key={platform}
-          href={`mailto:${url}`}
-          className="social-link"
-          aria-label={platform}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <IconComponent size={16} />
-        </a>
-      )
-    } else {
-      // ✅ all other platforms
-      return (
-        <a
-          key={platform}
-          href={url}
-          className="social-link"
-          aria-label={platform}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <IconComponent size={16} />
-        </a>
-      )
-    }
-  })}
-</div>
+                  if (platform.toLowerCase() === "email") {
+                    // ✅ email case
+                    return (
+                      <a
+                        key={platform}
+                        href={`mailto:${url}`}
+                        className="social-link"
+                        aria-label={platform}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <IconComponent size={16} />
+                      </a>
+                    )
+                  } else {
+                    // ✅ all other platforms
+                    return (
+                      <a
+                        key={platform}
+                        href={url}
+                        className="social-link"
+                        aria-label={platform}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <IconComponent size={16} />
+                      </a>
+                    )
+                  }
+                })}
+              </div>
 
             </div>
           </div>
@@ -177,9 +197,14 @@ const StyledWrapper = styled.div`
     text-decoration: none;
     display: block;
     transition: transform 0.3s ease;
+    animation: ${props => props.$level === 'executive'
+    ? 'float-slow 6s ease-in-out infinite'
+    : props.$level === 'lead'
+      ? 'float-medium 5s ease-in-out infinite'
+      : 'none'};
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
     }
   }
 
@@ -194,16 +219,38 @@ const StyledWrapper = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: ${props => props.$level === 'executive'
+    ? `0 10px 30px -10px ${props.$glowColor}40`
+    : props.$level === 'lead'
+      ? `0 5px 20px -5px ${props.$glowColor}30`
+      : 'none'};
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid ${props => props.$level === 'executive'
+    ? `${props.$glowColor}60`
+    : props.$level === 'lead'
+      ? `${props.$glowColor}40`
+      : '#374151'};
+    transform-style: preserve-3d;
+
+    &:hover {
+      box-shadow: 0 20px 40px -10px ${props => props.$glowColor}30;
+      border-color: ${props => props.$glowColor};
+      transform: rotateY(360deg);
+    }
   }
 
   .bg {
     position: absolute;
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
     z-index: 2;
-    background-color: #111827;
+    background: ${props => props.$level === 'executive'
+    ? `linear-gradient(145deg, #111827 40%, ${props.$glowColor}15 100%)`
+    : props.$level === 'lead'
+      ? `linear-gradient(145deg, #111827 50%, ${props.$glowColor}10 100%)`
+      : '#111827'};
     backdrop-filter: blur(24px);
-    border-radius: 10px;
+    border-radius: 13px;
     overflow: hidden;
   }
 
@@ -215,10 +262,10 @@ const StyledWrapper = styled.div`
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background-color: #ff0000;
-    opacity: 1;
-    filter: blur(12px);
-    animation: blob-bounce 5s infinite ease;
+    background-color: ${props => props.$glowColor || '#3B82F6'};
+    opacity: ${props => props.$level === 'executive' ? '0.8' : props.$level === 'lead' ? '0.6' : '0.4'};
+    filter: blur(24px);
+    animation: blob-bounce 8s infinite ease;
   }
 
   .content {
@@ -348,26 +395,23 @@ const StyledWrapper = styled.div`
   }
 
   @keyframes blob-bounce {
-    0% {
-      transform: translate(-100%, -100%) translate3d(0, 0, 0);
-    }
+    0% { transform: translate(-100%, -100%) translate3d(0, 0, 0); }
+    25% { transform: translate(-100%, -100%) translate3d(100%, 0, 0); }
+    50% { transform: translate(-100%, -100%) translate3d(100%, 100%, 0); }
+    75% { transform: translate(-100%, -100%) translate3d(0, 100%, 0); }
+    100% { transform: translate(-100%, -100%) translate3d(0, 0, 0); }
+  }
 
-    25% {
-      transform: translate(-100%, -100%) translate3d(100%, 0, 0);
-    }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 
-    50% {
-      transform: translate(-100%, -100%) translate3d(100%, 100%, 0);
-    }
-
-    75% {
-      transform: translate(-100%, -100%) translate3d(0, 100%, 0);
-    }
-
-    100% {
-      transform: translate(-100%, -100%) translate3d(0, 0, 0);
-    }
-  }`;
+  @keyframes float-medium {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+`;
 
 const StyledListWrapper = styled.div`
   .list-card {
@@ -402,7 +446,7 @@ const StyledListWrapper = styled.div`
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background-color: #ff0000;
+    background-color: ${props => props.$glowColor || '#3B82F6'};
     opacity: 1;
     filter: blur(12px);
     animation: blob-bounce 5s infinite ease;

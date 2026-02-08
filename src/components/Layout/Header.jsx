@@ -135,7 +135,7 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 aria-expanded={aboutOpen}
                 aria-controls="about-menu"
                 className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  aboutOpen || location.pathname === '/about' || location.pathname === '/contact' || location.pathname === '/feedback' 
+                  aboutOpen || location.pathname === '/about' || location.pathname === '/contact'
                     ? 'bg-primary-600/10 text-primary-600 border border-primary-600/30' 
                     : 'text-white hover:bg-white/5 border border-transparent'
                 }`}
@@ -162,14 +162,6 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                     >
                       <div className="w-2 h-2 rounded-full bg-blue-400 group-hover:scale-125 transition-transform"></div>
                       <span className="group-hover:translate-x-1 transition-transform duration-200">About Us</span>
-                    </Link>
-                    <Link 
-                      to="/feedback" 
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-primary-600/20 transition-all duration-200 group" 
-                      onClick={() => setAboutOpen(false)}
-                    >
-                      <div className="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></div>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">Core Feedback</span>
                     </Link>
                   </div>
                 </div>
@@ -433,7 +425,6 @@ const Header = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 {mobileAboutOpen && (
                   <div id="mobile-about" className="pl-4 mt-2 space-y-2">
                     <Link to="/about" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
-                    <Link to="/feedback" className="block py-2 text-white hover:text-primary-400" onClick={() => setMobileMenuOpen(false)}>Core Feedback</Link>
                   </div>
                 )}
               </div>

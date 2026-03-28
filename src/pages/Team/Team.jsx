@@ -4,6 +4,7 @@ import api from '../../services/api'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import Card from './Card'
 import AdminTeamManager from '../../components/Admin/AdminTeamManager'
+import Watermark from '../../components/Layout/Watermark'
 
 const Team = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -219,7 +220,7 @@ const Team = () => {
           <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
         </button>
 
-
+        <Watermark />
       </section>
 
       {/* Filter and View Controls */}

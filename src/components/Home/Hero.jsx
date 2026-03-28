@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Code, Terminal, Cpu, Globe } from 'lucide-react';
 import gsap from 'gsap';
+import Watermark from '../Layout/Watermark';
 
 const Hero = () => {
   const canvasRef = useRef(null);
@@ -294,6 +295,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <Watermark />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Mail,  MapPin, Send, Github, Instagram, Linkedin } from 'lucide-react'
 import DiscordIcon from '../../components/Layout/DiscordIcon';
 import api from '../../services/api'
+import Watermark from '../../components/Layout/Watermark'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -181,6 +182,7 @@ const Contact = () => {
         </div>
 
         
+        <Watermark />
       </section>
 
       {/* Main Contact Section */}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { ExternalLink, Github, Calendar, Users, Code, Database, Cloud, Zap, Bot, Globe, CheckCircle, Clock, ArrowRight, Sparkles, Star, Rocket } from 'lucide-react'
+import Watermark from '../../components/Layout/Watermark'
 
 const Projects = () => {
   const [activeProject, setActiveProject] = useState(0)
@@ -222,6 +223,7 @@ const Projects = () => {
             <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
           </button>
         </div>
+        <Watermark />
       </section>
 
       {/* Stats Section */}

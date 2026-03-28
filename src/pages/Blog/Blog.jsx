@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getBlogs } from '../../services/blogs';
 import BlogCard from '../../components/Admin/BlogCard';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import Watermark from '../../components/Layout/Watermark';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -153,6 +154,7 @@ const Blog = () => {
         </div>
 
         
+        <Watermark />
       </section>
 
       {/* Hero Section */}

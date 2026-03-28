@@ -68,15 +68,12 @@ const Projects = () => {
         uptime: '99.9%'
       },
       color: 'from-purple-500 to-pink-500'
-    }
-  ]
-
-  const ongoingProjects = [
+    },
     {
       id: 2,
       name: 'Eve Chatbot',
       description: 'An intelligent chatbot designed to provide community information, college details, and career guidance to students.',
-      status: 'ongoing',
+      status: 'completed',
       category: 'AI/ML & Web Dev',
       link: 'https://eve-higv.onrender.com/?next=/cc-chatbot/',
       image: '/eve.jpg',
@@ -92,12 +89,18 @@ const Projects = () => {
         'Career counseling assistance',
         'Natural language processing',
         'Context-aware responses',
-        'Multi-language support (planned)'
+        'Multi-language support'
       ],
-      progress: 75,
-      expectedCompletion: 'Q2 2025',
+      impact: {
+        users: '200+',
+        performance: '90%',
+        uptime: '99.5%'
+      },
       color: 'from-blue-500 to-cyan-500'
-    },
+    }
+  ]
+
+  const ongoingProjects = [
     {
       id: 3,
       name: 'Movie Recommendation Platform',

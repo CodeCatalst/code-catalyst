@@ -118,8 +118,6 @@ const EsportsRegistrationForm = () => {
         teamMembers: []
       });
     } catch (error) {
-      console.error('Submission error:', error);
-
       // Handle different error types
       if (!navigator.onLine || error.message?.includes('Network')) {
         toast({

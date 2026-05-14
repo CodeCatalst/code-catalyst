@@ -38,7 +38,6 @@ const NoticeDetails = () => {
         .slice(0, 3);
       setRelatedNotices(related);
     } catch (error) {
-      console.error('Failed to load notice:', error);
       toast({
         title: "Error",
         description: "Failed to load notice",

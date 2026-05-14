@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Calendar, ArrowRight, X, ClipboardCheck, FileText, Image } from 'lucide-react'
 import LoadingSpinner from '../../components/Common/LoadingSpinner'
 import { getNotices } from '../../services/notices'
+import Watermark from '../../components/Layout/Watermark'
 
 const Notices = () => {
   const [notices, setNotices] = useState([])
@@ -122,6 +123,7 @@ const Notices = () => {
             <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
           </button>
         </div>
+        <Watermark />
       </section>
       {/* Notices Grid */}
       <section className="py-20 bg-slate-900" id="notices-section">

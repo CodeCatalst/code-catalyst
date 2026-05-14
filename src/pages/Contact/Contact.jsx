@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Mail,  MapPin, Send, Github, Instagram, Linkedin } from 'lucide-react'
 import DiscordIcon from '../../components/Layout/DiscordIcon';
 import api from '../../services/api'
+import Watermark from '../../components/Layout/Watermark'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -86,7 +87,6 @@ const Contact = () => {
       setFormData({ name: '', email: '', subject: '', message: '' })
       setTimeout(() => setSuccess(false), 5000)
     } catch (error) {
-      console.error('Failed to send message:', error)
       setErrors({ submit: 'Failed to send message. Please try again.' })
     } finally {
       setLoading(false)
@@ -182,6 +182,7 @@ const Contact = () => {
         </div>
 
         
+        <Watermark />
       </section>
 
       {/* Main Contact Section */}

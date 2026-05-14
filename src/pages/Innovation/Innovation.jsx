@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Lightbulb, Users, Target, Rocket, Star, ChevronRight, Code, Zap, Award, BookOpen, ArrowRight, CheckCircle, Sparkles, Brain, Heart, Globe } from 'lucide-react'
+import Watermark from '../../components/Layout/Watermark'
 
 const Innovation = () => {
   const [activeSection, setActiveSection] = useState(0)
@@ -210,6 +211,7 @@ const Innovation = () => {
             <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
           </button>
         </div>
+        <Watermark />
       </section>
 
       {/* Interactive Stats Section */}

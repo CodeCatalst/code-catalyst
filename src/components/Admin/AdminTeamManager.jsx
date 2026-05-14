@@ -34,9 +34,7 @@ const AdminTeamManager = ({ onClose, onChange }) => {
     setLoading(true);
     setError(null);
     try {
-      console.log("Fetching team members...");
       const res = await getTeamMembers();
-      console.log("Raw team members response:", res.data);
 
       // Parse skills and social fields for all members
       const parsedMembers = res.data.map((m) => {
@@ -70,11 +68,8 @@ const AdminTeamManager = ({ onClose, onChange }) => {
         };
       });
 
-      console.log("Parsed team members:", parsedMembers);
       setMembers(parsedMembers);
     } catch (e) {
-      console.error("Failed to load team members:", e);
-      console.error("Error response:", e.response?.data);
       setError(
         `Failed to load team members: ${
           e.response?.data?.error || e.message || "Unknown error"
@@ -209,18 +204,14 @@ const AdminTeamManager = ({ onClose, onChange }) => {
       social: typeof form.social === "object" ? form.social : {},
     };
 
-    console.log("Submitting team member data:", submitForm);
-
     try {
       if (editing) {
-        console.log("Updating team member with ID:", editing);
         await updateTeamMember(editing, submitForm);
         setToast({
           message: "Team member updated successfully.",
           type: "success",
         });
       } else {
-        console.log("Adding new team member");
         await addTeamMember(submitForm);
         setToast({
           message: "Team member added successfully.",
@@ -233,8 +224,6 @@ const AdminTeamManager = ({ onClose, onChange }) => {
       fetchMembers();
       onChange && onChange();
     } catch (error) {
-      console.error("Team member save error:", error);
-      console.error("Error response:", error.response?.data);
       const errorMessage =
         error.response?.data?.error ||
         error.message ||
@@ -398,21 +387,30 @@ const AdminTeamManager = ({ onClose, onChange }) => {
                   }))
                 }
               />
-              {/* <input
-                className="w-full p-2 rounded bg-gray-800 text-white"
-                placeholder="Social (JSON)"
-                value={JSON.stringify(form.social || {})}
-                onChange={(e) => {
-                  try {
-                    const parsed = e.target.value.trim()
-                      ? JSON.parse(e.target.value)
-                      : {};
-                    setForm((f) => ({ ...f, social: parsed }));
-                  } catch {
-                    // Invalid JSON, ignore the change
+              <div className="space-y-2">
+                <input
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  placeholder="GitHub URL"
+                  value={form.social?.github || ""}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      social: { ...f.social, github: e.target.value },
+                    }))
                   }
-                }}
-              /> */}
+                />
+                <input
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  placeholder="LinkedIn URL"
+                  value={form.social?.linkedin || ""}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      social: { ...f.social, linkedin: e.target.value },
+                    }))
+                  }
+                />
+              </div>
               <div className="flex gap-2 justify-end">
                 {editing && (
                   <button

@@ -37,7 +37,6 @@ const MemberDetail = () => {
           setError(null)
         }
       } catch (error) {
-        console.error('Failed to fetch member:', error)
         setError('Failed to fetch member: ' + error.message)
       } finally {
         setLoading(false)

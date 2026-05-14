@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Github, ExternalLink, GitBranch, Star, Users, Code, CheckCircle, ArrowRight, Sparkles, Rocket, BookOpen, Award } from 'lucide-react'
 import { useToast } from '../../components/hooks/use-toast'
 import api from '../../services/api'
+import Watermark from '../../components/Layout/Watermark'
 
 const OpenSource = () => {
   const { toast } = useToast()
@@ -118,7 +119,6 @@ const OpenSource = () => {
       })
       setErrors({})
     } catch (error) {
-      console.error('Failed to submit contribution:', error)
       toast({
         title: "Error",
         description: error.response?.data?.error || "Failed to submit contribution. Please try again.",
@@ -230,6 +230,7 @@ const OpenSource = () => {
             <ArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
           </button>
         </div>
+        <Watermark />
       </section>
 
       {/* Open Source Projects Section */}

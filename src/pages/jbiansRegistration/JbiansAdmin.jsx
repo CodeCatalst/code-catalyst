@@ -22,7 +22,6 @@ const JbiansAdmin = () => {
         setSubmissions(response.data)
       }
     } catch (error) {
-      console.error('Error loading submissions:', error)
       toast({
         title: "Error",
         description: error.message || "Failed to load submissions",
@@ -40,7 +39,6 @@ const JbiansAdmin = () => {
         setStats(response.stats)
       }
     } catch (error) {
-      console.error('Error loading stats:', error)
       // Don't show error toast for stats, as it's not critical
     }
   }
@@ -81,7 +79,6 @@ const JbiansAdmin = () => {
         description: "Excel file downloaded successfully!",
       })
     } catch (error) {
-      console.error('Error downloading Excel:', error)
       toast({
         title: "Error",
         description: "Failed to download Excel file",
@@ -106,7 +103,6 @@ const JbiansAdmin = () => {
           description: "Registration deleted successfully",
         })
       } catch (error) {
-        console.error('Error deleting submission:', error)
         toast({
           title: "Error",
           description: error.message || "Failed to delete registration",

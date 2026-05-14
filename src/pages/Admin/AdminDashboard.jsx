@@ -133,7 +133,6 @@ const AdminDashboard = () => {
           totalHiringRequests,
         });
       } catch (error) {
-        console.error("Failed to fetch admin stats:", error);
         // If unauthorized, force logout and redirect
         if (error.response?.status === 401) {
           localStorage.removeItem("token");

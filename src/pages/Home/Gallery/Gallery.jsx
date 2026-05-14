@@ -6,6 +6,7 @@ import LoadingSpinner from '../../../components/Common/LoadingSpinner'
 
 
 import { getGallery as fetchGalleryFromApi } from '../../../services/gallery'
+import Watermark from '../../../components/Layout/Watermark'
 
 const Gallery = () => {
   const [events, setEvents] = useState([])
@@ -114,6 +115,7 @@ const Gallery = () => {
         </div>
 
         
+        <Watermark />
       </section>
 
       {/* Events Grid */}

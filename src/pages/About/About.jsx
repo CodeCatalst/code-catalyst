@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { CheckCircle, Target, Eye, Heart, Award, Users, Calendar, Code, Zap, Rocket, Star, ArrowRight } from 'lucide-react'
+import Watermark from '../../components/Layout/Watermark'
 
 const About = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -153,6 +154,7 @@ const About = () => {
             We are more than just a tech society - we're a community of innovators, learners, and future leaders who believe in the power of technology to change the world.
           </p>
         </div>
+        <Watermark />
       </section>
 
       {/* Animated Stats Section */}

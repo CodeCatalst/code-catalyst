@@ -337,12 +337,19 @@ const Home = () => {
             Code. Create. Analyze.
 
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button onClick={scrollPastHero} className="group relative flex items-center justify-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient-x text-white font-semibold px-8 py-4 rounded-xl transition-all duration-500 ease-out transform hover:scale-[1.02] hover:shadow-2xl shadow-lg overflow-hidden">
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <ArrowRight className="mr-2 transition-transform duration-300 group-hover:translate-x-1" size={22} />
               <span className="relative z-10">Explore community</span>
             </button>
+            <Link
+              to="/feedback"
+              className="group inline-flex items-center justify-center border border-white/20 bg-white/5 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 ease-out hover:bg-white/10 hover:border-white/35 hover:shadow-xl backdrop-blur-sm"
+            >
+              <MessageCircle className="mr-2 transition-transform duration-300 group-hover:scale-110" size={20} />
+              <span>Open core feedback form</span>
+            </Link>
           </div>
         </div>
         {/* Enhanced Scroll Indicator */}
